@@ -1,0 +1,35 @@
+The main files are
+
+rfs
+rfs_c
+
+These files contain global stability analysis of symmetric unimodal
+limit cycles of relay feedback systems.  The first one is related with
+the more conservative condition, but, on the other hand, more
+efficient.  Although more conservative, this condition was enough to
+prove stability of most systems analyzed, including the examples in the
+paper (all, but the last one).  The second file uses the conic
+relations explained in the paper.  IT is less conservative, but less
+efficient.
+
+
+type
+
+help rfs
+
+or
+
+help rfs_c
+
+for more information.
+
+NOTE: this files are for version 5.2 or lower of Matlab.  For files
+for version 5.3 or higher of Matlab or for the latest version please
+go to
+
+http://web.mit.edu/jmg/www
+
+The paper associated with these results can also be obtained at this
+web page.
+
+Written by Jorge Goncalves, jmg@mit.edu, All rights reserved

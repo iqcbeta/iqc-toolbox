@@ -1,0 +1,224 @@
+Model {
+  Name			  "test3"
+  Version		  2.20
+  SimParamPage		  Solver
+  SampleTimeColors	  off
+  InvariantConstants	  off
+  WideVectorLines	  off
+  ShowLineWidths	  off
+  StartTime		  "0.0"
+  StopTime		  "10.0"
+  Solver		  ode45
+  RelTol		  "1e-3"
+  AbsTol		  "1e-6"
+  Refine		  "1"
+  MaxStep		  "auto"
+  InitialStep		  "auto"
+  FixedStep		  "auto"
+  MaxOrder		  5
+  OutputOption		  RefineOutputTimes
+  OutputTimes		  "[]"
+  LoadExternalInput	  off
+  ExternalInput		  "[t, u]"
+  SaveTime		  on
+  TimeSaveName		  "tout"
+  SaveState		  off
+  StateSaveName		  "xout"
+  SaveOutput		  on
+  OutputSaveName	  "yout"
+  LoadInitialState	  off
+  InitialState		  "xInitial"
+  SaveFinalState	  off
+  FinalStateName	  "xFinal"
+  LimitMaxRows		  off
+  MaxRows		  "1000"
+  Decimation		  "1"
+  AlgebraicLoopMsg	  warning
+  MinStepSizeMsg	  warning
+  UnconnectedInputMsg	  warning
+  UnconnectedOutputMsg	  warning
+  UnconnectedLineMsg	  warning
+  ConsistencyChecking	  off
+  ZeroCross		  on
+  SimulationMode	  normal
+  RTWSystemTargetFile	  "grt.tlc"
+  RTWInlineParameters	  off
+  RTWPlaceOutputsASAP	  off
+  RTWRetainRTWFile	  off
+  RTWTemplateMakefile	  "grt_default_tmf"
+  RTWMakeCommand	  "make_rtw"
+  RTWGenerateCodeOnly	  off
+  ExtModeMexFile	  "ext_comm"
+  ExtModeBatchMode	  off
+  BlockDefaults {
+    Orientation		    right
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    NamePlacement	    normal
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+    ShowName		    on
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    center
+    VerticalAlignment	    middle
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  System {
+    Name		    "test3"
+    Location		    [12, 75, 512, 335]
+    Open		    on
+    ToolBar		    off
+    StatusBar		    off
+    ScreenColor		    white
+    PaperOrientation	    landscape
+    PaperPositionMode	    auto
+    PaperType		    usletter
+    PaperUnits		    inches
+    Block {
+      BlockType		      StateSpace
+      Name		      "Matrix\nGain"
+      Position		      [190, 116, 220, 144]
+      A			      "[]"
+      B			      "[]"
+      C			      "[]"
+      D			      "K"
+      X0		      "0"
+      MaskType		      "Matrix Gain"
+      MaskDescription	      "Matrix Gain."
+      MaskHelp		      "Multiplies input vector by entered matrix to pr"
+"oduce output vector (y=Au)."
+      MaskPromptString	      "Gain matrix:"
+      MaskStyleString	      "edit"
+      MaskTunableValueString  "on"
+      MaskInitialization      "K=@1; "
+      MaskDisplay	      "disp('K')"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1"
+    }
+    Block {
+      BlockType		      StateSpace
+      Name		      "State-Space"
+      Position		      [300, 39, 375, 81]
+      A			      "[-5,1;2,-3]"
+      B			      "[0;1]"
+      C			      "[0 1]"
+      D			      "[0]"
+      X0		      "0"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [255, 50, 275, 70]
+      Inputs		      "++"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "performance"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [90, 44, 135, 66]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty "
+      MaskPromptString	      "Order|List of iqc relationships:"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[10,20,30,40,30,20,10,0],[50,2"
+"0,20,50,80,80,50,50],[90,80,70,60,70,80,90,100],[50,20,20,50,80,80,50,50],[55"
+",45],[75,75],[55,45],[65,65],[55,45],[55,55],[46,55],[46,46],[55,46],[35,35],"
+"[55,46],[25,25])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|IN=w;OUT=f;"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "sat-int"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [75, 106, 135, 154]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty sp"
+"ecified by user"
+      MaskPromptString	      "Order|List of iqc relationships"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[18,45,45,18,18],[60,60,26,26,"
+"60],[62,82,82,62,62],[60,60,26,26,60],[62,0],[44,44],[79,65],[44,44],[71,71],"
+"[46,57],[68,69,72,74,73,71,69,68,69,72,74],[31,29,29,31,34,35,36,38,40,40,39]"
+",[31,31],[26,60],[45,38,24],[55,55,33],[24,18],[33,33],[99,82],[44,44],[10,12"
+",8,10,10,90,90],[44,51,51,44,80,80,44],[7,2],[55,55])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_ratelimiter(in)"
+    }
+    Line {
+      SrcBlock		      "Sum"
+      SrcPort		      1
+      DstBlock		      "State-Space"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Matrix\nGain"
+      SrcPort		      1
+      Points		      [5, 0; 0, -65]
+      DstBlock		      "Sum"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "performance"
+      SrcPort		      1
+      DstBlock		      "Sum"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "State-Space"
+      SrcPort		      1
+      Points		      [15, 0; 0, 160; -345, 0; 0, -90]
+      Branch {
+	Points			[0, -75]
+	DstBlock		"performance"
+	DstPort			1
+      }
+      Branch {
+	DstBlock		"sat-int"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "sat-int"
+      SrcPort		      1
+      DstBlock		      "Matrix\nGain"
+      DstPort		      1
+    }
+  }
+}

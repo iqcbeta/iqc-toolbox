@@ -1,0 +1,2519 @@
+TEST_ALL
+ 
+ approximate 1/(s^2+s+1) by 1, 1/(s+1), and 1/(s+0.7) ... 
+ 
+fdlmi_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    LMI #1    size = 1    states: 0    
+    LMI #2    size = 2    states: 8    
+  fdlmi_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  Solving with 40 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2                   0.777237
+     3                   0.491619
+     4                   0.409965
+     5                   0.409965
+     6                   0.350573
+     7                   0.350573
+     8                   0.316430
+     9                   0.316430
+    10                   0.305601
+    11                   0.305601
+    12                   0.301523
+    13                   0.301220
+* switching to QR
+    14                   0.301220
+***                 new lower bound:     0.298358
+
+ Result:  feasible solution of required accuracy
+          best objective value:     0.301220
+          guaranteed absolute accuracy: 2.86e-003
+          f-radius saturation:  0.416% of R = 1.00e+009 
+ 
+ 
+ the best approximation is: 
+ 
+Transfer function:
+-0.2967 s^2 + 0.4449 s + 0.9078
+-------------------------------
+       s^2 + 1.7 s + 0.7
+ 
+***********************************************************
+*       This is a global test of the iqc_beta package     *
+*  Written by ameg@mit.edu, last modified October 13,1997 *
+***********************************************************
+ 
+ 
+
+ans =
+
+LMI Control Toolbox "mincx" options:              
+**************************************************
+Relative accuracy:            0.01                
+Maximal # of iterations:      100                 
+Feasibility radius:           1000000000          
+Slow progress #:              10                  
+Turn-off trace:               1                   
+
+ 
+ 
+*** iqc_gain_tbx_test1 ...
+      Lower bound: 7.8538    ;  Upper bound: 7.8545    
+ 
+*** iqc_value_test1 ...
+      Lower bound: 2         ;  Upper bound: 2.0006    
+ 
+*** iqc_get_mlmi_test ...
+ 
+*** iqc_ltigain_test1 ...
+      Lower bound: 1.1755    ;  Upper bound: 1.1756    
+ 
+*** iqc_ltigain_test2 ...
+      Lower bound: 6.0437    ;  Upper bound: 6.0574    
+ 
+*** iqc_ltvnorm_test1 ...
+      Lower bound: 10.6948   ;  Upper bound: 10.7781   
+ 
+*** iqc_popov_test1 ...
+      Lower bound: 0.51743   ;  Upper bound: 0.51771   
+ 
+*** iqc_monotonic_test1 ...
+      Lower bound: 0.51743   ;  Upper bound: 0.51784   
+ 
+*** iqc_white_test ...
+   Upper bound: 4.1332    
+ 
+*** lmi_mincx_tbx_test1 ...
+      Lower bound: 2.8995    ;  Upper bound: 2.9       
+ 
+*** lmi_mincx_tbx_test2 ...
+      Lower bound: 5.5928    ;  Upper bound: 5.6198    
+ 
+*** fdlmi_mincx_tbx_test ...
+ 
+*** iqc_cdelay_test ...
+*** iqc_ltiunmod_test ...
+*** iqc_sector_test ...
+*** iqc_popov_vect_test ...
+*** iqc_sector_popov_vect_test ...
+*** iqc_polytope_test ...
+*** iqc_polytope_stvp_test ...
+*** iqc_window_test ...
+*** iqc_harmonic_test ...
+*** iqc_delay_test ...
+*** iqc_delay1_test ...
+*** iqc_slowtv_test ...
+*** iqc_tvscalar_test ...
+*** GUI test1 ...
+*** GUI test2 ...
+*** GUI test3 ...
+*** GUI test4 ...
+ 
+ 
+***********TESTING OK!!!
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         10
+    simple q-forms: 2
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 2    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 62 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6                  97.598594
+     7                  91.404729
+     8                  91.404729
+     9                  91.404729
+    10                  90.363421
+    11                  90.363421
+    12                  90.324726
+    13                  90.302930
+    14                  90.302930
+    15                  90.293296
+* switching to QR
+    16                  90.293296
+    17                  90.293296
+    18                  90.292369
+    19                  90.292369
+    20                  90.292369
+    21                  90.292325
+    22                  90.292325
+
+ Result:  feasible solution
+          best objective value:    90.292325
+          f-radius saturation:  0.591% of R = 1.00e+009 
+ Termination due to SLOW PROGRESS:
+          the objective was decreased by less than 
+          1.000% during the last 10 iterations.
+
+
+gain =
+
+    9.5022
+
+the result was gain=9.50 on nov 10, 1997
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         6
+    simple q-forms: 2
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 23 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+    10
+    11
+    12
+    13
+    14
+    15               4.646329e+004
+    16               3.652415e+004
+    17               3.652415e+004
+    18               3.482416e+004
+    19               3.482416e+004
+***                 new lower bound: 2.987338e+004
+    20               3.448237e+004
+    21               3.438621e+004
+* switching to QR
+    22               3.438621e+004
+    23               3.434402e+004
+    24               3.434118e+004
+    25               3.433949e+004
+    26               3.433901e+004
+    27               3.433886e+004
+    28               3.433886e+004
+    29               3.433884e+004
+    30               3.433884e+004
+
+ Result:  feasible solution
+          best objective value: 3.433884e+004
+          f-radius saturation:  0.150% of R = 1.00e+009 
+ Termination due to SLOW PROGRESS:
+          the objective was decreased by less than 
+          1.000% during the last 10 iterations.
+
+
+gain =
+
+  185.3074
+
+the result was gain=185.31 on June 22, 1999
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         13
+    simple q-forms: 21
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 2    
+    LMI #2    size = 1    states: 2    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 104 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6                  14.167885
+     7                   7.533114
+     8                   7.533114
+     9                   5.384863
+    10                   5.384863
+    11                   4.282293
+    12                   4.093439
+    13                   4.093439
+    14                   4.093439
+    15                   3.956780
+    16                   3.956780
+    17                   3.956780
+    18                   3.725222
+    19                   3.725222
+    20                   3.565335
+    21                   3.565335
+    22                   3.516213
+    23                   3.516213
+***                 new lower bound:     3.314868
+    24                   3.512385
+    25                   3.512385
+***                 new lower bound:     3.479626
+
+ Result:  feasible solution of required accuracy
+          best objective value:     3.512385
+          guaranteed relative accuracy: 9.33e-003
+          f-radius saturation:  0.004% of R = 1.00e+009 
+ 
+
+gain =
+
+    1.8741
+
+the result was gain=1.87 on June 22, 1999
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  1
+    states:         20
+    simple q-forms: 2
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+    LMI #2    size = 1    states: 0    
+    LMI #3    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 213 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8               1.024201e+004
+     9                9854.155119
+    10                9645.266392
+    11                9645.266392
+    12                9168.761420
+    13                9168.761420
+    14                8746.269106
+    15                8746.269106
+    16                8746.269106
+    17                7889.960766
+    18                7889.960766
+    19                7889.960766
+    20                7113.251580
+    21                7113.251580
+    22                6977.854821
+    23                6977.854821
+    24                6753.022275
+    25                6753.022275
+    26                6753.022275
+    27                6372.995879
+    28                6372.995879
+    29                6372.995879
+    30                5910.321617
+    31                5910.321617
+    32                5910.321617
+    33                5623.482323
+    34                5623.482323
+    35                5623.482323
+    36                5376.928480
+    37                5376.928480
+    38                5376.928480
+    39                5227.589772
+    40                5227.589772
+    41                5227.589772
+    42                5227.589772
+    43                5049.435522
+    44                5049.435522
+    45                5015.510237
+***                 new lower bound:  4940.643347
+    46                5015.510237
+    47                5015.510237
+***                 new lower bound:  4982.513050
+
+ Result:  feasible solution of required accuracy
+          best objective value:  5015.510237
+          guaranteed relative accuracy: 6.58e-003
+          f-radius saturation:  25.964% of R = 1.00e+009 
+ 
+
+gain =
+
+   70.8203
+
+the result was gain=70.95 on June 22, 1999
+ 
+Transfer function:
+    -1
+-----------
+s^2 + s + 1
+ 
+ 
+Transfer function:
+ 3 s + 0.3
+-----------
+0.3 s + 0.3
+ 
+
+T0 =
+
+    0.2700
+
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  3
+    states:         11
+    simple q-forms: 4
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+    LMI #2    size = 1    states: 0    
+    LMI #3    size = 1    states: 0    
+    LMI #4    size = 1    states: 0    
+    LMI #5    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 71 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8               1.687625e+004
+     9               1.187937e+004
+    10               1.150192e+004
+    11               1.150192e+004
+    12               1.067409e+004
+    13               1.067409e+004
+    14               1.009352e+004
+    15               1.009352e+004
+    16                9826.467481
+* switching to QR
+    17                9826.467481
+***                 new lower bound:  9266.012939
+    18                9752.170490
+    19                9752.170490
+***                 new lower bound:  9678.403209
+
+ Result:  feasible solution of required accuracy
+          best objective value:  9752.170490
+          guaranteed relative accuracy: 7.56e-003
+          f-radius saturation:  9.585% of R = 1.00e+009 
+ 
+result was gain=98.69 on dec 5, 1997
+ 
+Transfer function:
+    -1
+-----------
+s^2 + s + 1
+ 
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         12
+    simple q-forms: 2
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+    LMI #2    size = 1    states: 0    
+    LMI #3    size = 1    states: 4    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 95 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4                  26.563536
+     5                  19.319474
+     6                  19.319474
+     7                  14.131080
+     8                  14.131080
+     9                  10.833658
+    10                  10.833658
+    11                   8.855214
+    12                   8.855214
+    13                   8.855214
+    14                   7.191508
+    15                   7.191508
+    16                   6.879343
+    17                   6.879343
+    18                   6.879343
+    19                   5.789938
+    20                   5.789938
+    21                   5.543021
+    22                   5.543021
+    23                   5.420899
+    24                   5.420899
+    25                   5.404785
+***                 new lower bound:     5.353440
+
+ Result:  feasible solution of required accuracy
+          best objective value:     5.404785
+          guaranteed relative accuracy: 9.50e-003
+          f-radius saturation:  0.028% of R = 1.00e+009 
+ 
+
+gain =
+
+    2.3248
+
+result was gain=2.32 on dec 5, 1997
+*** Testing iqc software on an H-infinity norm calculation problem
+*
+*     ||G|| = 2.1513
+ 
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         5
+    simple q-forms: 0
+  Processing signals and quadratic forms ...
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 16 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1                   6.383329
+     2                   4.946624
+     3                   4.946624
+     4                   4.655283
+     5                   4.655283
+     6                   4.655283
+***                 new lower bound:     4.201914
+     7                   4.631933
+***                 new lower bound:     4.491576
+     8                   4.630970
+***                 new lower bound:     4.594194
+
+ Result:  feasible solution of required accuracy
+          best objective value:     4.630970
+          guaranteed relative accuracy: 7.94e-003
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ 
+
+ans =
+
+    2.1520
+
+ 
+... the following should be very small number: 
+
+ans =
+
+  1.3878e-017
+
+*** GUI test1 ...
+Warning: The model name 'test1' is shadowing another name in the MATLAB workspace or path.  Type "which -all test1" at the command line to find the other uses of this name.  You should change the name of the model to avoid problems. To turn this warning off, type "warning('off','Simulink:ShadowedModelName')" at the command line.
+
+gain =
+
+    1.0008
+
+*** GUI test2 ...
+Warning: The model name 'test2' is shadowing another name in the MATLAB workspace or path.  Type "which -all test2" at the command line to find the other uses of this name.  You should change the name of the model to avoid problems. To turn this warning off, type "warning('off','Simulink:ShadowedModelName')" at the command line.
+
+gain =
+
+    1.8474
+
+*** GUI test3 ...
+Warning: The model name 'test3' is shadowing another name in the MATLAB workspace or path.  Type "which -all test3" at the command line to find the other uses of this name.  You should change the name of the model to avoid problems. To turn this warning off, type "warning('off','Simulink:ShadowedModelName')" at the command line.
+
+gain =
+
+    0.6903
+
+*** GUI test4 ...
+Warning: The model name 'test4' is shadowing another name in the MATLAB workspace or path.  Type "which -all test4" at the command line to find the other uses of this name.  You should change the name of the model to avoid problems. To turn this warning off, type "warning('off','Simulink:ShadowedModelName')" at the command line.
+
+gain =
+
+    0.1429
+
+ 
+ 
+***********iqc_gui.m TESTING OK!!!
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         11
+    simple q-forms: 8
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 3    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 77 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+    21
+    22
+    23
+    24
+    25
+    26
+    27
+    28
+    29
+    30
+    31               1.472071e+004
+    32                6678.574627
+    33                6678.574627
+    34                6678.574627
+    35                2935.498760
+    36                2935.498760
+    37                1885.382894
+    38                1885.382894
+    39                1352.502551
+    40                1352.502551
+    41                 968.304737
+    42                 968.304737
+    43                 968.304737
+    44                 917.659129
+    45                 917.659129
+    46                 889.504821
+***                 new lower bound:   855.298519
+* switching to QR
+    47                 889.504821
+    48                 873.624951
+    49                 872.821301
+***                 new lower bound:   866.314189
+
+ Result:  feasible solution of required accuracy
+          best objective value:   872.821301
+          guaranteed relative accuracy: 7.46e-003
+          f-radius saturation:  0.063% of R = 1.00e+009 
+ 
+
+gain =
+
+   29.5435
+
+ now calculate the monodromy matrix in the associated 
+ Hamiltonian system for a 10 percent smaller gain ...
+ 
+
+abs_z =
+
+    3.5989
+    1.0497
+    0.9526
+    0.2779
+
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  3
+    states:         8
+    simple q-forms: 9
+  Processing signals and quadratic forms ...
+    LMI #1    size = 2    states: 2    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 56 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+* switching to QR
+     2
+     3                  26.654385
+     4                  18.661795
+     5                  18.661795
+     6                  17.529728
+     7                  17.529728
+     8                  14.593476
+     9                  14.231815
+    10                  14.231815
+    11                  13.787690
+    12                  13.787690
+    13                  13.425428
+    14                  13.425428
+    15                  13.350735
+    16                  13.350735
+***                 new lower bound:    11.930047
+    17                  13.326558
+***                 new lower bound:    12.764225
+    18                  13.326558
+***                 new lower bound:    13.150769
+    19                  13.326558
+***                 new lower bound:    13.260706
+
+ Result:  feasible solution of required accuracy
+          best objective value:    13.326558
+          guaranteed relative accuracy: 4.94e-003
+          f-radius saturation:  0.136% of R = 1.00e+009 
+ 
+
+ans =
+
+    3.6506
+
+    3.6488
+
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         6
+    simple q-forms: 6
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 1    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 27 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3                 174.899996
+     4                 129.098348
+     5                 108.064032
+     6                 108.064032
+***                 new lower bound:    26.036272
+     7                 104.066724
+***                 new lower bound:    59.105718
+     8                 104.066724
+***                 new lower bound:    87.398582
+     9                 103.369516
+***                 new lower bound:    96.178357
+    10                 103.227153
+***                 new lower bound:    98.671202
+    11                 103.159451
+***                 new lower bound:   100.768916
+    12                 103.104784
+***                 new lower bound:   102.125289
+
+ Result:  feasible solution of required accuracy
+          best objective value:   103.104784
+          guaranteed relative accuracy: 9.50e-003
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ 
+
+ans =
+
+   10.1541
+
+   10.1524
+
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  4
+    states:         4
+    simple q-forms: 4
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+    LMI #2    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 13 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4                  55.608556
+     5                  35.236766
+     6                  32.778010
+     7                  32.778010
+     8                  32.778010
+     9                  24.750174
+    10                  24.750174
+    11                  24.750174
+    12                  17.289191
+    13                  17.289191
+    14                  16.736506
+***                 new lower bound:    11.533862
+    15                  16.736506
+***                 new lower bound:    11.726786
+    16                  15.197361
+***                 new lower bound:    14.142852
+    17                  15.001714
+***                 new lower bound:    14.796544
+    18                  14.985366
+***                 new lower bound:    14.933709
+
+ Result:  feasible solution of required accuracy
+          best objective value:    14.985366
+          guaranteed relative accuracy: 3.45e-003
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ 
+ gain from f->v using iqc_ltvnorm : 3.871094
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  4
+    states:         9
+    simple q-forms: 8
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 1    
+    LMI #2    size = 1    states: 1    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 52 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5                  37.317054
+     6                  23.260023
+     7                  23.260023
+     8                  16.420120
+     9                  16.420120
+    10                  16.420120
+    11                  11.984384
+    12                  11.984384
+    13                  11.984384
+    14                   9.092735
+    15                   9.092735
+    16                   8.531366
+    17                   8.531366
+    18                   8.133675
+    19                   8.133675
+    20                   8.048575
+    21                   8.048575
+    22                   8.014245
+    23                   8.014245
+    24                   8.009908
+    25                   8.009908
+    26                   8.005757
+***                 new lower bound:     7.963422
+
+ Result:  feasible solution of required accuracy
+          best objective value:     8.005757
+          guaranteed relative accuracy: 5.29e-003
+          f-radius saturation:  0.066% of R = 1.00e+009 
+ 
+ gain from f->v using iqc_ltiunmod : 2.829445
+ 
+ Sys : v=G0*w, w=sum_{over i} delta(i)*v(i) 
+ G0  : A=[0.9501,0.4860,0.4565; 0.2311,0.8913,0.0185; 0.6068,0.7621,0.8214]
+       B=[0.889;  1.231;  1.584]
+       C=sys(3)
+       D=[0;0;0]
+ 
+ First, use mu-toolbox to get maximun ||delta|| such that the system
+ is still stable
+ 
+ mu-toolbox predicts that the ststem is stable when 
+ the uncertainty has norm less than 0.63244
+ 
+ IQC theory also proves that system can substain an uncertainty with 
+ norm less than 0.63237
+******* testing iqc_gain_tbx ***********
+****************************************
+ANALYTICAL ANSWER = 7.506
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  5
+    states:         5
+    simple q-forms: 2
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 17 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+    10
+    11                  77.390337
+    12                  65.672137
+***                 new lower bound:    40.861819
+    13                  61.070979
+    14                  60.439318
+***                 new lower bound:    45.442127
+    15                  60.053007
+***                 new lower bound:    49.932026
+    16                  59.366956
+***                 new lower bound:    56.799554
+    17                  58.953325
+***                 new lower bound:    58.393269
+
+ Result:  feasible solution of required accuracy
+          best objective value:    58.953325
+          guaranteed relative accuracy: 9.50e-003
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ 
+
+gain =
+
+    7.6781
+
+Warning: Divide by zero.
+> In <a href="error:C:\Andres\matlab\IQC_toolbox\iqc_beta31\tests\iqc_monotonic_test1.m,43,1">iqc_monotonic_test1 at 43</a>
+  In <a href="error:C:\Andres\matlab\IQC_toolbox\iqc_beta31\tests\TEST_ALL.m,65,1">TEST_ALL at 65</a>
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         4
+    simple q-forms: 5
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+    LMI #2    size = 1    states: 0    
+    LMI #3    size = 1    states: 0    
+    LMI #4    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 16 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2                   0.551627
+     3                   0.370468
+     4                   0.370468
+     5                   0.343622
+***                 new lower bound:     0.157788
+     6                   0.283529
+***                 new lower bound:     0.169352
+     7                   0.277123
+***                 new lower bound:     0.201015
+     8                   0.271956
+***                 new lower bound:     0.252458
+     9                   0.268572
+***                 new lower bound:     0.264757
+    10                   0.268162
+***                 new lower bound:     0.267238
+
+ Result:  feasible solution of required accuracy
+          best objective value:     0.268162
+          guaranteed absolute accuracy: 9.24e-004
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ 
+
+ans =
+
+    0.5178
+
+The lower bound is 0.51742
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  12
+    states:         2
+    simple q-forms: 3
+  Processing signals and quadratic forms ...
+    LMI #1    size = 12   states: 0    
+    LMI #2    size = 8    states: 0    
+    LMI #3    size = 2    states: 0    
+    LMI #4    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 57 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20                4316.727213
+    21                4316.727213
+    22                4068.655499
+    23                4068.655499
+    24                4068.655499
+    25                3863.804757
+    26                3343.058866
+***                 new lower bound:   364.713187
+    27                3343.058866
+***                 new lower bound:   511.500301
+    28                2090.219563
+***                 new lower bound:   543.718356
+    29                2090.219563
+***                 new lower bound:   661.222981
+    30                2090.219563
+***                 new lower bound:   682.972036
+    31                2090.219563
+    32                1577.445177
+    33                1538.733378
+***                 new lower bound:   790.799746
+    34                1538.733378
+***                 new lower bound:   886.475525
+    35                1538.733378
+***                 new lower bound:   983.361326
+    36                1538.733378
+***                 new lower bound:   988.109991
+    37                1538.733378
+    38                1538.733378
+    39                1538.733378
+    40                1538.733378
+    41                1443.062393
+    42                1443.062393
+***                 new lower bound:  1064.648245
+    43                1443.062393
+***                 new lower bound:  1150.653021
+    44                1443.062393
+***                 new lower bound:  1161.607400
+    45                1443.062393
+    46                1443.062393
+    47                1443.062393
+* switching to QR
+    48                1443.062393
+    49                1443.062393
+***                 new lower bound:  1419.375660
+    50                1443.062393
+    51                1443.062393
+
+ Result:  feasible solution
+          best objective value:  1443.062393
+          guaranteed relative accuracy: 1.64e-002
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ Termination due to SLOW PROGRESS:
+          the objective was decreased by less than 
+          1.000% during the last 10 iterations.
+
+
+gain =
+
+   37.9877
+
+the result was gain=74.9938 on June 22, 1999
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  4
+    states:         4
+    simple q-forms: 5
+  Processing signals and quadratic forms ...
+    LMI #1    size = 2    states: 0    
+    LMI #2    size = 2    states: 0    
+    LMI #3    size = 2    states: 0    
+    LMI #4    size = 2    states: 0    
+    LMI #5    size = 2    states: 0    
+    LMI #6    size = 2    states: 0    
+    LMI #7    size = 2    states: 0    
+    LMI #8    size = 2    states: 0    
+    LMI #9    size = 2    states: 0    
+    LMI #10   size = 2    states: 0    
+    LMI #11   size = 2    states: 0    
+    LMI #12   size = 2    states: 0    
+    LMI #13   size = 2    states: 0    
+    LMI #14   size = 2    states: 0    
+    LMI #15   size = 2    states: 0    
+    LMI #16   size = 2    states: 0    
+    LMI #17   size = 2    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 23 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+    21
+    22
+    23
+    24
+    25
+    26
+    27
+    28
+    29
+    30
+    31
+    32
+    33
+    34
+    35
+    36
+    37
+    38
+    39
+    40
+    41
+    42
+    43
+    44
+    45
+    46
+    47
+    48
+    49
+    50
+    51
+    52
+    53               1.630880e+005
+    54               1.147993e+005
+    55               1.147993e+005
+    56               9.245934e+004
+    57               9.245934e+004
+    58               9.245934e+004
+    59               9.245934e+004
+    60               7.844922e+004
+    61               7.844922e+004
+    62               7.844922e+004
+    63               7.844922e+004
+    64               7.844922e+004
+    65               5.270542e+004
+    66               5.270542e+004
+    67               5.270542e+004
+    68               5.270542e+004
+    69               4.862400e+004
+    70               4.862400e+004
+    71               4.862400e+004
+    72               4.862400e+004
+    73               4.661927e+004
+    74               4.661927e+004
+    75               4.661927e+004
+    76               4.449540e+004
+    77               4.449540e+004
+    78               4.449540e+004
+    79               4.249031e+004
+    80               4.249031e+004
+    81               4.182263e+004
+* switching to QR
+    82               4.182263e+004
+    83               4.182263e+004
+***                 new lower bound: 3.701430e+004
+    84               4.089164e+004
+***                 new lower bound: 3.831162e+004
+    85               4.069112e+004
+***                 new lower bound: 4.030456e+004
+
+ Result:  feasible solution of required accuracy
+          best objective value: 4.069112e+004
+          guaranteed relative accuracy: 9.50e-003
+          f-radius saturation:  0.067% of R = 1.00e+009 
+ 
+
+gain =
+
+  201.7204
+
+the result was gain=199.66 on Nov 12, 1997
+
+La =
+
+  -72.5016         0
+         0  -74.9603
+
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  4
+    states:         4
+    simple q-forms: 5
+  Processing signals and quadratic forms ...
+    LMI #1    size = 2    states: 0    
+    LMI #2    size = 2    states: 0    
+    LMI #3    size = 2    states: 0    
+    LMI #4    size = 2    states: 0    
+    LMI #5    size = 2    states: 0    
+    LMI #6    size = 2    states: 0    
+    LMI #7    size = 2    states: 0    
+    LMI #8    size = 2    states: 0    
+    LMI #9    size = 2    states: 0    
+    LMI #10   size = 2    states: 0    
+    LMI #11   size = 2    states: 0    
+    LMI #12   size = 2    states: 0    
+    LMI #13   size = 2    states: 0    
+    LMI #14   size = 2    states: 0    
+    LMI #15   size = 2    states: 0    
+    LMI #16   size = 2    states: 0    
+    LMI #17   size = 2    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 23 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+    21
+    22
+    23
+    24
+    25
+    26
+    27
+    28
+    29
+    30               1.849585e+004
+    31               1.321727e+004
+    32               1.321727e+004
+    33               1.050372e+004
+    34               1.050372e+004
+    35               1.050372e+004
+    36               1.050372e+004
+    37               1.050372e+004
+    38                8484.995069
+    39                8484.995069
+    40                8484.995069
+    41                8484.995069
+    42                8150.081458
+    43                8150.081458
+    44                8150.081458
+    45                7911.828036
+    46                7911.828036
+    47                7911.828036
+    48                7321.465270
+    49                7321.465270
+    50                7223.036937
+    51                7223.036937
+***                 new lower bound:  6575.717455
+    52                7137.761232
+***                 new lower bound:  7069.952501
+
+ Result:  feasible solution of required accuracy
+          best objective value:  7137.761232
+          guaranteed relative accuracy: 9.50e-003
+          f-radius saturation:  0.010% of R = 1.00e+009 
+ 
+
+gain =
+
+   84.4853
+
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  4
+    states:         3
+    simple q-forms: 1
+  Processing signals and quadratic forms ...
+    LMI #1    size = 2    states: 0    
+    LMI #2    size = 1    states: 0    
+    LMI #3    size = 1    states: 0    
+    LMI #4    size = 1    states: 0    
+    LMI #5    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 13 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+***                 new lower bound:     4.339017
+     6
+***                 new lower bound:    12.302999
+     7
+***                 new lower bound:    19.099397
+     8
+***                 new lower bound:    28.445737
+     9
+***                 new lower bound:    37.317316
+    10
+***                 new lower bound:    47.942103
+    11
+***                 new lower bound:    59.004917
+    12
+***                 new lower bound:    73.671118
+    13
+***                 new lower bound:    89.090748
+    14
+***                 new lower bound:   110.150856
+    15
+***                 new lower bound:   132.452435
+    16
+***                 new lower bound:   163.138495
+    17
+***                 new lower bound:   195.650505
+    18
+***                 new lower bound:   240.574233
+    19
+***                 new lower bound:   288.188344
+    20
+***                 new lower bound:   354.129353
+    21
+***                 new lower bound:   424.021558
+    22
+***                 new lower bound:   521.057753
+    23
+***                 new lower bound:   623.899043
+    24
+***                 new lower bound:   767.106615
+    25
+***                 new lower bound:   918.864288
+    26
+***                 new lower bound:  1131.000208
+    27
+***                 new lower bound:  1355.745537
+    28
+***                 new lower bound:  1671.539493
+    29
+***                 new lower bound:  2005.921733
+    30
+***                 new lower bound:  2479.193921
+    31
+***                 new lower bound:  2979.748756
+    32
+***                 new lower bound:  3695.757582
+    33
+***                 new lower bound:  4451.227513
+    34
+***                 new lower bound:  5549.462156
+    35
+***                 new lower bound:  6702.014308
+    36
+***                 new lower bound:  8421.663418
+    37
+***                 new lower bound: 1.020016e+004
+    38
+***                 new lower bound: 1.297288e+004
+    39
+***                 new lower bound: 1.567155e+004
+    40               1.328136e+005
+***                 new lower bound: 2.003281e+004
+    41               8.334839e+004
+***                 new lower bound: 2.879440e+004
+    42               7.325558e+004
+***                 new lower bound: 3.570870e+004
+    43               6.561976e+004
+***                 new lower bound: 4.134518e+004
+    44               6.148228e+004
+***                 new lower bound: 4.561976e+004
+    45               5.807888e+004
+***                 new lower bound: 4.870684e+004
+    46               5.663389e+004
+***                 new lower bound: 5.081116e+004
+    47               5.580563e+004
+***                 new lower bound: 5.220445e+004
+    48               5.523397e+004
+***                 new lower bound: 5.310468e+004
+    49               5.502212e+004
+***                 new lower bound: 5.367637e+004
+    50               5.488876e+004
+***                 new lower bound: 5.436732e+004
+
+ Result:  feasible solution of required accuracy
+          best objective value: 5.488876e+004
+          guaranteed relative accuracy: 9.50e-003
+          f-radius saturation:  0.005% of R = 1.00e+009 
+ 
+
+gain =
+
+  234.2835
+
+the result was gain=234.28 on nov 10, 1997
+Warning: Divide by zero.
+> In <a href="error:C:\Andres\matlab\IQC_toolbox\iqc_beta31\tests\iqc_popov_test1.m,38,1">iqc_popov_test1 at 38</a>
+  In <a href="error:C:\Andres\matlab\IQC_toolbox\iqc_beta31\tests\TEST_ALL.m,80,1">TEST_ALL at 80</a>
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         2
+    simple q-forms: 2
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 6 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2                   0.714912
+     3                   0.442689
+     4                   0.442689
+***                 new lower bound:     0.140551
+     5                   0.329833
+     6                   0.277914
+***                 new lower bound:     0.196850
+     7                   0.270736
+***                 new lower bound:     0.255810
+     8                   0.268020
+***                 new lower bound:     0.265473
+
+ Result:  feasible solution of required accuracy
+          best objective value:     0.268020
+          guaranteed absolute accuracy: 2.55e-003
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ 
+
+ans =
+
+    0.5177
+
+The lower bound is 0.51742
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  4
+    states:         5
+    simple q-forms: 5
+  Processing signals and quadratic forms ...
+    LMI #1    size = 2    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 23 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6                  60.966367
+     7                  60.966367
+     8                  60.404047
+     9                  60.404047
+    10                  60.404047
+    11                  60.341850
+***                 new lower bound:    59.768603
+
+ Result:  feasible solution of required accuracy
+          best objective value:    60.341850
+          guaranteed relative accuracy: 9.50e-003
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ 
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         2
+    simple q-forms: 1
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 5 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+***                 new lower bound:    13.296098
+     3
+***                 new lower bound:    32.556941
+     4
+***                 new lower bound:    68.390324
+     5
+***                 new lower bound:   125.882398
+     6
+***                 new lower bound:   205.493430
+     7                 817.354971
+***                 new lower bound:   282.620870
+     8                 695.468617
+***                 new lower bound:   478.550904
+     9                 679.634709
+***                 new lower bound:   635.027989
+    10                 674.353327
+***                 new lower bound:   653.794070
+    11                 674.353327
+***                 new lower bound:   669.913464
+
+ Result:  feasible solution of required accuracy
+          best objective value:   674.353327
+          guaranteed relative accuracy: 6.58e-003
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ 
+
+gain =
+
+   25.9683
+
+The answer was gain=25.97 on nov 10, 1997
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         2
+    simple q-forms: 2
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 6 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+***                 new lower bound:     5.218449
+     3                  56.612874
+***                 new lower bound:     9.693239
+     4                  51.033760
+***                 new lower bound:    44.492062
+     5                  50.297422
+***                 new lower bound:    47.127714
+     6                  50.159484
+***                 new lower bound:    49.559790
+     7                  50.159484
+***                 new lower bound:    50.014242
+
+ Result:  feasible solution of required accuracy
+          best objective value:    50.159484
+          guaranteed relative accuracy: 2.90e-003
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ 
+
+gain =
+
+    7.0823
+
+The answer was gain=7.08 on nov 10, 1997
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         5
+    simple q-forms: 1
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+    LMI #2    size = 1    states: 0    
+    LMI #3    size = 1    states: 1    
+    LMI #4    size = 1    states: 1    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 23 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+    10
+    11                2264.455625
+    12                1312.026596
+    13                1312.026596
+    14                1050.766836
+    15                1050.766836
+    16                 879.528783
+    17                 879.528783
+    18                 868.235109
+***                 new lower bound:   793.996283
+    19                 856.254299
+***                 new lower bound:   809.344356
+    20                 848.019139
+***                 new lower bound:   820.127542
+    21                 844.123617
+***                 new lower bound:   826.857299
+    22                 841.715054
+***                 new lower bound:   833.718760
+
+ Result:  feasible solution of required accuracy
+          best objective value:   841.715054
+          guaranteed relative accuracy: 9.50e-003
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ 
+
+gain =
+
+   29.0123
+
+the result was gain=28.99 on nov 10, 1997
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         11
+    simple q-forms: 2
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+    LMI #2    size = 1    states: 0    
+    LMI #3    size = 1    states: 0    
+    LMI #4    size = 1    states: 2    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 78 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8                   7.904135
+     9                   3.209266
+    10                   3.209266
+    11                   2.405987
+    12                   2.405987
+    13                   2.223685
+    14                   2.223685
+    15                   1.522738
+    16                   1.522738
+    17                   0.988604
+    18                   0.988604
+    19                   0.739510
+    20                   0.739510
+    21                   0.570957
+    22                   0.570957
+    23                   0.570957
+    24                   0.366554
+    25                   0.366554
+    26                   0.366554
+    27                   0.293047
+    28                   0.293047
+    29                   0.293047
+    30                   0.266591
+    31                   0.266591
+    32                   0.266591
+    33                   0.259652
+    34                   0.259652
+    35                   0.259652
+    36                   0.223716
+    37                   0.223716
+    38                   0.215360
+    39                   0.215360
+    40                   0.208333
+* switching to QR
+    41                   0.208333
+    42                   0.206682
+    43                   0.206546
+***                 new lower bound:     0.204584
+
+ Result:  feasible solution of required accuracy
+          best objective value:     0.206546
+          guaranteed absolute accuracy: 1.96e-003
+          f-radius saturation:  0.812% of R = 1.00e+009 
+ 
+
+gain =
+
+    0.4545
+
+the result was gain=0.4537 on dec 2, 1997
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  5
+    states:         11
+    simple q-forms: 8
+  Processing signals and quadratic forms ...
+    LMI #1    size = 4    states: 0    
+    LMI #2    size = 3    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 92 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+* switching to QR
+     9
+    10
+    11                4994.165511
+    12                2737.117221
+    13                2477.575633
+    14                2477.575633
+    15                1664.864134
+    16                1664.864134
+    17                1664.864134
+    18                 974.297929
+    19                 974.297929
+    20                 869.553110
+    21                 869.553110
+    22                 798.963178
+    23                 769.030676
+    24                 769.030676
+    25                 769.030676
+    26                 744.700727
+    27                 744.700727
+    28                 744.700727
+    29                 721.293476
+    30                 721.293476
+    31                 711.648225
+    32                 711.648225
+***                 new lower bound:   529.844167
+    33                 681.019792
+***                 new lower bound:   553.914260
+    34                 681.019792
+***                 new lower bound:   571.276071
+    35                 673.390362
+***                 new lower bound:   607.589882
+    36                 671.621437
+***                 new lower bound:   620.354300
+    37                 670.214032
+***                 new lower bound:   631.268309
+    38                 667.970579
+***                 new lower bound:   639.306273
+    39                 667.099441
+***                 new lower bound:   645.153978
+    40                 666.429667
+***                 new lower bound:   649.431568
+    41                 666.429667
+***                 new lower bound:   652.569327
+    42                 664.317869
+***                 new lower bound:   658.006849
+
+ Result:  feasible solution of required accuracy
+          best objective value:   664.317869
+          guaranteed relative accuracy: 9.50e-003
+          f-radius saturation:  7.035% of R = 1.00e+009 
+ 
+
+ans =
+
+   25.7744
+
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         2
+    simple q-forms: 2
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 5 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+***                 new lower bound:     1.438765
+     4
+***                 new lower bound:     7.815986
+     5
+***                 new lower bound:    20.939227
+     6
+***                 new lower bound:    39.138201
+     7
+***                 new lower bound:    70.358838
+     8
+***                 new lower bound:   116.424980
+     9
+***                 new lower bound:   196.194491
+    10
+***                 new lower bound:   314.153415
+    11
+***                 new lower bound:   521.091077
+    12
+***                 new lower bound:   837.449968
+    13
+***                 new lower bound:  1390.811357
+    14
+***                 new lower bound:  2269.915012
+    15
+***                 new lower bound:  3773.668934
+    16
+***                 new lower bound:  6222.356780
+    17
+***                 new lower bound: 1.032256e+004
+    18
+***                 new lower bound: 1.666950e+004
+    19               7.542639e+004
+***                 new lower bound: 2.434666e+004
+    20               6.341048e+004
+***                 new lower bound: 5.557496e+004
+    21               6.161927e+004
+***                 new lower bound: 5.831821e+004
+    22               6.147761e+004
+***                 new lower bound: 6.089357e+004
+
+ Result:  feasible solution of required accuracy
+          best objective value: 6.147761e+004
+          guaranteed relative accuracy: 9.50e-003
+          f-radius saturation:  0.006% of R = 1.00e+009 
+ 
+
+ans =
+
+  247.9468
+
+The answer must be small ...
+
+ans =
+
+     0
+
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         15
+    simple q-forms: 1
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 145 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4                 140.737443
+     5                  80.680949
+     6                  53.826496
+     7                  40.692500
+     8                  33.842383
+     9                  27.275756
+    10                  27.275756
+    11                  24.367096
+* switching to QR
+    12                  24.367096
+    13                  23.232510
+    14                  23.232510
+    15                  22.941809
+    16                  22.941809
+    17                  22.941809
+    18                  20.882087
+    19                  20.882087
+    20                  20.530973
+    21                  20.530973
+    22                  20.345341
+    23                  20.345341
+    24                  20.345341
+    25                  19.189115
+    26                  19.189115
+    27                  18.975263
+    28                  18.975263
+    29                  18.975263
+    30                  18.424610
+    31                  18.424610
+    32                  18.275799
+    33                  18.275799
+    34                  18.275799
+    35                  17.828677
+    36                  17.828677
+    37                  17.708198
+    38                  17.708198
+    39                  17.708198
+    40                  17.509552
+    41                  17.509552
+    42                  17.457375
+    43                  17.457375
+    44                  17.457375
+    45                  17.301862
+    46                  17.301862
+    47                  17.272588
+    48                  17.272588
+    49                  17.272588
+    50                  17.188758
+    51                  17.188758
+    52                  17.188758
+    53                  17.124338
+    54                  17.124338
+    55                  17.124338
+    56                  17.086477
+    57                  17.086477
+    58                  17.083390
+    59                  17.083390
+    60                  17.083390
+
+ Result:  feasible solution
+          best objective value:    17.083390
+          f-radius saturation:  0.002% of R = 1.00e+009 
+ Termination due to SLOW PROGRESS:
+          the objective was decreased by less than 
+          1.000% during the last 10 iterations.
+
+
+gain =
+
+    4.1332
+
+answer as b-> inf: ||G||_{H2}=4.1292
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         6
+    simple q-forms: 2
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 0    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 23 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+    10
+    11
+    12
+    13
+    14
+    15
+    16               5.971555e+005
+    17               4.423092e+005
+    18               4.272906e+005
+    19               4.272906e+005
+***                 new lower bound: 2.271557e+005
+    20               4.117322e+005
+    21               4.056410e+005
+* switching to QR
+    22               4.056410e+005
+***                 new lower bound: 3.281470e+005
+    23               3.969910e+005
+***                 new lower bound: 3.723536e+005
+    24               3.941812e+005
+***                 new lower bound: 3.904365e+005
+
+ Result:  feasible solution of required accuracy
+          best objective value: 3.941812e+005
+          guaranteed relative accuracy: 9.50e-003
+          f-radius saturation:  53.672% of R = 1.00e+009 
+ 
+
+gain =
+
+  627.8385
+
+result was gain=627.60 on nov 10, 1997
+*** Testing lmi software on an eigenvalue calculation problem
+*
+*     answer should be = 1.8117
+ 
+lmi_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    LMI #1    size = 5    
+    LMI #2    size = 5    
+  lmi_extract done OK
+ 
+lmi_mincx_tbx ...
+  defining the original variables ...
+  Solving with 15 decision variables ...
+
+ Solver for LMI feasibility problems L(x) < R(x)
+    This solver minimizes  t  subject to  L(x) < R(x) + t*I
+    The best value of t should be negative for feasibility
+
+ Iteration   :    Best value of t so far 
+ 
+     1                        3.649593
+***                 new lower bound:     0.019068
+
+ Result:  best value of t:     3.649593
+          f-radius saturation:  0.000% of R = 1.00e+009
+
+ These LMI constraints were found infeasible 
+
+ 
+The problem is infeasible.
+
+ans =
+
+    3.6496
+
+*** Testing lmi software on an eigenvalue calculation problem
+*
+*     answer should be = 2.0691
+ 
+lmi_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    LMI #1    size = 10   
+  lmi_extract done OK
+ 
+lmi_mincx_tbx ...
+  defining the original variables ...
+  Solving with 15 decision variables ...
+
+ Solver for LMI feasibility problems L(x) < R(x)
+    This solver minimizes  t  subject to  L(x) < R(x) + t*I
+    The best value of t should be negative for feasibility
+
+ Iteration   :    Best value of t so far 
+ 
+     1                        4.291164
+***                 new lower bound:     0.715412
+
+ Result:  best value of t:     4.291164
+          f-radius saturation:  0.000% of R = 1.00e+009
+
+ These LMI constraints were found infeasible 
+
+ 
+The problem is infeasible.
+*** Testing lmi software on an H-infinity norm calculation problem
+*
+*     ||G||^2 = 38.3943
+ 
+lmi_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    LMI #1    size = 12   
+  lmi_extract done OK
+ 
+lmi_mincx_tbx ...
+  defining the original variables ...
+  Solving with 56 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3                  40.540605
+     4                  39.065643
+     5                  39.065643
+     6                  38.503525
+     7                  38.503525
+     8                  38.492320
+     9                  38.403004
+    10                  38.403004
+***                 new lower bound:    38.138124
+
+ Result:  feasible solution of required accuracy
+          best objective value:    38.403004
+          guaranteed relative accuracy: 6.90e-003
+          f-radius saturation:  0.001% of R = 1.00e+009 
+ 
+
+Y =
+
+   38.4030
+
+*** Testing lmi software on problem
+*** x>a, x>b, trace(x)->min 
+*
+*     answer = 33.8995
+ 
+lmi_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    LMI #1    size = 20   
+    LMI #2    size = 20   
+  lmi_extract done OK
+ 
+lmi_mincx_tbx ...
+  defining the original variables ...
+  Solving with 210 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1                  89.780132
+***                 new lower bound:     2.192545
+     2                  38.981054
+***                 new lower bound:    17.728502
+     3                  36.959567
+***                 new lower bound:    29.435251
+     4                  35.591140
+     5                  35.032071
+***                 new lower bound:    32.888445
+     6                  34.488892
+     7                  34.117772
+***                 new lower bound:    33.044017
+     8                  34.039451
+***                 new lower bound:    33.716076
+
+ Result:  feasible solution of required accuracy
+          best objective value:    34.039451
+          guaranteed relative accuracy: 9.50e-003
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ 
+
+ans =
+
+   34.0395
+
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+    21
+    22
+    23
+    24
+    25
+    26
+    27
+    28
+    29
+    30
+    31
+    32
+    33
+    34
+    35
+    36
+    37
+    38
+    39
+    40
+    41
+    42
+    43
+    44
+    45
+    46
+    47
+    48
+    49
+    50
+    51
+    52
+    53
+    54
+    55
+    56
+    57
+    58
+    59
+    60
+    61
+    62
+    63
+    64
+    65
+    66
+    67
+    68
+    69
+    70
+    71
+    72
+    73
+    74
+    75
+    76
+    77
+    78
+    79
+    80
+    81
+    82
+    83
+    84
+    85
+    86
+    87
+    88
+
+ Result:  infeasibility
+
+ The LMI constraints were found INFEASIBLE 
+
+iqc_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+    scalar inputs:  2
+    states:         7
+    simple q-forms: 10
+  Processing signals and quadratic forms ...
+    LMI #1    size = 1    states: 2    
+  iqc_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  defining the non-KYP LMIs ...
+  defining the KYP LMIs ...
+  Solving with 38 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1
+     2
+     3
+     4
+     5
+     6
+     7
+     8
+     9
+    10
+    11
+    12                 292.139584
+    13                 173.108647
+    14                 173.108647
+    15                 135.732338
+    16                 135.732338
+    17                 128.535218
+    18                 128.535218
+    19                 125.236897
+    20                 125.236897
+    21                 123.646808
+***                 new lower bound:   118.317140
+    22                 123.646808
+***                 new lower bound:   122.015244
+    23                 123.217827
+***                 new lower bound:   122.047257
+
+ Result:  feasible solution of required accuracy
+          best objective value:   123.217827
+          guaranteed relative accuracy: 9.50e-003
+          f-radius saturation:  0.001% of R = 1.00e+009 
+ 
+
+ans =
+
+   11.1004
+
+lmi_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+Warning: ambiguous scalar in matrix expression found in log # 11 : X > a here is intepreted as X > a*ones(size(X)!
+> In <a href="error:C:\Andres\matlab\IQC_toolbox\iqc_beta31\lmitools\lmi_extract.m,465,1">lmi_extract at 465</a>
+  In <a href="error:C:\Andres\matlab\IQC_toolbox\iqc_beta31\lmitools\lmi_mincx_tbx.m,27,1">lmi_mincx_tbx at 27</a>
+  In <a href="error:C:\Andres\matlab\IQC_toolbox\iqc_beta31\tests\test_X_lt_a.m,4,1">test_X_lt_a at 4</a>
+  In <a href="error:C:\Andres\matlab\IQC_toolbox\iqc_beta31\tests\TEST_ALL.m,128,1">TEST_ALL at 128</a>
+    LMI #1    size = 2    
+  lmi_extract done OK
+ 
+lmi_mincx_tbx ...
+  defining the original variables ...
+  Solving with 1 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1                   2.026746
+***                 new lower bound:     1.322876
+     2                   2.009825
+***                 new lower bound:     1.855896
+     3                   2.001075
+***                 new lower bound:     1.951938
+     4                   2.000261
+***                 new lower bound:     1.992392
+
+ Result:  feasible solution of required accuracy
+          best objective value:     2.000261
+          guaranteed relative accuracy: 3.93e-003
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ 
+
+ans =
+
+    2.0003
+
+ 
+ The answer should be (very) close to 2; and there should be a warning message
+ 
+fdlmi_extract: processing the abst log information ... 
+  Processing cst, var, and lin, counting ...
+Warning: ambiguous scalar in matrix expression found in log # 11 : X > a here is intepreted as X > a*ones(size(X)!
+> In <a href="error:C:\Andres\matlab\IQC_toolbox\iqc_beta31\lmitools\fdlmi_extract.m,465,1">fdlmi_extract at 465</a>
+  In <a href="error:C:\Andres\matlab\IQC_toolbox\iqc_beta31\lmitools\fdlmi_mincx_tbx.m,29,1">fdlmi_mincx_tbx at 29</a>
+  In <a href="error:C:\Andres\matlab\IQC_toolbox\iqc_beta31\tests\test_X_lt_a.m,13,1">test_X_lt_a at 13</a>
+  In <a href="error:C:\Andres\matlab\IQC_toolbox\iqc_beta31\tests\TEST_ALL.m,128,1">TEST_ALL at 128</a>
+    LMI #1    size = 2    states: 0    
+  fdlmi_extract done OK
+ 
+iqc_gain_tbx ...
+  defining the original variables ...
+  Solving with 1 decision variables ...
+
+ Solver for linear objective minimization under LMI constraints 
+
+ Iterations   :    Best objective value so far 
+ 
+     1                   2.026746
+***                 new lower bound:     1.322876
+     2                   2.009825
+***                 new lower bound:     1.855896
+     3                   2.001075
+***                 new lower bound:     1.951938
+     4                   2.000261
+***                 new lower bound:     1.992392
+
+ Result:  feasible solution of required accuracy
+          best objective value:     2.000261
+          guaranteed relative accuracy: 3.93e-003
+          f-radius saturation:  0.000% of R = 1.00e+009 
+ 
+
+ans =
+
+    2.0003
+
+ 
+ The answer should be (very) close to 2; and there should be a warning message
+ 
+diary off

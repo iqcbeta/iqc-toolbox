@@ -1,0 +1,27 @@
+The main file is
+
+sat
+
+This file contains global stability analysis of equilibrium points of
+saturation systems (SAT).
+
+Type
+
+help sat
+
+for more information.
+
+Note: this version is based on the development and is not optimized.
+It can be made much more efficient.
+
+Please email me if you have problems so that I can fix them.  For the
+latest releases please visit my web page at
+
+http://web.mit.edu/jmg/www
+
+NOTE: this files are for version 5.3 or higher of Matlab.
+
+The paper associated with these results can also be obtained at this
+web page.
+
+Written by Jorge Goncalves, jmg@mit.edu, All rights reserved

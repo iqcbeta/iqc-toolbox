@@ -1,0 +1,716 @@
+Model {
+  Name			  "iqc_lib"
+  Version		  2.20
+  SimParamPage		  Solver
+  SampleTimeColors	  off
+  InvariantConstants	  off
+  WideVectorLines	  off
+  ShowLineWidths	  off
+  StartTime		  "0.0"
+  StopTime		  "999999"
+  Solver		  ode45
+  RelTol		  "1e-3"
+  AbsTol		  "1e-6"
+  Refine		  "1"
+  MaxStep		  "10"
+  InitialStep		  "auto"
+  FixedStep		  "auto"
+  MaxOrder		  5
+  OutputOption		  RefineOutputTimes
+  OutputTimes		  "[]"
+  LoadExternalInput	  off
+  ExternalInput		  "[t, u]"
+  SaveTime		  off
+  TimeSaveName		  "tout"
+  SaveState		  off
+  StateSaveName		  "xout"
+  SaveOutput		  off
+  OutputSaveName	  "yout"
+  LoadInitialState	  off
+  InitialState		  "xInitial"
+  SaveFinalState	  off
+  FinalStateName	  "xFinal"
+  LimitMaxRows		  off
+  MaxRows		  "1000"
+  Decimation		  "1"
+  AlgebraicLoopMsg	  warning
+  MinStepSizeMsg	  warning
+  UnconnectedInputMsg	  warning
+  UnconnectedOutputMsg	  warning
+  UnconnectedLineMsg	  warning
+  ConsistencyChecking	  off
+  ZeroCross		  on
+  SimulationMode	  normal
+  RTWSystemTargetFile	  "grt.tlc"
+  RTWInlineParameters	  off
+  RTWPlaceOutputsASAP	  off
+  RTWRetainRTWFile	  off
+  RTWTemplateMakefile	  "grt_default_tmf"
+  RTWMakeCommand	  "make_rtw"
+  RTWGenerateCodeOnly	  off
+  ExtModeMexFile	  "ext_comm"
+  ExtModeBatchMode	  off
+  BlockDefaults {
+    Orientation		    right
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    NamePlacement	    normal
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+    ShowName		    on
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    center
+    VerticalAlignment	    middle
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  System {
+    Name		    "iqc_lib"
+    Location		    [40, 42, 530, 593]
+    Open		    on
+    ToolBar		    off
+    StatusBar		    off
+    ScreenColor		    white
+    PaperOrientation	    landscape
+    PaperPositionMode	    auto
+    PaperType		    usletter
+    PaperUnits		    inches
+    Block {
+      BlockType		      Inport
+      Name		      "In"
+      Position		      [30, 400, 50, 420]
+      Port		      "1"
+      PortWidth		      "-1"
+      SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      Demux
+      Name		      "Demux"
+      Ports		      [1, 2, 0, 0, 0]
+      Position		      [90, 331, 130, 364]
+      Outputs		      "2"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Gain"
+      Position		      [35, 192, 60, 218]
+      Gain		      "1"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "LTI unmodeled"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [370, 464, 410, 496]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty sp"
+"ecified by user"
+      MaskPromptString	      "Order|List of iqc relationships"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[81,85,86,85,81],[19,34,44,56,"
+"72],[54,57,62,71,74,75,74,68,60,55,53,55,60,67,74],[32,27,25,25,28,34,41,48,5"
+"1,53,59,66,69,69,66],[45,43,42,43,45],[20,37,46,57,72],[25,10,36,25],[71,24,2"
+"4,72])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out=iqc_ltiunmod(in,1,1);"
+    }
+    Block {
+      BlockType		      StateSpace
+      Name		      "Matrix\nGain"
+      Position		      [90, 190, 120, 220]
+      A			      "[]"
+      B			      "[]"
+      C			      "[]"
+      D			      "K"
+      X0		      "0"
+      MaskType		      "Matrix Gain"
+      MaskDescription	      "Matrix Gain."
+      MaskHelp		      "Multiplies input vector by entered matrix to pr"
+"oduce output vector (y=Au)."
+      MaskPromptString	      "Gain matrix:"
+      MaskStyleString	      "edit"
+      MaskTunableValueString  "on"
+      MaskInitialization      "K=@1; "
+      MaskDisplay	      "disp('K')"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1"
+    }
+    Block {
+      BlockType		      Mux
+      Name		      "Mux"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [25, 331, 55, 364]
+      Inputs		      "2"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "STV scalar"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [185, 341, 225, 369]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty "
+      MaskPromptString	      "Order|List of iqc relationships:"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[32,33,33,32,32],[70,70,20,20,"
+"70],[32,28,22,17,14,14,17,22,27,32],[23,21,20,20,27,38,46,48,48,45],[29,36,36"
+",29,29],[80,80,79,79,80],[5,5],[19,81],[43,43],[19,80],[67,51,67],[27,44,60],"
+"[74,74],[19,73],[89,74],[51,38],[88,78],[20,42])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_slowtv(in,0.1,1,1)"
+    }
+    Block {
+      BlockType		      StateSpace
+      Name		      "State-Space"
+      Position		      [35, 109, 110, 151]
+      A			      "1"
+      B			      "1"
+      C			      "1"
+      D			      "1"
+      X0		      "0"
+    }
+    Block {
+      BlockType		      Step
+      Name		      "Step Source"
+      Position		      [90, 265, 120, 295]
+      Time		      "1"
+      Before		      "0"
+      After		      "1"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [30, 265, 50, 285]
+      Inputs		      "++"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "TV scalar"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [185, 280, 225, 310]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty "
+      MaskPromptString	      "Order|List of iqc relationships:"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "disp('|D(t)|<k')"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_tvscalar(in,1)"
+    }
+    Block {
+      BlockType		      TransferFcn
+      Name		      "Transfer Fcn"
+      Position		      [25, 33, 60, 67]
+      Numerator		      "[1]"
+      Denominator	      "[1 1]"
+    }
+    Block {
+      BlockType		      ZeroPole
+      Name		      "Zero-Pole"
+      Position		      [90, 32, 135, 68]
+      Zeros		      "[1]"
+      Poles		      "[0; -1]"
+      Gain		      "[1]"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "cdelay"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [265, 317, 330, 353]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty sp"
+"ecified by user"
+      MaskPromptString	      "Order|List of iqc relationships"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "disp(' Exp(-ds)-1')\n"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_cdelay(in,1)"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "diagonal structure"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [375, 409, 410, 441]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty "
+      MaskPromptString	      "Order|List of iqc relationships:"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[20,7,7,20],[5,5,94,94],[22,33"
+",11,22],[90,66,66,90],[43,55,32,43],[61,36,36,62],[62,63,62,61,62],[31,29,27,"
+"29,31],[71,72,71,70,71],[17,15,13,15,17],[78,90,90,79],[94,94,5,5])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_diag(in);"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "encapsulated deadzone"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [380, 113, 420, 147]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty sp"
+"ecified by user"
+      MaskPromptString	      "Order|List of iqc relationships"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[60,30,30,60,60],[90,90,60,60,"
+"90],[30,30,60,60,30],[40,10,10,40,40],[30,10,10,3,30],[25,25,76,76,76],[80,80"
+",60],[72,25,25],[60,77],[76,76],[82,80,77,80,82,98],[76,72,76,80,76,76],[58,5"
+"0,40,32],[88,76,76,63],[42,45,45,50],[15,17,34,36])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_dzn_e(in,1,0,1)"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "encapsulated odd deadzone"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [380, 333, 420, 367]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty sp"
+"ecified by user"
+      MaskPromptString	      "Order|List of iqc relationships"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[60,30,30,60,60],[90,90,60,60,"
+"90],[30,30,60,60,30],[40,10,10,40,40],[30,10,10,3,30],[25,25,76,76,76],[80,80"
+",60],[72,25,25],[60,77],[76,76],[82,80,77,80,82,98],[76,72,76,80,76,76],[58,5"
+"0,40,32],[88,76,76,63],[42,45,45,50],[15,17,34,36])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_dzn_e_odd(in,1,0,1)"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "harmonic"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [185, 400, 225, 430]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty sp"
+"ecified by user"
+      MaskPromptString	      "Order|List of iqc relationships"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(1:15,cos(1:15))"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_harmonic(in)"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "monotonic with \nrestrict rate"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [275, 169, 320, 201]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty sp"
+"ecified by user"
+      MaskPromptString	      "Order|List of iqc relationships"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[99,-0],[50,50],[50,50],[-0,10"
+"0],[10,90],[0,100],[99,95,88,82,75,70,67,60,55,50],[76,76,75,74,72,70,68,62,5"
+"6,50],[1,5,9,16,22,29,34,40,45,50],[20,21,22,24,26,29,32,38,44,50])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_monotonic(in,1,1)"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "norm bounded"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [185, 156, 225, 184]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty "
+      MaskPromptString	      "Order|List of iqc relationships:"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[80,80],[20,80],[80,95],[35,53"
+"],[95,85],[20,41],[72,59,72],[29,47,64],[53,53],[17,82],[46,46],[17,82],[2,2]"
+",[17,83],[9,9],[17,83],[26,42,13,26],[72,28,28,72])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_ltvnorm(in,1,1);"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "odd slope nonlinearity"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [380, 183, 420, 217]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty sp"
+"ecified by user"
+      MaskPromptString	      "Order|List of iqc relationships"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[96,2],[50,50],[50,50],[95,4],"
+"[97,80,60,40,20,4],[90,90,71,30,10,10],[81,84,60,75,60],[72,71,71,99,71],[81,"
+"84],[69,71],[73,75],[97,99],[75,75,75],[96,99,99])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_slope_odd(in,1,0,0,1)"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "performance"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [180, 29, 225, 51]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty "
+      MaskPromptString	      "Order|List of iqc relationships:|List of proper"
+"ties of inputs"
+      MaskStyleString	      "edit,edit,edit"
+      MaskTunableValueString  "on,on,on"
+      MaskDisplay	      "plot(0,0,100,100,[10,20,30,40,30,20,10,0],[50,2"
+"0,20,50,80,80,50,50],[90,80,70,60,70,80,90,100],[50,20,20,50,80,80,50,50],[55"
+",45],[75,75],[55,45],[65,65],[55,45],[55,55],[46,55],[46,46],[55,46],[35,35],"
+"[55,46],[25,25])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|IN=w;OUT=f;|"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "polytope"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [275, 384, 310, 416]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty "
+      MaskPromptString	      "Order|List of iqc relationships:"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[33,15,33,67,84,67,33],[80,50,"
+"20,20,50,80,80])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_polytope(in);"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "polytope with\nrestrict rate"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [275, 459, 310, 491]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty "
+      MaskPromptString	      "Order|List of iqc relationships:"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[33,15,33,67,84,67,33],[80,50,"
+"20,20,50,80,80])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_polytope(in);"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "popov IQC"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [185, 464, 225, 496]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty "
+      MaskPromptString	      "Order|List of iqc relationships:"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "disp('Popov')\n"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_popov_vect(in,0)"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "sat-int"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [350, 21, 410, 69]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty sp"
+"ecified by user"
+      MaskPromptString	      "Order|List of iqc relationships"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[18,45,45,18,18],[60,60,26,26,"
+"60],[62,82,82,62,62],[60,60,26,26,60],[62,0],[44,44],[79,65],[44,44],[71,71],"
+"[46,57],[68,69,72,74,73,71,69,68,69,72,74],[31,29,29,31,34,35,36,38,40,40,39]"
+",[31,31],[26,60],[45,38,24],[55,55,33],[24,18],[33,33],[99,82],[44,44],[10,12"
+",8,10,10,90,90],[44,51,51,44,80,80,44],[7,2],[55,55])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_rl5(in)"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "sector"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [275, 98, 320, 132]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty "
+      MaskPromptString	      "Order|List of iqc relationships:"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[100,-0],[54,54],[50,50],[0,10"
+"0],[66,32],[100,0],[-0,100],[37,71],[20,-0],[0,32],[33,13],[5,41],[40,28],[24"
+",46],[47,42],[44,51],[65,57],[60,73],[78,63],[64,90],[95,77],[69,100],[91,85,"
+"82,78,77,75,74,66,61,56,54,50,48,45,43,42,40,38,35,31,27,24,21,17,14,11,10,8,"
+"7],[96,96,93,90,82,76,71,66,66,63,60,54,51,49,46,42,38,34,32,32,32,32,32,31,2"
+"9,27,24,18,13])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_sector(in,0,1)"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "sector+popov"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [270, 28, 315, 62]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty "
+      MaskPromptString	      "Order|List of iqc relationships:"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[100,-0],[54,54],[50,50],[0,10"
+"0],[66,32],[100,0],[-0,100],[37,71],[20,-0],[0,32],[33,13],[5,41],[40,28],[24"
+",46],[47,42],[44,51],[65,57],[60,73],[78,63],[64,90],[95,77],[69,100],[91,85,"
+"82,78,77,75,74,66,61,56,54,50,48,45,43,42,40,38,35,31,27,24,21,17,14,11,10,8,"
+"7],[96,96,93,90,82,76,71,66,66,63,60,54,51,49,46,42,38,34,32,32,32,32,32,31,2"
+"9,27,24,18,13])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_popov(in,[0,1])"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "slope nonlinearity"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [375, 253, 415, 287]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty sp"
+"ecified by user"
+      MaskPromptString	      "Order|List of iqc relationships"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[95,4],[50,50],[50,50],[95,5],"
+"[98,79,60,50,40,20,4],[90,90,80,50,40,30,30],[81,84,60,67,60],[82,80,80,100,8"
+"0],[80,84],[78,80],[64,67],[98,100],[68,67,67,67,67],[96,100,100,100,100])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_slope(in,1,0,0,1)"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "unknown const"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [180, 213, 225, 247]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty "
+      MaskPromptString	      "Order|List of iqc relationships:"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[18,18],[27,72],[40,40,39,36,3"
+"0,27,26,26,28,31,36,39],[68,31,30,29,29,32,37,42,46,49,49,48],[49,49],[27,73]"
+",[66,54,66],[40,50,58],[75,78],[63,67],[78,78],[30,67],[83,73],[30,30],[10,90"
+",90,10,10],[88,88,12,12,88],[1,10],[50,50],[100,90],[50,50])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_ltigain(in,1);"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "white noise\nperformance"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [185, 77, 225, 113]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty "
+      MaskPromptString	      "Order|List of iqc relationships:|List of proper"
+"ties of inputs"
+      MaskStyleString	      "edit,edit,edit"
+      MaskTunableValueString  "on,on,on"
+      MaskInitialization      "r = rand(1,12); r2 = [r(1),r;r,r(12)]; t =[1:13"
+";1:13];\n"
+      MaskDisplay	      "plot(t(:),r2(:))"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|IN=w;OUT=f;|f=iqc_white(1,100,1);"
+    }
+    Block {
+      BlockType		      "S-Function"
+      Name		      "window"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [275, 253, 315, 287]
+      FunctionName	      "IQC"
+      PortCounts	      "[]"
+      SFunctionModules	      "''"
+      MaskType		      "IQC block"
+      MaskDescription	      "Uncertain blocks specification"
+      MaskHelp		      "IQC block to contain any type of uncertainty sp"
+"ecified by user"
+      MaskPromptString	      "Order|List of iqc relationships"
+      MaskStyleString	      "edit,edit"
+      MaskTunableValueString  "on,on"
+      MaskDisplay	      "plot(0,0,100,100,[84,94,4],[27,25,25],[94,84],["
+"25,22],[15,15],[5,97],[12,15],[86,97],[18,15],[86,97],[81,70,70,16,16,6],[26,"
+"26,72,72,26,26],[71,71,15],[26,73,73])"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      none
+      MaskIconUnits	      autoscale
+      MaskValueString	      "1|out==iqc_window(in,1)"
+    }
+    Block {
+      BlockType		      Outport
+      Name		      "Out"
+      Position		      [95, 400, 115, 420]
+      Port		      "1"
+      OutputWhenDisabled      held
+      InitialOutput	      "0"
+    }
+  }
+}

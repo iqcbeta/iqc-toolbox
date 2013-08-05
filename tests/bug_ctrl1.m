@@ -1,0 +1,14 @@
+g=tf([1/pi^2 0 1],[1 0 1/pi^2-1/6 0 2/pi^2-1/(6*pi^2)]);
+[A,B,C,D]=ssdata(g);
+d=D/2;
+[v,l]=eig(A);
+l=diag(l);
+n=length(l);
+ns=length(find(real(l)<0));
+v=[v(:,find(real(l)<0)) v(:,find(real(l)>0))];
+vi=inv(v);
+c=C*v;
+a=vi*A*v;
+b=vi*B;
+rs=ss(a(1:ns,1:ns),b(1:ns),c(1:ns),d)
+rstf=tf(rs)

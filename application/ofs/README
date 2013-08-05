@@ -1,0 +1,29 @@
+The main file is
+
+ofs
+
+This file contains global stability analysis of equilibrium points of
+on_off systems (OFS).
+
+Type
+
+help ofs
+
+for more information.
+
+NOTE: this is an alpha version.  It does not inlcude cases of systems
+with non-invertible Ai matrices.  Also, it only works with systems of
+order 3 or higher.  Later versions will also include an automatic
+search for ti- and ti+.
+
+Please email me if you have problems so that I can fix them.  For the
+latest releases please visit my web page at
+
+http://web.mit.edu/jmg/www
+
+NOTE: this files are for version 5.3 or higher of Matlab.
+
+The paper associated with these results can also be obtained at this
+web page.
+
+Written by Jorge Goncalves, jmg@mit.edu, All rights reserved

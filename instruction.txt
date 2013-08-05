@@ -1,0 +1,68 @@
+For installation:
+
+1. Unpack the file
+
+   -- on a UNIX system, use "gunzip" and "tar" : 
+
+      % gunzip iqcbXYZ.tar.gz
+      % tar -xvf iqcbXYZ.tar
+ 
+   -- on Win95, Win98, or WinNT, une, for example, "WinZip"
+
+   The unpacking should produce a directory "iqc_beta" with several 
+   sub-directories. The directory structure is:
+
+       iqc_beta --+-- absttools -- @abst
+                  |                                +-- v52 
+                  +-- application -+- hysteresis --+ 
+                  |                |               +-- v53 
+                  |                +- ofs
+                  |                |
+                  |                +- rfs
+                  |                |
+                  |                +- sat
+                  |
+                  +-- cpm -- subfunctions
+                  |         
+                  +-- iqctools  -- iqclib
+                  |
+                  +-- lmitools
+                  |
+                  +-- tests
+
+2. Include those subdirectories into the MATLAB search path. This can 
+   be done by putting instructions 
+
+   path(path,'path_to_iqc_beta/absttools')
+   path(path,'path_to_iqc_beta/iqctools')
+   path(path,'path_to_iqc_beta/iqctools/iqclib')
+   path(path,'path_to_iqc_beta/lmitools')
+   path(path,'path_to_iqc_beta/cpm')
+   path(path,'path_to_iqc_beta/cpm/subfunctions')
+   path(path,'path_to_iqc_beta/application')
+   path(path,'path_to_iqc_beta/application/hysteresis/v52')
+   path(path,'path_to_iqc_beta/application/hysteresis/v53') 
+   path(path,'path_to_iqc_beta/application/ofs')
+   path(path,'path_to_iqc_beta/application/rfs') 
+   path(path,'path_to_iqc_beta/application/sat')
+   path(path,'path_to_iqc_beta/tests')
+
+   into your "startup.m" file, where "path_to_iqc_beta" is the path to 
+   the directory "iqc_beta".
+
+3. We suggest users put their own application files, if there is any, in 
+   a new subdirectory under the directory 'application'. Remember to include 
+   that subdirectory in to the MATLAB search path. 
+
+4. You can test the installation by typing 
+
+   >> iqc_beta_test
+
+   to the MATLAB prompt. If everything is as expected, the last line
+   of this program's output will be
+
+   ***********TESTING OK!!!
+
+5. Please report any problems or bugs to Alexandre Megretski at 
+   ameg@mit.edu or Chung-Yao (Isaac) Kao at cykao@mit.edu. We will try
+   to fix them as quickly as possible. 

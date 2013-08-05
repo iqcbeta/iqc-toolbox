@@ -1,0 +1,141 @@
+
+********************************** WARNING!!! ********************************** 
+
+The specialized (cutting-plane-mathod based) solvers for "frequency dependent 
+linear matrix inequalities" in this directory are experimental and under active 
+development. Bugs and numerical problems are likely to be found and there is no 
+guaranteed performance. It is solely the responsibility of the user to determine 
+the accuracy and validity of the results.
+
+********************************** WARNING!!! ********************************** 
+
+
+GENERAL INSTRUCTIONS:
+
+The four solvers coming with this package are:
+
+-- iqc_gain_accpm.m, fdlmi_mincx_accpm.m : based on Analytic Center 
+   Cutting Plane Method ('one central cut per iteration' version).
+ 
+-- iqc_gain_ellip.m, fdlmi_mincx_ellip.m : based on a modified Ellipsoid Method.
+
+THESE SOLVERS ARE TO BE USED WITH IQC-beta, a MATLAB toolbox for robustness
+analysis using IQC framework. The IQC-beta toolbox can be found at Chung-Yao 
+Kao's or Alexandre Megretski's webpages:
+
+http://www.ee.unimelb.edu.au/staff/cykao/
+http://web.mit.edu/ameg/www/
+
+One can also find a draft manual and installation instruction of IQC-beta at
+Chung-Yao Kao's webpages. It is desirable to keep the solvers and other MATLAB
+functions found in this package in a seperate directory under iqc_beta. 
+
+
+
+ABOUT THE SOLVERS:
+
+1. fdlmi_mincx_accpm.m and fdlmi_mincx_ellip.m are solvers for minimizing a 
+   linear objective over a convex set definied by frequency dependent linear 
+   matrix inequalities.
+
+   Synopsis : [cost,xopt] = fdlmi_mincx_xxxxx(obj,options)
+	      [cost,xopt] = fdlmi_mincx_xxxxx
+
+   input  -- 'obj'     : an 'abst' object, 'lin', that defined the linear objective. 
+	   	         When there is no input, the solver solves a feasibility 
+                         problem.
+          -- 'options' : this input is optional. One may set the parameters of the algorithm
+                         by using this input. The 'options' must be a structure. Details below.
+
+   output -- 'cost' : optimal objective. When there is no input, 'cost' is set 
+                      to be empty. 
+          -- 'xopt' : optimal solution to the decision variables in the problem.
+
+
+2. iqc_gain_accpm.m and iqc_gain_ellip.m are specialized for IQC analysis 
+   of feedback systems and for solving worst case L2-gain estimation problems.
+   The synopsis of these two functions is identical to the synopsis of 
+   'iqc_gain_tbx.m', the default solver of IQC-beta toolbox. 
+
+   Synopsis : [gain,xopt] = iqc_gain_xxxxx(f,y,options)
+
+   input  -- 'f'  : an 'abst' object, 'inp', which represent the input signal of
+		    the system.
+          -- 'y'  : an 'abst' object, 'sgn', which represent the output signal of
+		    the system.
+          ****** The program is to estimate the L2-gain from f to y. ******
+
+          -- 'options' : this input is optional. One may set the parameters of the algorithm
+                         by using this input. The 'options' must be a structure. Details below.
+
+   output -- 'gain' : The estimate L2 gain.
+          -- 'xopt' : optimal solution to the decision variables in the problem.
+
+
+3. About the 'options':
+
+   For ACCPM algorithm: the 'options' must be a structure which has the following fields: 
+ 
+      options.max_iteration : Program is forced to stop when number of iteration > this number
+      options.boxlen        : Each decision variable is assumed to be in [-boxlen, +boxlen]  
+      options.accind1       : Program will stop when (obj_current - obj_lowerbound)/ obj_current < accind1, if obj_current > 0.001
+      options.accind2       : Program will stop when (obj_current - obj_lowerbound) < accind2, if obj_current <= 0.001
+      options.accind3       : Program will stop when the volumn of the outbound ellispoid is less than accind3
+      options.fset          : Feasible set specified by the user. If this field is not set or is set to empty, then the default
+                              set; i.e., |x_i| <= boxlen will be used. This field 'options.fset' is itself a structure which has
+                              two subfields: 'options.fset.center' and 'options.fset.range'. These parameters specify the set
+                              {x: |x_i - options.fset.center(i)| <= options.fset.range(i) } in which iqc_gain_accpm.m will searches
+                              for an optimal solution for the underlying IQC problem.
+
+    The default values of
+ 
+      options.max_iteration = 100000
+      options.boxlen        = 1e7
+      options.accind1       = 1e-4
+      options.accind2       = 1e-6
+      options.accind3       = 1e-12
+      options.fset          = {};
+
+   For Ellipoid algorithm, the parameter 'options' also have five fileds: 
+
+      options.max_iteration : Program is forced to stop when number of iteration > this number
+      options.Rad           : Feasible set is assumed to be contained in the ball of radius = Rad  
+      options.accind1       : Program will stop when (obj_current - obj_lowerbound)/ obj_current < accind1, if obj_current > 0.001
+      options.accind2       : Program will stop when (obj_current - obj_lowerbound) < accind2, if obj_current <= 0.001
+      options.accind3       : Program will stop when the volumn of the outbound ellispoid is less than accind3
+      options.fset          : Feasible set specified by the user. If this field is not set or is set to empty, then the default
+                              ellipsoid; i.e., the ball of radius = Rad will be used. This field 'options.fset' is itself a structure 
+                              which has two subfields: 'options.fset.center' and 'options.fset.range'. These parameters specify the ball
+                              {x: || x - options.fset.center || <= options.fset.range } in which iqc_gain_ellip.m will searches
+                              for an optimal solution for the underlying IQC problem.
+
+   The default values of
+ 
+      options.max_iteration = 100000
+      options.Rad           = 1e7
+      options.accind1       = 1e-4
+      options.accind2       = 1e-6
+      options.accind3       = 1e-12
+      options.fset          = {};
+
+
+There are several sub-programs which all solvers require to function appropriately.
+They are contained in the subdirectory : ./CPM/subfunctions/ The paths to these 
+directories need to be added to MATLAB for solvers to work properly. One can see 
+the sample startup.m function for which directories are required to be added to the 
+MATLAB path.
+
+In the package, there are also two M-files, iqc_gain_accpm_test.m and 
+iqc_gain_ellip_test.m. These two files contain several test examples for solvers 
+iqc_gain_accpm.m and iqc_gain_ellip.m, respectively. 
+
+These solvers are work of Chung-Yao Kao (University of Melbourne, Australia) and Alexandre 
+Megretski (LIDS, MIT, Cambridge, USA). All rights of the authors are reserved. At 
+this stage, these prototype solvers are under active development and are NOT meant 
+to be distributed yet. Please do not re-distribute them. Whoever interested in these 
+solvers may contact the authors (cykao@ee.unimelb.edu.au, ameg@mit.edu) to obtain a 
+free copy. For bug report, please send an e-mail, which shall include the MATLAB
+file(s) which generate(s) the error(s), to Chung-Yao Kao. 
+ 
+We thank you for your interests in our work and your effort on testing of these 
+prototypes!
