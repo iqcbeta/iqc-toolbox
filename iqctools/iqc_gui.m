@@ -1,20 +1,14 @@
-function [gain,exe_comment]=iqc_gui(sys_name,datafile_name,type,sol)
-%function [gain,exe_comment]=iqc_gui(sys_name,datafile_name,type,sol)
-% if:       sys_name = 'newtest1'
-%           sol = 'sdpt3' use solver: sdpt3 and call YALMIP
-%
-% command >> iqc_gui('newtest1',[],[],'sdpt3')
-%
-%
+function [gain,exe_comment]=iqc_gui(sys_name,datafile_name,type)
+% function [gain,exe_comment]=iqc_gui(sys_name,datafile_name,type)
+% This is the graohic interface function for the IQC ToolBox
 
 
-
+old_path=pwd;
 % options=[0 200 0 0 777];
 options=[0 200 0 0 66];
 fclose('all');
 
 %%
-% 判斷輸入程序
 if nargin==0,
     disp('You have to build a SIMULINK block diagram')
     disp('using the blocks from "iqc_lib" before')
@@ -86,15 +80,13 @@ else
     keep_linfile=0;
 end
 
-[exe_comment,ecctr]=gui_iqctbx(sys_name,keep_linfile,sol);
+[exe_comment,ecctr]=gui_iqctbx(sys_name,keep_linfile);
 
 exe_sys_name=[sys_name,'_iqcexe'];
 exe_sys_name_full=[sys_name,'_iqcexe.m'];
 
 fp=fopen(exe_sys_name_full,'wt');
 fprintf(fp,['function gain=',exe_sys_name,'\n']);
-% fprintf(fp,['abst_init_iqc;\n']);
-
 
 if ~isdatafile
     for forlp_counter=1:ecctr
@@ -121,7 +113,6 @@ end
 fclose(fp);
 
 if isdatafile==0,
-    %     eval(['abst_init_iqc;'])
     for forlp_counter=1:ecctr
         eval(exe_comment{forlp_counter})
     end
@@ -136,7 +127,6 @@ else
     disp([strtmp2,exe_sys_name_full])
 end
 
-%---------------------2013/04/15 delete old file ex: *.mdl.r*
 old_sim_name={'r14','r14sp1','r14sp2','r14sp3','r2006a','r2006b',...
     'r2007a','r2007b','r2008a','r2008b','r2009a','r2009b',...
     'r2010a','r2010b','r2011a','r2011b','r2012a','r2012b','unknown_version'};
@@ -145,9 +135,10 @@ for i1=1:length(old_sim_name)
         delete([sys_name,'_lin.mdl.',old_sim_name{i1}]);
     end
 end
+cd(old_path);
 
 %%
-function [exe_comment,ecctr,A,B,C,D,newfile,IQC]=gui_iqctbx(filename,keep_linfile,sol)
+function [exe_comment,ecctr,A,B,C,D,newfile,IQC]=gui_iqctbx(filename,keep_linfile)
 %%
 if nargin==1,
     keep_linfile=0;
@@ -181,7 +172,26 @@ oldfilemdl=[filename '.mdl'];
 newfile=[filename '_lin'];
 newfilemdl=[newfile '.mdl'];
 
-file_path=which(oldfilemdl);
+file_path=which(oldfilemdl,'-all');
+if size(file_path,1)~=1
+    choose_n=0;
+    choose_all=size(file_path,1);
+    disp('The name of file have more one in your matlab path,')
+    for i1=1:choose_all
+        disp([sft(num2str(i1),4),':',file_path{i1}])
+    end
+    while choose_n==0
+        choose_n=input(['(1-',num2str(choose_all),') ?: '], 's');
+        if isempty(find(1:choose_all==str2double(choose_n)))
+            choose_n=0;
+        else
+            choose_n=str2double(choose_n);
+        end
+    end
+    file_path=file_path{choose_n};
+else
+    file_path=file_path{1};
+end
 dot_pos=(findstr(file_path,oldfilemdl));
 cd(file_path(1:dot_pos-1));
 
@@ -194,20 +204,22 @@ copyfile(oldfilemdl,newfilemdl)
 
 load_system(newfile);
 
+%% Main loop
+
 IQC_INFO=[];      % containing information of IQC block
 have_done=0;      % index for adding Mux and DeMux mudules
 iqc_counter=0;    % IQC block counter
 block_counter=0;  % block counter
 
-%-------------------------------找IQC block 資訊
+% IQC block
 A=zeros(1,8);
 fun=[];
-%------------------------------block_counter需扣除subsystem個數及原系統
+%block_counter
 All_block=find_system(newfile);
 Sub_block=find_system(newfile,'BlockType','SubSystem');
 block_counter=size(All_block,1)-size(Sub_block,1)-1;
 
-% -------------------------------------判斷為連續系統or離散系統
+% Is exist discrete-time block?
 dis_block=find_system(newfile,'BlockType','DiscreteTransferFcn');
 dis_block_sampletime=get_param(dis_block,'SampleTime');
 dis_block=find_system(newfile,'BlockType','DiscreteZeroPole');
@@ -224,9 +236,11 @@ if isempty(dis_block_sampletime)
 else
     signal_type='discrete';
     signal_sampletime=dis_block_sampletime{1,1};
+    close_system(newfile);
+    error('exist discrete-time block')
 end
 
-% ------------------------------------找IQC方塊
+% find IQC block
 iqc_block=find_system(newfile,'FunctionName','IQC');
 iqc_block_name=get_param(iqc_block,'Name');
 iqc_block_position=get_param(iqc_block,'Position');
@@ -234,7 +248,7 @@ iqc_block_MaskValueString=get_param(iqc_block,'MaskValueString');
 iqc_counter=size(iqc_block,1);
 
 for n=1:iqc_counter
-    %--------------------------------記錄參數
+    % save paramter
     line_temp=iqc_block_MaskValueString{n};
     cor1=findstr(line_temp,'|');
     line_buffer=line_temp(1,1:cor1);
@@ -246,7 +260,7 @@ for n=1:iqc_counter
         A(1,5:6)=order;
     end
     
-    %--------------------------------記錄位置
+    % save block position
     A(1,1:4)=iqc_block_position{n};
     IQC_INFO=[IQC_INFO;A];
     fun=line_temp(1,cor1(1,1)+1:size(line_temp,2));
@@ -254,11 +268,9 @@ for n=1:iqc_counter
     IQC.name{n}=iqc_block_name{n};
     IQC.rela{n,1}=fun;
     IQC.rela{n,2}=A(5:6);
-    
 end
 
-%% 11/2
-% delete main floor inport and outport
+% delete main floor Inport and Outport
 main_in=find_system(newfile,'SearchDepth',1,'BlockType','Inport');
 delete_block(main_in);
 main_out=find_system(newfile,'SearchDepth',1,'BlockType','Outport');
@@ -269,79 +281,13 @@ save_system(newfile,[],'OverwriteIfChangedOnDisk',true,'BreakAllLinks',true);
 IQC_INFO=add_blk(IQC_INFO,newfile);
 save_system(newfile,[],'OverwriteIfChangedOnDisk',true);
 
-
 % change the connect line
 linechang(newfile,iqc_block,IQC,IQC_INFO);
 save_system(newfile,[],'OverwriteIfChangedOnDisk',true);
 
 close_system(newfile);
 
-% IQC_INFO=getportdim(IQC_INFO,newfile);
-
-% if length(unique(sampletimeset))~=1
-%     error('the block sample time does not match')
-% end
-
-%%
-% %--------------------------------增加輸入輸出
-% IQC_INFO=add_blk(IQC_INFO,block_counter,newfile,All_block,Sub_block,iqc_block_name);
-
-% %--------------------------------更改連接線
-% line_item=find_system(newfile,'FindAll','on','type','line');
-% line_src=get_param(line_item,'SrcBlock');
-% line_dst=get_param(line_item,'DstBlock');
-% inn=0;
-% connet_line=[];
-% for n1=1:size(iqc_block_name,1)
-%     for n2=1:size(line_item,1)
-%         %--------------------------------設定連接Inport
-%         if strcmp(line_src{n2},iqc_block_name{n1});
-%             Dstname=get_param(line_item(n2),'DstBlock');
-%             dstpoint=get_param(line_item(n2),'Points');
-%             in_point=get_param(find_system(newfile,'Name',['MIn',num2str(IQC_INFO(n1,8))]),'Position');
-%             in_point_x=in_point{1}(1,3)+5;
-%             in_point_y=in_point{1}(1,4)-10;
-%             %----------------------------判斷分歧
-%             if ~isempty(Dstname)
-%                 delete_line(line_item(n2));
-%                 add_line(newfile,[in_point_x,in_point_y;dstpoint(2:size(dstpoint,1),:)]);
-%                 inn=inn+1;
-%             else
-%                 dstpoint=get_param(line_item(n2),'Points');
-%                 %------------------------不能直接刪，若直接刪則分歧線也會刪除
-%                 %------------------------先判斷分歧線連到哪
-%                 for n3=1:size(line_item,1)
-%                     l=get_param(line_item(n3),'Points');
-%                     if dstpoint(size(dstpoint,1),:)==l(1,:)
-%                         inn=inn+1;
-%                         connet_line{inn}=get_param(line_item(n3),'Points');
-%                     end
-%                 end
-%                 delete_line(line_item(n2));
-%                 add_line(newfile,[in_point_x,in_point_y;dstpoint(2:size(dstpoint,1),:)]);
-%                 for n4=1:inn
-%                     add_line(newfile,[connet_line{n4}]);
-%                 end
-%                 inn=1;
-%             end
-%         end
-%         %--------------------------------設定連接Outport
-%         if strcmp(line_dst{n2},iqc_block_name{n1});
-%             srcpoint=get_param(line_item(n2),'Points');
-%             out_point=get_param(find_system(newfile,'Name',['MOut',num2str(IQC_INFO(n1,8))]),'Position');
-%             out_point_x=out_point{1}(1,1)-5;
-%             out_point_y=out_point{1}(1,2)+10;
-%             delete_line(line_item(n2));
-%             add_line(newfile,[srcpoint(1:size(srcpoint,1)-1,:);out_point_x,out_point_y]);
-%         end
-%     end
-% end
-
-% delete_block(iqc_block);
-% save_system(newfile);
-% close_system(newfile);
-
-% Second Round:
+%% Second Round:
 % Defind the signals and corresponding IQC relationships of
 % the signals, and run the solver
 if (options(5)==0)|(options(5)==777),
@@ -350,17 +296,11 @@ end
 ecctr=1;
 
 if strcmp(signal_type,'continuous')
-    exe_comment{ecctr}=['abst_init_iqc;'];
+    exe_comment{ecctr}='abst_init_iqc;';
 else
     exe_comment{ecctr}=['abst_init_iqc(',signal_sampletime,');'];
 end
 ecctr=ecctr+1;
-
-if ~isempty(sol)
-    exe_comment{ecctr}=['setlmioptions(''',sol,''');'];
-    ecctr=ecctr+1;
-end
-
 
 exe_comment{ecctr}=['open_system(''',newfile,''');'];
 if strcmp(signal_type,'continuous');
@@ -490,7 +430,7 @@ end
 
 % LTI system outputs, whose components are inputs of iqc-blocks
 if strcmp(signal_type,'continuous');
-    exe_comment{ecctr+1}=['w_iqcexe=ss(A_iqcexe,B_iqcexe,C_iqcexe,D_iqcexe)*f_iqcexe;'];
+    exe_comment{ecctr+1}='w_iqcexe=ss(A_iqcexe,B_iqcexe,C_iqcexe,D_iqcexe)*f_iqcexe;';
 else
     exe_comment{ecctr+1}=['w_iqcexe=ss(A_iqcexe,B_iqcexe,C_iqcexe,D_iqcexe,',signal_sampletime,')*f_iqcexe;'];
 end
@@ -611,95 +551,15 @@ ecctr=ecctr+2;
 ecctr=ecctr-1;
 
 
-
-
-
-% function [IQC_INFO]=add_blk(I,block_counter,newfile,All_block,Sub_block,iqc_block_name)
-%
-% % --- check how many mudules to be added --- %
-% IQC_INFO=I;
-% name=[];
-% Sub_block_name=get_param(Sub_block,'Name');
-% % -------------------------------------判斷IQC方塊所在位置是否在子方塊內
-% % -------------------------------------如果有則題示使用者需將IQC拉出
-% for i1=1:size(All_block,1)
-%     for i2=1:size(Sub_block_name,1)
-%         for i3=1:size(iqc_block_name,1)
-%             if findstr(All_block{i1},[Sub_block_name{i2},'/',iqc_block_name{i3}])
-%                 error('The IQC block must be in the main floor...')
-%                 % error('請將IQC方塊拉出到主層')
-%             end
-%         end
-%     end
-% end
-%
-%
-% %--------------------------------------得到主層下的Inport/Outport數量
-% in_counter=size(find_system(newfile,'BlockType','Inport'),1);
-% out_counter=size(find_system(newfile,'BlockType','Outport'),1);
-%
-% for i1=1:size(Sub_block_name,1)
-%     sub_port=get_param(Sub_block,'Ports');
-%
-%     in_counter=in_counter-sub_port{1}(1);
-%     out_counter=out_counter-sub_port{1}(2);
-% end
-%
-% for nth=1:size(I,1),
-%
-%     % --- extract iqc box's position --- %
-%
-%     x1=I(nth,1);
-%     y1=I(nth,2);
-%     x2=I(nth,3);
-%     y2=I(nth,4);
-%     input_width=I(nth,5);
-%     output_width=I(nth,6);
-%
-%     % --- 1. add inport block --- %
-%     IQC_INFO(nth,7)=in_counter+1;   % stor information into IQC_INFO
-%     name=['MIn', num2str(in_counter+1)];
-%     c1=x2;
-%     c2=y2;
-%     c3=c1+20;
-%     c4=c2+20; % c1,c2,c3,c4 are block's coordinates %
-%     blk_pos=['[',num2str(c1),',',num2str(c2),',',num2str(c3),...
-%         ',',num2str(c4),']'];
-%     add_block('built-in/Inport',[newfile,'/',name],'Position',blk_pos,...
-%         'Port',num2str(in_counter+1),'PortWidth',num2str(input_width),...
-%         'SampleTime','-1','SignalType','auto','Interpolate','on');
-%
-%     % --- 2. add outport blocks --- %
-%     IQC_INFO(nth,8)=out_counter+1;
-%     name=['MOut',num2str(out_counter+1)];
-%     c1=x1;
-%     c2=y2;
-%     c3=c1+20;
-%     c4=c2+20; % c1,c2,c3,c4 are block's coordinates %
-%     blk_pos=['[',num2str(c1),',',num2str(c2),',',num2str(c3),...
-%         ',',num2str(c4),']'];
-%     add_block('built-in/Outport',[newfile,'/',name],'Position',blk_pos,...
-%         'Port',num2str(out_counter+1),'PortWidth',num2str(output_width),...
-%         'SampleTime','-1','OutputWhenDisabled','held','InitialOutput','0');
-%
-%
-%     in_counter=in_counter+1;
-%     out_counter=out_counter+1;
-% end
-
-
-%% 11/2
 function [IQC_INFO]=add_blk(I,filename)
 
 % --- check how many mudules to be added --- %
 IQC_INFO=I;
 name=[];
 
-
-%--------------------------------------得到主層下的Inport/Outport數量
+% number of main floor inport/outport
 in_counter=size(find_system(filename,'SearchDepth',1,'BlockType','Inport'),1);
 out_counter=size(find_system(filename,'SearchDepth',1,'BlockType','Outport'),1);
-
 
 for nth=1:size(I,1),
     
@@ -758,8 +618,6 @@ line_dst=get_param(line_item,'DstBlock');
 line_dst_port=get_param(line_item,'DstPort');
 
 delete_block(iqc_block)
-% delete_block(L2block)
-
 
 for n1=1:length(IQC.name)
     for n2=1:size(line_item,1)
@@ -775,7 +633,7 @@ for n1=1:length(IQC.name)
             add_line(LinearFileName,[in_point_x,in_point_y;dstpoint(1,:)]);
             %             return;
         end
-        %--------------------------------設定連接Outport
+        %--------------------------------Outport
         if strcmp(line_dst{n2},IQC.name{n1}) && IQC_INFO(n1,7)~=0;
             out_point=get_param(find_system(LinearFileName,'Name',['MOut',num2str(IQC_INFO(n1,7))]),'Position');
             out_point_x=out_point{1}(1,1)-5;
