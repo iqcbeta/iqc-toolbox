@@ -24,6 +24,6 @@ T0=0.27
 [w11,X,x]=iqc_window(v1,T0,[]);
 w1==w11;
 w2==iqc_dzn_e_odd(v2,1.8,0,kphi);
-gain=iqc_gain_tbx(f,v2);
+gain=iqc_gain_tbx(f,v2)
 iqc_bode
 display('result was gain=98.69 on dec 5, 1997')

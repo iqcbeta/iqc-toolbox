@@ -40,14 +40,14 @@ y=G*(z1-z2);
 v1=f(1)+y;
 v2=f(2)+y;
 z=[z1;z2];
-w1==iqc_monotonic(v1,[0.1 3]);
-w2==iqc_monotonic(v2,[0.1 3]);
+w1==iqc_monotonic(v1,[0.1 3],1);
+w2==iqc_monotonic(v2,[0.1 3],1);
 g1=iqc_gain_tbx(f,z);
 if isempty(g1);
-   fprintf(1,'Zames-Falb + Popov IQCs: L2 gain f-->y <= infinity\n');
+   fprintf(1,'Zames-Falb IQCs: L2 gain f-->y <= infinity\n');
    g1=Inf;
 else
-   fprintf(1,'Zames-Falb + Popov IQCs: L2 gain f-->y <= %g\n',g1);
+   fprintf(1,'Zames-Falb IQCs: L2 gain f-->y <= %g\n',g1);
 end
 
 a=cell(2,2);
@@ -78,8 +78,8 @@ else
 end
 g=[g1;g2];
 
-iqc_value;
-value_iqc(xa)
-value_iqc(xb)
-value_iqc(xc)
-value_iqc(xd)
+% iqc_value;
+% value_iqc(xa)
+% value_iqc(xb)
+% value_iqc(xc)
+% value_iqc(xd)

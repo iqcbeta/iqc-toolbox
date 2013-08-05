@@ -27,8 +27,8 @@ lmitbx_options([0 600 -1 25 option5]);
 
   v1=M1*(f+C*y);
   v2=M2*(f+C*y);
-  w1==iqc_monotonic(v1,1,[1 100]);
-  w2==iqc_monotonic(v2,1,[1 100]);
+  w1==iqc_monotonic(v1,[1 100],1);
+  w2==iqc_monotonic(v2,[1 100],1);
   y==P*(w1-w2);
   g1=iqc_gain_tbx(f,[v1;v2]);
 if isempty(g1);

@@ -2,12 +2,12 @@ For installation:
 
 1. Unpack the file
 
-   -- on a UNIX system, use "gunzip" and "tar" : 
+   -- on a UNIX / LINUX system, use "gunzip" and "tar" : 
 
       % gunzip iqcbXYZ.tar.gz
       % tar -xvf iqcbXYZ.tar
  
-   -- on Win95, Win98, or WinNT, une, for example, "WinZip"
+   -- on Windows machines, une, for example, "WinZip"
 
    The unpacking should produce a directory "iqc_beta" with several 
    sub-directories. The directory structure is:
@@ -48,7 +48,10 @@ For installation:
    path(path,'path_to_iqc_beta/tests')
 
    into your "startup.m" file, where "path_to_iqc_beta" is the path to 
-   the directory "iqc_beta".
+   the directory "iqc_beta"; 
+
+   Or, use MATLAB's  "set path" functionality, which can be found 
+   in the drop-down manu under "file". 
 
 3. We suggest users put their own application files, if there is any, in 
    a new subdirectory under the directory 'application'. Remember to include 
@@ -63,6 +66,5 @@ For installation:
 
    ***********TESTING OK!!!
 
-5. Please report any problems or bugs to Alexandre Megretski at 
-   ameg@mit.edu or Chung-Yao (Isaac) Kao at cykao@mit.edu. We will try
-   to fix them as quickly as possible. 
+5. Please report any problems or bugs to Chung-Yao (Isaac) Kao at 
+    cykao@mail.ee.nsysu.edu.tw. We will try to fix them as quickly as possible. 

@@ -26,4 +26,4 @@ M  = variable;
 M  > 0;
 v'*(a^2*M)*v - w3'*M*w3 > 0;
 u  == uc;
-g  = iqc_gain_tbx_YALMIP([w1;w2],x2,'lmilab')
+g  = iqc_gain_tbx([w1;w2],x2)
