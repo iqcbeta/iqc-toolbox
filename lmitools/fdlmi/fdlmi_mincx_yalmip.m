@@ -23,8 +23,6 @@ function [cost,xopt]=fdlmi_mincx_yalmip(obj)
 global ABST
 str={};
 
-ABST.systemtype = 'continuous';
-
 lmiparameter=ABST.lmiparameter;
 
 % first, process the ABST log

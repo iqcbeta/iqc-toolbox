@@ -6,6 +6,11 @@ function [w]=iqc_tvscalar(v,D)
 %
 % created by Prof. A Megretski, ameg@mit.edu
 % modified for new IQC toolbox by C. Kao cykao@mit.edu, 08/31/1997
+% Last modified by cmj on 2013/5/5
+
+if nargin<1
+    disp_str(1)
+end
 
 if nargin<2
    D=1;

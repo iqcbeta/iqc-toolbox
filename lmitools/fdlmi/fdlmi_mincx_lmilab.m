@@ -23,7 +23,6 @@ function [cost,xopt]=fdlmi_mincx_lmilab(obj)
 global ABST
 str={};
 
-ABST.systemtype = 'continuous';
 
 lmiparameter=ABST.lmiparameter;
 

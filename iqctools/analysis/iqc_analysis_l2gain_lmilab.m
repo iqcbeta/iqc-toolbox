@@ -19,12 +19,10 @@ function gain=iqc_analysis_l2gain_lmilab(f,z)
 % Written by ameg@mit.edu, last modified November 10, 1997
 % Modified by cykao@mit.edu on Oct. 25, 1998
 % Last modified by cykao@ee.mu.oz.au on Aug. 14 2004
-% Last modified by cmj on 2013/4/23
+% Last modified by cmj on 2013/5/1
 
 global ABST
 str={};
-
-ABST.systemtype = 'continuous';
 
 lmiparameter=ABST.lmiparameter;
 

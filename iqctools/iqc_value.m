@@ -25,8 +25,6 @@ if ~isfield(A,'xopt'),
     disp_str(49,'iqc_gain_tbx')
 end
 
-ABST.systemtype = 'continuous';
-
 cst=1;
 var=2;
 lin=3;

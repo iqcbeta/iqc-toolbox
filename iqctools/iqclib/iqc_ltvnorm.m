@@ -7,15 +7,21 @@ function [w,x]=iqc_ltvnorm(v,n,gain)
 % x>0 is the salar multiplier of the IQC gain^2*v'*x*v>w'*x*w
 %
 % Written by ameg@mit.edu,  last modified October 13, 1997
+% Last modified by cmj on 2013/5/4
+
 if nargin<1,
-   error('input must be specified')
+   disp_str(1)
 end
-if nargin<2, n=size(v,1); end
-if nargin<3, gain=1; end
+if nargin<2
+    n=size(v,1);
+end
+if nargin<3
+    gain=1; 
+end
 
 x=symmetric;
 w=signal(n);
-x>0;
+x>0; %#ok<*VUNUS>
 if gain==1,
    v'*x*v>w'*x*w;
 else

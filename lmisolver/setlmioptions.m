@@ -75,7 +75,7 @@ else
     return
 end
 
-% 把计砞﹚ & 陪ボ
+% 把计砞﹚陪ボ
 switch uselmitool
     case 'lmilab'
         if isempty(lmioptions) % ぃ砞﹚ lmi 把计ㄏノ箇砞 [0 200 0 0 0]

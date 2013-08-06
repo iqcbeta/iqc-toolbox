@@ -18,7 +18,7 @@ function gain=iqc_analysis_l2gain_yalmip(f,z)
 % exported in the format of two files: *_exe.m and *_exe.mat
 % (containing the script and the datafile respectively)
 %
-% Written by cmj on 2013/4/30
+% Written by cmj on 2013/5/1
 
 global ABST
 str={};
@@ -26,8 +26,6 @@ str={};
 sft_v='1e-9';
 % sft_v='0';
 % sft_v='eps';
-
-ABST.systemtype = 'continuous';
 
 switch ABST.systemtype
     case 'continuous',

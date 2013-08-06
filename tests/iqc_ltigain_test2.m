@@ -32,7 +32,7 @@ abst_init_iqc
 w=signal;
 v=signal;
 y=g*w+h*v;
-w==iqc_ltigain(v);
+w==iqc_ltigain(v); %#ok<*EQEFF>
 iqc_gain_tbx(v,y)
 disp(gamma)
 iqc_bode

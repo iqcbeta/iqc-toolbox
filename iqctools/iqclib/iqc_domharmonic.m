@@ -41,49 +41,63 @@ function [f,M,x,d]=iqc_domharmonic(n,a,b,N1,N2)
 %           N2 determines break frequency of filter, default N2=2
 %
 %  Work by Ulf Jonsson, June 1998
-%
-if nargin<5, N2=2; end
-if nargin<4, N1=1; end
-if nargin<3, b=[]; end
-if nargin<2, a=1; end
-if nargin<1, n=1; end
+% Last modified by cmj on 2013/5/2
+
+if nargin<5
+    N2=2;
+end
+if nargin<4
+    N1=1;
+end
+if nargin<3
+    b=[];
+end
+if nargin<2
+    a=1;
+end
+if nargin<1
+    n=1;
+end
 
 if exist('butter')==0
-    error('Your computer doesn''t have Signal Processing Toolbox!')
+    disp_str(71,'signal processing toolbox')
 end
 
-f=signal(n);
-s=tf([1 0],1);
-x=symmetric;
-d=symmetric;
-if isempty(b)
-    if a>0   %case 2
-        [num,den]=butter(N1,N2*a,'s');
-        H=tf(num,den);
-        x>0;
-        d>0;
-        x*real(freqresp(H'*H,a))-d>0;
-    else     %case 3
-        a=abs(a);
-        [num,den]=butter(N1,a/N2,'s');
-        H=tf(num,den);
-        x<0;
-        d<0;
-        x*real(freqresp(H'*H,a))-d>0;
-    end
-else       %case 1
-    a=abs(a);
-    [num,den]=butter(N1,[a/N2,b*N2],'s');
-    H=tf(num,den);
-    x>0;
-    d>0;
-    x*real(freqresp(H'*H,a))-d>0;
-    x*real(freqresp(H'*H,b))-d>0;
+global ABST
+
+switch ABST.systemtype
+    case 'continuous'
+        f=signal(n);
+        s=tf([1 0],1);
+        x=symmetric;
+        d=symmetric;
+        if isempty(b)
+            if a>0   %case 2
+                [num,den]=butter(N1,N2*a,'s');
+                H=tf(num,den);
+                x>0; %#ok<*VUNUS>
+                d>0;
+                x*real(freqresp(H'*H,a))-d>0;
+            else     %case 3
+                a=abs(a);
+                [num,den]=butter(N1,a/N2,'s');
+                H=tf(num,den);
+                x<0;
+                d<0;
+                x*real(freqresp(H'*H,a))-d>0;
+            end
+        else       %case 1
+            a=abs(a);
+            [num,den]=butter(N1,[a/N2,b*N2],'s');
+            H=tf(num,den);
+            x>0;
+            d>0;
+            x*real(freqresp(H'*H,a))-d>0;
+            x*real(freqresp(H'*H,b))-d>0;
+        end
+        (H*f)'*x*(H*f)>f'*d*f;
+        M=H'*x*H-d;
+        
+    case 'discrete'
+        disp_str(70,'iqc_domharmonic','discrete')
 end
-(H*f)'*x*(H*f)>f'*d*f;
-M=H'*x*H-d;
-
-
-
-
-

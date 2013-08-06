@@ -45,6 +45,8 @@ fdlmi_mincx_tbx(y);
 disp(' ')
 disp(' the best approximation is: ')
 value_iqc(Ga)
+value_iqc(y)
+norm(G0-value_iqc(Ga),inf)
 bode(G0,value_iqc(Ga))
 
 

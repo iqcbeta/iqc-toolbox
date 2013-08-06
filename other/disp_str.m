@@ -4,6 +4,7 @@ warning('on','all')
 
 if nargin < 1
     disp_str(1)
+    return
 end
 
 idx=varargin{1};
@@ -33,8 +34,9 @@ switch idx
             parameter{2}])
         % parameter{1} = 'skew'
         % parameter{2} = 'one'
-        
-        
+    case 8
+        error(['only ',parameter{1},' signals are allowed'])
+        % parameter{1} = 'scalar'
     case 11
         warning('The "abst" environment not defined')
     case 12
@@ -160,12 +162,24 @@ switch idx
     case 66
         error('Bad index of independent variables!!')
     case 67
-         disp(['The problem is ',parameter{1}])
-         % parameter{1} = feasible or infeasible
+        disp(['The problem is ',parameter{1}])
+        % parameter{1} = feasible or infeasible
     case 68
-         warning(['range auto set [',parameter{1},' ',parameter{2},']!'])
-         % parameter{1} = 0
-         % parameter{2} = pi
+        warning(['range auto set [',parameter{1},' ',parameter{2},']!'])
+        % parameter{1} = 0
+        % parameter{2} = pi
+    case 69
+        error(['allowed values for ',parameter{1},' : ',parameter{2}])
+        % parameter{1} = type
+        % parameter{2} = 0,1
+    case 70
+        error(['The IQC: ',parameter{1},' may not be used in the ',...
+            parameter{2},' system'])
+        % parameter{1} = iqc_cdelay
+        % parameter{2} = discrete
+    case 71
+        error(['the "',parameter{1},'" is not available for the user'])
+        % parameter{1} = signal processing toolbox
 end
 
 warning('off','all')

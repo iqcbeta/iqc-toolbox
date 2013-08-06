@@ -1,5 +1,8 @@
-function abst_init_iqc
-% function abst_init_iqc
+function abst_init_iqc(type)
+% function abst_init_iqc(type)
+%
+%   type: 0 or empty -> continuous system
+%         1          -> discrete   system
 %
 % initializes the "abst" class environment for iqc handling
 %
@@ -22,8 +25,13 @@ function abst_init_iqc
 %   double
 %   lti (also tf,ss,zpk)
 %
+%
 % Written by ameg@mit.edu,  last modified October 13, 1997
-% Last modified by cmj on 2013/4/23
+% Last modified by cmj on 2013/5/1
+
+if nargin == 0
+    type = 0;
+end
 
 % symbolic names for interior types:
 cst=1;
@@ -59,6 +67,16 @@ end
 % 清除 ABST ABSTSOLUTION
 ABST=[];
 ABSTSOLUTION=[];
+
+% 設定系統形式
+switch type
+    case 0
+        ABST.systemtype = 'continuous';
+    case 1
+        ABST.systemtype = 'discrete';
+    otherwise
+        disp_str(69,'type','0,1')
+end
 
 ABST.name='iqc';         % environment name
 

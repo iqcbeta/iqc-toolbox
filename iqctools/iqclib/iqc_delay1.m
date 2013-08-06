@@ -4,7 +4,7 @@ function [w,X,x]=iqc_delay1(v,T0,a)
 % Defines IQCs for the relation w=e^{-sT}v,
 % where 0<T<T0 is an uncertain time delay.
 %
-% The IQCs have the form 
+% The IQCs have the form
 %
 % (H*v)'*X*(H*v)>(w-v)'*X*(w-v)
 %
@@ -13,33 +13,45 @@ function [w,X,x]=iqc_delay1(v,T0,a)
 %
 % and X=x0+x1/(s+a(1))+....+xN/(s+a(N))>0
 %     a(i)>0, i=1,..,N
-%     xi arbitrary scalar variable 
+%     xi arbitrary scalar variable
 %
 % Default a=[]
 %         T0=1
 %
 % Work by UlfJ June 12, 1997
-
+% Last modified by cmj on 2013/5/2
 
 if nargin<1
-   error('input must be specified')
+    disp_str(1)
 end
-if size(v,1)~=1, error('only scalar signals are allowed'), end
-if nargin<2, T0=1; end
-if nargin<3, a=[]; end
-
-s=tf([1 0],1);
-w=signal;
-x{1}=rectangular;
-X=x{1};
-N=length(a);
-for k=1:N
-  x{k+1}=rectangular;
-  X=X+x{k+1}*(1/(s+a(k)));
+if size(v,1)~=1
+    disp_str(8,'scalar')
 end
-X>0;
-b=sqrt(50);
-a=sqrt(2*b+6.5);
-H=2*T0*s*(T0*s+sqrt(12.5))/(T0^2*s*s+a*T0*s+b);
-(H*v)'*X*(H*v)>(w-v)'*X*(w-v);
+if nargin<2
+    T0=1;
+end
+if nargin<3
+    a=[];
+end
 
+global ABST
+
+switch ABST.systemtype
+    case 'continuous' 
+        s=tf([1 0],1);
+        w=signal;
+        x{1}=rectangular;
+        X=x{1};
+        N=length(a);
+        for k=1:N
+            x{k+1}=rectangular; %#ok<*AGROW>
+            X=X+x{k+1}*(1/(s+a(k)));
+        end
+        X>0; %#ok<*VUNUS>
+        b=sqrt(50);
+        a=sqrt(2*b+6.5);
+        H=2*T0*s*(T0*s+sqrt(12.5))/(T0^2*s*s+a*T0*s+b);
+        (H*v)'*X*(H*v)>(w-v)'*X*(w-v);
+    case 'discrete'
+        disp_str(70,'iqc_delay1','discrete')
+end
