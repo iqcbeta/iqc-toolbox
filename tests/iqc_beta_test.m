@@ -503,33 +503,33 @@ end
 
 
 
-disp('*** GUI test1 ...')
-g=iqc_gui('test1');
-ga=1;
-if isempty(g)|(abs(g-ga)>ga/1000),
-   error('iqc_beta is corrupted')
-end
-
-disp('*** GUI test2 ...')
-g=iqc_gui('test2');
-ga=1.8474;
-if isempty(g)|(abs(g-ga)>ga/1000),
-   error('iqc_beta is corrupted')
-end
-
-disp('*** GUI test3 ...')
-g=iqc_gui('test3');
-ga=0.6903;
-if isempty(g)|(abs(g-ga)>ga/1000),
-   error('iqc_beta is corrupted')
-end
-
-disp('*** GUI test4 ...')
-g=iqc_gui('test4');
-ga=0.1429;
-if isempty(g)|(abs(g-ga)>ga/1000),
-   error('iqc_beta is corrupted')
-end
+% disp('*** GUI test1 ...')
+% g=iqc_gui('test1');
+% ga=1;
+% if isempty(g)|(abs(g-ga)>ga/1000),
+%    error('iqc_beta is corrupted')
+% end
+% 
+% disp('*** GUI test2 ...')
+% g=iqc_gui('test2');
+% ga=1.8474;
+% if isempty(g)|(abs(g-ga)>ga/1000),
+%    error('iqc_beta is corrupted')
+% end
+% 
+% disp('*** GUI test3 ...')
+% g=iqc_gui('test3');
+% ga=0.6903;
+% if isempty(g)|(abs(g-ga)>ga/1000),
+%    error('iqc_beta is corrupted')
+% end
+% 
+% disp('*** GUI test4 ...')
+% g=iqc_gui('test4');
+% ga=0.1429;
+% if isempty(g)|(abs(g-ga)>ga/1000),
+%    error('iqc_beta is corrupted')
+% end
 
 disp(' ')
 disp(' ')

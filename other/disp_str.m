@@ -37,6 +37,10 @@ switch idx
     case 8
         error(['only ',parameter{1},' signals are allowed'])
         % parameter{1} = 'scalar'
+    case 9
+        error(['the ',parameter{1},' must be ',parameter{2}])
+        % parameter{1} = '"block_path" and "param_name" 
+        % parameter{2} = char
     case 11
         warning('The "abst" environment not defined')
     case 12
@@ -183,6 +187,8 @@ switch idx
     case 72
         error(['Numerical problems, the "Decomposition process"',...
             ' is invalid'])
+    case 73
+        error('The Performance Block no more than one. ')
 end
 
 warning('off','all')

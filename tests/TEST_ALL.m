@@ -45,8 +45,8 @@ close all; clear all
 iqc_get_mlmi_test
 close all; clear all
 
-iqc_gui_test1
-close all; clear all
+% iqc_gui_test1
+% close all; clear all
 
 iqc_harmonic_test1
 close all; clear all

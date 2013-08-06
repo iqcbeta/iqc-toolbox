@@ -42,13 +42,13 @@ switch ABST.lmitool
             end
         end
         
-%         %%
-%         str{sc}=['LMI',ks,'_11=zeros(',num2str(size(A1,1)),');'];
-%         sc=sc+1;
-%         str{sc}=['LMI',ks,'_12=zeros(',num2str(size(A1,1)),',',num2str(size(B1,2)),');'];
-%         sc=sc+1;
-%         str{sc}=['LMI',ks,'_22=zeros(',num2str(size(B1,2)),');'];
-%         sc=sc+1;
+        %%
+        str{sc}=['LMI',ks,'_11=zeros(',num2str(size(A1,1)),');'];
+        sc=sc+1;
+        str{sc}=['LMI',ks,'_12=zeros(',num2str(size(A1,1)),',',num2str(size(B1,2)),');'];
+        sc=sc+1;
+        str{sc}=['LMI',ks,'_22=zeros(',num2str(size(B1,2)),');'];
+        sc=sc+1;
         %%
         
         % Mpi
