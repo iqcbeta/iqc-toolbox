@@ -7,11 +7,16 @@ function x=II(n)
 % the corresponding log entry is [1 n n 0 7 0 0 0]
 %
 % Written by ameg@mit.edu,  last modified October 13, 1997
+% Last modified by cmj on 2013/4/18
+
 if nargin==0, n=1; end
+if nargout~=1
+    disp_str(3)
+end
 
 global ABST
 if ~isfield(ABST,'log'),
-   error('"abst" environment not initialized')
+    disp_str(12)
 end
 
 l=zeros(1,ABST.mlog);             % prepare new log entry

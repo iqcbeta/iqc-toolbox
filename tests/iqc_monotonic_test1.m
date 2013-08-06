@@ -44,6 +44,11 @@ lbw=abs(g./(1+g)).*(real(g)>-1)+abs(g./imag(g)).*(real(g)<=-1);
 lb=max(lbw);
 
 abst_init_iqc
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
 f=signal;
 w=signal;
 v=G*(f-w);

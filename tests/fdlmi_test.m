@@ -24,6 +24,11 @@ disp(' ')
 clear all
 s=tf([1,0],1);
 abst_init_fdlmi;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
 G0=1/(s*s+s+1);
 G1=ss(-1,1,1,0);
 G2=ss(-0.7,1,1,0);

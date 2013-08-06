@@ -43,6 +43,10 @@ disp(['*     ||G||^2 = ' num2str(norm(ss(A,B,C,D),Inf)^2)])
 disp(' ')
 
 abst_init_lmi;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sdpt3')
+
 p=symmetric(n);
 y=symmetric;
 a=abst(A);

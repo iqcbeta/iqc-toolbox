@@ -30,6 +30,11 @@ error('parameter k2 should be positive')
 end
 
 abst_init_iqc;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
 A=[-0.21,-1;1,0];
 B=[0.8;0];
 C=[0,1];

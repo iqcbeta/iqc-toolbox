@@ -7,6 +7,10 @@ s=tf([1 0],1);
 G=2*20*10*(s*s-0.5*s+1)/((s+10)*(s+20)*(s+30));
 
 abst_init_iqc;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal;
 f=signal;
 v=G*(-w+f);

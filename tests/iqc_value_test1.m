@@ -13,6 +13,11 @@ G=(s-1)/((s+2)*(s+2));
 H=(s-2)/((s+1)*(s+1));
 abst_init_iqc;
 lmitbx_options([0 0 0 0 1]);
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal(2);
 v=[G 1]*w;
 x=symmetric;

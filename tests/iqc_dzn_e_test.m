@@ -9,6 +9,11 @@ k2=0.3;
 kphi=k2*1;
 G=(s+1-k1/k2)/(s*s+s+1);
 abst_init_iqc;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal;
 f=signal;
 v=G*w+f;

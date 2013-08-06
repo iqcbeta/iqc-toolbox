@@ -1,7 +1,7 @@
 function x=diagonal(n)
 % function x=diagonal(n)
 %
-% defines an "abst" object which is a 
+% defines an "abst" object which is a
 % diagonal real matrix variable
 % of size n by n
 %
@@ -9,9 +9,14 @@ function x=diagonal(n)
 % [2 n n 0 3 0 0 0]
 %
 % Written by ameg@mit.edu,  last modified October 13, 1997
+% Last modified by cmj on 2013/4/18
+
 global ABST
 if ~isfield(ABST,'log'),
-   error('"abst" environment not initialized')
+    disp_str(12)
+end
+if nargout~=1
+    disp_str(3)
 end
 
 if nargin<1, n=1; end

@@ -18,8 +18,7 @@ Q2=1/(100*s+1)*[99               -125*(s+1)/(.1*s+1);
                -75*(s+1)/(.1*s+1)    99];
 	       
 % --- initialize IQC environment ---
-abst_init_iqc;  
-lmitbx_options([0 200 -1 25 0]);
+abst_init_iqc;
 
 w=signal(2);
 f=signal(2);

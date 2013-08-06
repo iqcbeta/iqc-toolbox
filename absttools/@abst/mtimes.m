@@ -1,15 +1,16 @@
 function c=mtimes(a,b)
 % function c=mtimes(a,b)
-% 
+%
 % mtimes function for the "abst" type
-% 
+%
 %
 % Written by ameg@mit.edu,  last modified October 13, 1997
-global ABST
+% Last modified by cmj on 2013/4/19
 
+global ABST
 % is operation supported ?
-if ~isfield(ABST,'mtimes'),
- error('Operation "mtimes" not supported')
+if ~isfield(ABST,'mtimes')
+    disp_str(14,'mtimes')
 end
 
 a=abst(a);                % convert to "abst", if necessary
@@ -23,19 +24,16 @@ cb=ABST.log(nb,1);
 
 ocls=ABST.mtimes(ca,cb);    % check if "mtimes" is allowed
 if ocls==0,
-   error([ABST.cls{ca} '*' ABST.cls{cb} '  not allowed'])
+    disp_str(39,ABST.cls{ca},'*',ABST.cls{cb})
 elseif ha==vb,
-   z=abst_alloc([ocls va hb num_op('mtimes') 0 na nb]);
-   c=abst(z,0);
-elseif (va==1)&(ha==1),
-   z=abst_alloc([ocls vb hb num_op('mtimes') 0 na nb]);
-   c=abst(z,0);
-elseif (vb==1)&(hb==1),
-   z=abst_alloc([ocls va ha num_op('mtimes') 0 na nb]); 
-   c=abst(z,0);
+    z=abst_alloc([ocls va hb num_op('mtimes') 0 na nb]);
+    c=abst(z,0);
+elseif (va==1)&&(ha==1),
+    z=abst_alloc([ocls vb hb num_op('mtimes') 0 na nb]);
+    c=abst(z,0);
+elseif (vb==1)&&(hb==1),
+    z=abst_alloc([ocls va ha num_op('mtimes') 0 na nb]);
+    c=abst(z,0);
 else
-   error('argument dimensions are not compatible')
+    disp_str(38)
 end
-
-   
-

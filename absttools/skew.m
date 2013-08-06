@@ -1,7 +1,7 @@
 function x=skew(n)
 % function x=skew(n)
 %
-% defines an "abst" object which is a 
+% defines an "abst" object which is a
 % skew symmetric matrix variable
 % of size n by n
 %
@@ -9,15 +9,19 @@ function x=skew(n)
 % [2 n n 0 4 0 0 0]
 %
 % Written by ameg@mit.edu,  last modified October 13, 1997
+% Last modified by cmj on 2013/4/18
+
 if nargin==0, n=2; end
 if n<2,
-   error('input of "skew" is not greater than one')
-   return
+    disp_str(7,'skew','one')
+end
+if nargout~=1
+    disp_str(3)
 end
 
 global ABST
 if ~isfield(ABST,'log'),
-   error('"abst" environment not initialized')
+    disp_str(12)
 end
 
 l=zeros(1,ABST.mlog);             % prepare new log entry

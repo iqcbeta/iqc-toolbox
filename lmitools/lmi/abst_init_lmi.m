@@ -1,8 +1,8 @@
 function abst_init_lmi
 % function abst_init_lmi
-% 
+%
 % initializes the "abst" class environment for frequency dependent LMI handling
-% 
+%
 % internal classes:
 %   1:  cst       (converted from "double","tf","ss","zpf", or "lti")
 %   2:  var       (matrix  variable, can be declared with
@@ -14,7 +14,7 @@ function abst_init_lmi
 %   double
 %
 % Written by cykao@mit.edu, last modified: Feb 9, 1999
-
+% Last modified by cmj on 2013/4/26
 
 % symbolic names for interior types:
 cst=1;
@@ -22,18 +22,27 @@ var=2;
 lin=3;
 lmi=4;
 
-global ABST
-if isfield(ABST,'options'),
-   options=ABST.options;
+% 保留舊 lmi 工具設定
+global ABST ABSTSOLUTION
+if isfield(ABST,'lmiparameter');
+    lmitool=ABST.lmitool;
+    lmiparameter=ABST.lmiparameter;
 else
-   options=[0 200 0 0 0];
+    chk=chklmitool;
+    switch chk
+        case {1,3}
+            lmitool='lmilab';
+            lmiparameter=[0 200 0 0 0];
+        case 2
+            lmitool='yalmip';
+            lmiparameter=[];
+    end
 end
 
-clear global ABST               % remove old trash
-clear global ABSTSOLUTION
-global ABST
-global ABSTSOLUTION
-ABSTSOLUTION={};
+% 清除 ABST ABSTSOLUTION
+ABST=[];
+ABSTSOLUTION=[];
+
 ABST.name='lmi';                % environment name
 ABST.mlog=8;                    % number of columns in ABST.log
 ABST.log=zeros(100,ABST.mlog);  % will keep operations logic
@@ -50,33 +59,29 @@ ABST.log=zeros(100,ABST.mlog);  % will keep operations logic
 %        conversion:    address of the data in ABST.dat
 % 7: second argument
 % 8: third argument: apparently, for subsassgn only
-%
-
-% ABST.log(1,1:5)=[1 0 0 -1 1];   % reference for the empty object
-% ABST.nlog=1;                    % number of USED rows in ABST.log
 ABST.nlog=0;                    % number of USED rows in ABST.log
 ABST.dat={};                    % will keep data
 ABST.ndat=0;                    % no data yet
 ABST.def={'symmetric'; ...      % for the use by "display"
-          'rectangle'; ...
-          'diagonal'; ...
-          'skew'; ...
-          'structure'; ...
-          'zero'; ...
-          'identity'; ...
-          'input'; ...
-          'vector' ...
-};
-ABST.ext={'double'   1; ...
-};   
-ABST.next=5;                    % five external classes 
+    'rectangle'; ...
+    'diagonal'; ...
+    'skew'; ...
+    'structure'; ...
+    'zero'; ...
+    'identity'; ...
+    'input'; ...
+    'vector'};
+ABST.ext={'double'   1};
+ABST.next=5;                    % five external classes
 ABST.cls={'constant'; ...
-          'variable'; ...
-          'linear'; ...
-          'lmi'; ...
-};
+    'variable'; ...
+    'linear'; ...
+    'lmi'};
 ABST.ncls=4;                    % number of interior types
-ABST.options=options;           % LMI control toolbox options
+
+% lmi toolbox
+ABST.lmitool=lmitool;
+ABST.lmiparameter=lmiparameter;
 
 % tables for admissible operations follow
 % rows correspond to the first argument type
@@ -111,21 +116,21 @@ ABST.ctranspose(t)=t;
 ABST.subsref(t)=t;
 % binary operations
 ABST.plus(t,[cst var lin])= ...
-            [cst lin lin];
+    [cst lin lin];
 ABST.minus(t,[cst var lin])= ...
-             [cst lin lin];
+    [cst lin lin];
 ABST.horzcat(t,[cst var lin])= ...
-               [cst lin lin];
+    [cst lin lin];
 ABST.vertcat(t,[cst var lin])= ...
-               [cst lin lin];
+    [cst lin lin];
 ABST.mtimes(t,[cst var lin])= ...
-              [cst lin lin];
+    [cst lin lin];
 ABST.lt(t,[var lin])= ...
-          [lmi lmi];
+    [lmi lmi];
 ABST.gt(t,[var lin])= ...
-          [lmi lmi];
-ABST.subsasgn(t,[cst])= ...
-                [cst];
+    [lmi lmi];
+ABST.subsasgn(t,cst)= ...
+    cst;
 
 % ************************************************************** var
 % admissible operations for "var"
@@ -137,21 +142,21 @@ ABST.ctranspose(t)=lin;
 ABST.subsref(t)=t;
 % binary operations
 ABST.plus(t,[cst var lin])= ...
-            [lin lin lin];
+    [lin lin lin];
 ABST.minus(t,[cst var lin])= ...
-            [lin lin lin];
+    [lin lin lin];
 ABST.vertcat(t,[cst var lin ])= ...
-               [lin lin lin ];
+    [lin lin lin ];
 ABST.horzcat(t,[cst var lin ])= ...
-               [lin lin lin];
-ABST.subsasgn(t,[var])= ...
-                [var];
-ABST.mtimes(t,[cst])= ...
-              [lin];
+    [lin lin lin];
+ABST.subsasgn(t,var)= ...
+    var;
+ABST.mtimes(t,cst)= ...
+    lin;
 ABST.lt(t,[cst,var,lin])= ...
-          [lmi lmi lmi];
+    [lmi lmi lmi];
 ABST.gt(t,[cst,var,lin])= ...
-          [lmi lmi lmi];
+    [lmi lmi lmi];
 
 
 % ************************************************************** lin
@@ -164,20 +169,21 @@ ABST.ctranspose(t)=lin;
 
 % binary operations
 ABST.plus(t,[cst var lin])= ...
-            [lin lin lin];
+    [lin lin lin];
 ABST.minus(t,[cst var lin])= ...
-            [lin lin lin];
+    [lin lin lin];
 ABST.vertcat(t,[cst var lin ])= ...
-               [lin lin lin ];
+    [lin lin lin ];
 ABST.horzcat(t,[cst var lin ])= ...
-               [lin lin lin ];
-ABST.mtimes(t,[cst])= ...
-              [lin];
+    [lin lin lin ];
+ABST.mtimes(t,cst)= ...
+    lin;
 ABST.lt(t,[cst var lin])= ...
-          [lmi lmi lmi];
+    [lmi lmi lmi];
 ABST.gt(t,[cst var lin])= ...
-          [lmi lmi lmi];
+    [lmi lmi lmi];
 
 % ************************************************************** lmi
 % no admissible operations for "lmi"
+
 abst_const;

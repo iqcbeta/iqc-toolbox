@@ -4,6 +4,10 @@
 
 G=ss([-0.3 -100;1 0],[1.4;0],[1 1],0);
 abst_init_iqc;
+ 
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal;
 f=signal;
 v=G*(w+f);

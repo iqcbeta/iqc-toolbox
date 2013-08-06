@@ -5,6 +5,11 @@
 clear all
 G=ss([-0.2 -1;1 0],[1;0],[1 1],0);
 abst_init_iqc;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal;
 f=signal;
 v=-G*(w+f);
@@ -14,6 +19,11 @@ disp('The answer was gain=25.97 on nov 10, 1997')
 
 G=ss([-0.2 -1;1 0],[1;0],[1 1],0);
 abst_init_iqc;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal;
 f=signal;
 v=-G*(w+f);

@@ -7,9 +7,15 @@ function x=signal(n)
 % [5 n 1 0 1 0 0 0]
 %
 % Written by ameg@mit.edu,  last modified October 13, 1997
+% Last modified by cmj on 2013/4/18
+
+if nargout~=1
+    disp_str(3)
+end
+
 global ABST
 if ~isfield(ABST,'log'),
-   error('"abst" environment not initialized')
+    disp_str(12)
 end
 
 if nargin<1, n=1; end

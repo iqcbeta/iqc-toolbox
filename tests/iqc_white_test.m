@@ -11,6 +11,11 @@ b=50;
 H=sqrt(b*2/pi);
 a=[0.1;0.5;1;-0.1+0.9950i];
 abst_init_iqc;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
 [f,Y,X]=iqc_white(2,b,a);
 z=G*H*f;
 gain=iqc_gain_tbx(f,z)

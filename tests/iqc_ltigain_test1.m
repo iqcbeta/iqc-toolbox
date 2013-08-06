@@ -22,6 +22,10 @@ G=[0 sg;0 0];
 H=[sh;1];
 
 abst_init_iqc
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal(2);
 f=signal;
 v=G*w+H*f;

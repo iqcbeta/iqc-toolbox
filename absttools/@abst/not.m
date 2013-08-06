@@ -5,11 +5,12 @@ function c=not(a)
 % 
 %
 % Written by ameg@mit.edu,  last modified October 13, 1997
-global ABST
+% Last modified by cmj on 2013/4/19
 
+global ABST
 % is operation supported ?
 if ~isfield(ABST,'not'),
- error('Operation "not" not supported')
+ disp_str(14,'not')
 end
 
 a=abst(a);                % convert to "abst", if necessary
@@ -19,11 +20,8 @@ ca=ABST.log(na,1);        % interior class of a
 
 ocls=ABST.not(ca);    % check if "not" is allowed
 if ocls==0,
-   error(['~' ABST.cls{ca} '  not allowed'])
+   disp_str(40,'~',ABST.cls{ca})
 else
    z=abst_alloc([ocls va ha num_op('not') 0 na]);
    c=abst(z,0);
 end
-
-   
-

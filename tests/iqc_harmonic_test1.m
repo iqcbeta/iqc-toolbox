@@ -9,6 +9,11 @@ w0=3;
 s=tf([1 0],1);
 
 abst_init_iqc;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
 f=signal;
 w=signal;   % w=cos(w0*t)*x
 y=(1/(s*s+s+a))*(f-b*w);

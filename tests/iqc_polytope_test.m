@@ -12,6 +12,10 @@ Delta{3}=[-1;1];
 Delta{4}=[-1;-1];
 
 abst_init_iqc;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal(2);
 f=signal(2);
 v=G*(w+f);

@@ -14,4 +14,3 @@ z=roots(p);
 zp=z(find(real(z)<0));
 h=poly(zp);
 h=h*sqrt(g(n+1))/h(n+1);
-

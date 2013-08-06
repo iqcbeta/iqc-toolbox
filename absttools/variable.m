@@ -8,15 +8,22 @@ function x=variable(N)
 % i.e. they will correspond to new decision variables)
 %
 % Written by ameg@mit.edu,  last modified October 13, 1997
+% Last modified by cmj on 2013/4/18
+
+if nargout~=1
+    disp_str(3)
+end
 
 global ABST
 if ~isfield(ABST,'log'),
-   error('"abst" environment not initialized')
+    disp_str(12)
 end
 
 if nargin<1,
-   N=1;
+    N=1;
 end
+
+
 
 y=abst(N);                        % convert N to "abst"
 

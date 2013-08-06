@@ -4,7 +4,12 @@ clear all
 s=tf([1 0],1);
 G=(s-1)/((s+2)*(s+2));
 abst_init_iqc;
-lmitbx_options([0 0 0 0 1]);
+% lmitbx_options([0 0 0 0 1]);
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal;
 v=G*w;
 gain=iqc_gain_tbx(w,v);

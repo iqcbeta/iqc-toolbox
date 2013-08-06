@@ -18,7 +18,7 @@ global ABST
 
 % is operation supported ?
 if ~isfield(ABST,'subsref'),
- error('Operation "subsref" not supported')
+ disp_str(14,'subsref')
 end
 
 na=double(a);             % reference to a in ABST.log
@@ -27,7 +27,7 @@ ca=ABST.log(na,1);        % interior class of a
 
 ocls=ABST.subsref(ca);    % check if "subsref" is allowed
 if ocls==0,
-   error([ABST.cls{ca} '[s]  not allowed'])
+   disp_str(43,ABST.cls{ca},'[s]','')
 else
    Mvert=repmat((1:va)',1,ha);
    Mhorz=repmat((1:ha),va,1);

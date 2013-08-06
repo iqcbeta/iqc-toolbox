@@ -20,6 +20,10 @@ M=1/1.5*[s/(s+100)    0;
 % case (1) --------------
 abst_init_iqc
 
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
 f=signal(2);
 w1=signal;
 w2=signal;

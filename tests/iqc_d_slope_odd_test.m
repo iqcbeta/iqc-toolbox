@@ -31,6 +31,7 @@ fprintf(1,'Present value of G : %f\n',G);
 
 abst_init_iqc
 lmitbx_options([0 600 -1 25 0]);
+
 w1=signal;
 w2=signal;
 f=signal(2);
@@ -57,7 +58,8 @@ a{2,1}=[100 .1];a{2,2}=[];
 % a{1,2}=Inf;
 
 abst_init_iqc
-lmitbx_options([0 600 -1 25 0]);
+% lmitbx_options([0 600 -1 25 0]);
+
 w=signal(2);
 f=signal(2);
 z1=M1*w(1);

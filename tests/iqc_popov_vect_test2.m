@@ -14,9 +14,15 @@ D=zeros(2,2);
 G=ss(A,B,C,D);
 s=tf([1 0],1);
 abst_init_iqc;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
+
 w=signal(2);
 f=signal(2);
 v=G*w+1/(s+1)*f;
 w==iqc_popov_vect(v);
 w==iqc_tvscalar(v,1);
-gain=iqc_gain_tbx(f,v);
+gain=iqc_gain_tbx(f,v)

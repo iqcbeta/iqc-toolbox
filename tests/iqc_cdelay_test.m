@@ -1,9 +1,15 @@
 %
 % Test of iqc_cdelay.m 
 %
-clear all
+% clear all
+clc
 G=ss([-1 -2;1 0],[1;0],[1 1],0);
+
 abst_init_iqc;
+
+setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal;
 f=signal;
 v=G*(w+f);

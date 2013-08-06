@@ -4,11 +4,12 @@ function g=derivative(f)
 % g=df/dt
 %
 % Written by ameg@mit.edu,  last modified October 13, 1997
+% Last modified by cmj on 2013/4/18
 
 global ABST
 
-if ABST.log(double(f),1)~=6 & ABST.log(double(f),1)~=5
-   error('only a signal or an input could be differentiated')
+if ABST.log(double(f),1)~=6 && ABST.log(double(f),1)~=5
+    disp_str(41)
 end
 
 l=zeros(1,ABST.mlog);             % prepare new log entry

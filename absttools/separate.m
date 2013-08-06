@@ -5,6 +5,7 @@ function [rs,ru]=separate(g)
 % find a stable system rs
 % and an antistable sustem ru such that g=rs+ru
 % (the direct terms of rs and ru must be equal)
+
 [A,B,C,D]=ssdata(g);
 d=D/2;
 [v,l]=eig(A);
@@ -20,4 +21,3 @@ b=vi*B;
 rs=tf(nrs,drs);
 [nru,dru]=ss2tf(a(ns+1:n,ns+1:n),b(ns+1:n),c(ns+1:n),d);
 ru=tf(nru,dru);
-

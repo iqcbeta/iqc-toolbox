@@ -5,6 +5,12 @@ clear all
 G=ss([-0.5 -5;1 0],[1;0],[1 1],0);
 Gr=ss(-0.1,9,1,10);
 abst_init_iqc;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
+
 w=signal;
 b=100;
 f=iqc_white(1,b,[1,-0.25+2.2*i]);

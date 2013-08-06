@@ -24,7 +24,7 @@ a1=a+b*c;
 if d==0
    disp('  System is linear.  ')
    disp(' ')
-   break
+%    break
 elseif d<0
    d=-d;
 end
@@ -35,7 +35,7 @@ if max(real(pa))>0
       disp(' ')
       disp(' The system is unstable (A has unstable poles)')
       disp(' ')
-      break
+%       break
 end
 
 %make sure a and a+bc are stale
@@ -44,7 +44,7 @@ if max(real(pa1))>=0
       disp(' ')
       disp(' The origin is locally unstable (A+BC has unstable poles)')
       disp(' ')
-      break
+%       break
 end
 
 
@@ -55,7 +55,7 @@ if -c*iabd>=d
     disp(' ')
     disp(' System has 3 equilibrium points')
     disp(' ')
-    break
+%     break
 end
   
 %break

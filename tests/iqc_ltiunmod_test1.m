@@ -43,7 +43,11 @@ disp(' mu-toolbox predicts that the ststem is stable when ')
 disp([' the uncertainty has norm less than ',num2str(k0)])
 
 abst_init_iqc
-lmitbx_options([0 0 0 0 1]);
+% lmitbx_options([0 0 0 0 1]);
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sdpt3')
+
 k1=0.999*k0;
 f=signal;
 w=signal;
@@ -60,12 +64,12 @@ w==iqc_ltiunmod(y,1,1,k2);
 g2=iqc_gain_tbx(f,y);
 
 disp(' ')
-if ~isempty(g2)
+if ~isempty(g2) && ~isinf(g2)
    str1=' IQC theory also proves that system can substain an uncertainty with ';
    str2=' norm less than ';
    disp(str1)
    disp([str2,num2str(k2)])
-elseif ~isempty(g1)
+elseif ~isempty(g1) && ~isinf(g1)
    str1=' IQC theory also proves that system can substain an uncertainty with ';
    str2=' norm less than ';
    disp(str1)

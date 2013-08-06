@@ -25,6 +25,10 @@ h=tf(ch(1:2),[1 ch(3:4)]);      % CS Toolbox representation of h
 gamma=max(norm(g+h,inf),norm(g-h,inf));  % analytical gamma
 
 abst_init_iqc
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal;
 v=signal;
 y=g*w+h*v;

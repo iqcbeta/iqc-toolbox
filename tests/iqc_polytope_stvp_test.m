@@ -37,6 +37,10 @@ Omega{3}=[-d1 0;0 d2];
 Omega{4}=[-d1 0;0 -d2];
 Lambdastruc=[1 0;0 2];
 abst_init_iqc;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal(2);
 f=signal(2);
 v=G*(w+f);

@@ -3,14 +3,15 @@ function Z=mvrtct(X,Y)
 %
 % forms a tf lti system Z=[Z;Y]
 %
-% Written by ameg@mit.edu to by-pass the bug in the 
+% Written by ameg@mit.edu to by-pass the bug in the
 % Control Systems Toolbox v. 5.1
+% Last modified by cmj on 2013/4/18
 
 [ax,bx,cx,dx]=ssdata(ss(X));
 [ay,by,cy,dy]=ssdata(ss(Y));
 
 if size(dx,2)~=size(dy,2),
-  error('Incompatible horizontal size')
+    disp_str(6)
 end
 
 nx=size(ax,1);
@@ -24,4 +25,3 @@ c=[cx zeros(mx,ny);zeros(my,nx) cy];
 d=[dx;dy];
 
 Z=ss(a,b,c,d);
- 

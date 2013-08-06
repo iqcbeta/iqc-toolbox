@@ -15,6 +15,10 @@ a=1;
 G21=(k1*s+k2)/(kphi*(s+a))
 G12=(s+a)*P;
 abst_init_iqc;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w1=signal;
 w2=signal;
 f=signal;

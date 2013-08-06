@@ -1,15 +1,16 @@
 function c=uplus(a)
 % function c=uplus(a)
-% 
+%
 % uplus function for the "abst" type
-% 
+%
 %
 % Written by ameg@mit.edu,  last modified October 13, 1997
-global ABST
+% Last modified by cmj on 2013/4/19
 
+global ABST
 % is operation supported ?
 if ~isfield(ABST,'uplus'),
- error('Operation "uplus" not supported')
+    disp_str(14,'uplus')
 end
 
 a=abst(a);                % convert to "abst", if necessary
@@ -19,11 +20,8 @@ ca=ABST.log(na,1);        % interior class of a
 
 ocls=ABST.uplus(ca);    % check if "uplus" is allowed
 if ocls==0,
-   error(['+' ABST.cls{ca} '  not allowed'])
+    disp_str(40,'+',ABST.cls{ca})
 else
-   z=abst_alloc([ocls va ha num_op('uplus') 0 na]);
-   c=abst(z,0);
+    z=abst_alloc([ocls va ha num_op('uplus') 0 na]);
+    c=abst(z,0);
 end
-
-   
-

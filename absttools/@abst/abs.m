@@ -7,4 +7,3 @@ function y=abs(x)
 y=vector;
 y>x;
 y+x>0;
-   

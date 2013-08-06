@@ -1,6 +1,6 @@
 function [gain,exe_comment]=iqc_gui(sys_name,datafile_name,type)
 % function [gain,exe_comment]=iqc_gui(sys_name,datafile_name,type)
-% This is the graohic interface function for the IQC ToolBox
+% This is the graphics interface function for the IQC ToolBox
 
 
 old_path=pwd;
@@ -24,7 +24,7 @@ elseif nargin==2
     type=1;
     sol=[];
     datafile=datafile_name;
-    dot_pos=(findstr(datafile_name,'.'));
+    dot_pos=(strfind(datafile_name,'.'));
     if ~isempty(dot_pos)
         datafile_name=datafile_name(1:dot_pos(1,1)-1);
     end

@@ -4,6 +4,10 @@
 clear all
 G=tf(0.5,[1 0.25 1]);
 abst_init_iqc;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal;
 f=signal;
 v=G*(-w+f);

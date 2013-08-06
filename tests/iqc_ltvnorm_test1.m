@@ -44,6 +44,10 @@ disp('****************************************')
 disp(['ANALYTICAL ANSWER = ' num2str(gain)])
 
 abst_init_iqc
+
+setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sdpt3')
+
 w=signal(m);
 f=signal(k);
 v=G*w+f;

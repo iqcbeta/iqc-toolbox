@@ -14,10 +14,12 @@ function L=iqc_pre_optlp(f,z,options)
 %
 % Written by cykao@mit.edu on October 25, 1998
 
+global ABST
+
 % first, process the iqc abst log
 E=iqc_extract(f,z);
 E=iqc_reduce(E);
-vrb=(E.options(5)==0)|(E.options(5)==777);
+vrb=(ABST.lmiparameter(5)==0)|(ABST.lmiparameter(5)==777);
 
 % symbolic names for interior types:
 cst=1;

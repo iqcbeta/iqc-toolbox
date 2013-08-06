@@ -33,6 +33,11 @@ disp(['*     answer = ' num2str(answ)])
 disp(' ')
 
 abst_init_lmi;
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
 x=symmetric(n);
 x>A;
 x>B;

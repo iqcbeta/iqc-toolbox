@@ -1,12 +1,11 @@
-function E=iqc_extract_YALMIP(f,z)
-% function E=iqc_extract_YALMIP(f,z)
+function E=iqc_extract(f,z)
+% function E=iqc_extract(f,z)
 %
 % processes log file of iqc environment
 % output is E - a structure
 % which contains more detailed
 % information about the system elements
 %
-% E.options :   same as ABST.options
 % E.nlog    :   number of non-zero rows in ABST.log
 % E.nlmivar :   total number of INDEPENDENT scalar decision variables
 % E.nlmi    :   total number of LMI's
@@ -43,8 +42,6 @@ function E=iqc_extract_YALMIP(f,z)
 %               size 1-by-nsimple array
 % E.T       :   the first column of ABST.log (types of variables)
 %
-% to suppress the text output, use lmitbx_options to set
-% ABST.options(5)~=0 or 777
 %
 % This program is based on the first generation program Written by
 %      ameg@mit.edu, last modified November 10, 1997
@@ -59,20 +56,28 @@ function E=iqc_extract_YALMIP(f,z)
 % of a variable.
 %
 % Written by cykao@ee.mu.oz.au     Aug. 14 2004
-
+% Last modified by cmj on 2013/4/24
 
 % safety checks
 global ABST
 A=ABST;
 if ~isfield(A,'name'),
-    error('"abst" environment not defined')
+    disp_str(12)
 end
 if ~strcmp(A.name,'iqc'),
-    error('This is not an "iqc" environment')
+    disp_str(15,'iqc')
 end
 
 % vrb=0 to suppress the output
-vrb=(A.options(5)==0)|(A.options(5)==777);
+switch ABST.lmitool
+    case 'lmilab'
+        vrb = (A.lmiparameter(5)==0)|(A.lmiparameter(5)==777);
+    case 'yalmip'
+        vrb=1;
+        if ~isempty(ABST.lmiparameter)
+            vrb = isempty(strfind(ABST.lmiparameter,'''verbose'',0'));
+        end
+end
 
 % symbolic names for interior types:
 cst=1;
@@ -89,7 +94,7 @@ iqc=11;
 lnk=12;
 
 if vrb,
-    disp('iqc_extract: processing the abst log information ... ')
+    disp_str(64,'iqc_extract')
 end
 
 %  ---- The following codes were introduced by C. Kao to fix the bug
@@ -113,10 +118,10 @@ for flcnt=1:length(lnk_ind)
     if (A.log(a1,2)~=A.log(a2,2)),
         error(['link incompatible at log #' num2str(lnk_ind(flcnt))])
     end
-    if (A.log(a1,1)==inp & A.log(a2,1)==inp)
+    if (A.log(a1,1)==inp && A.log(a2,1)==inp)
         A.log(lnk_ind(flcnt),1)=-1;
         if a1>a2,
-            inp_inp=[inp_inp;[a2,a1]];
+            inp_inp=[inp_inp;[a2,a1]]; %#ok<*AGROW>
         elseif a1<a2
             inp_inp=[inp_inp;[a1,a2]];
         else
@@ -136,16 +141,16 @@ for flcnt=1:size(inp_inp,1)
     a1_1=A.log(inp_1,6);
     op_2=A.log(inp_2,4);
     a1_2=A.log(inp_2,6);
-    if (op_1~=-2 & op_2~=-2),
+    if (op_1~=-2 && op_2~=-2),
         A.log(inp_2,4)=-2;
         A.log(inp_2,6)=inp_1;
-    elseif (op_1==-2 & op_2~=-2),
+    elseif (op_1==-2 && op_2~=-2),
         A.log(inp_2,4)=-2;
         A.log(inp_2,6)=A.log(inp_1,6);
-    elseif (op_1~=-2 & op_2==-2),
+    elseif (op_1~=-2 && op_2==-2),
         A.log(inp_1,4)=-2;
         A.log(inp_1,6)=A.log(inp_2,6);
-    elseif (op_1==-2 & op_2==-2)
+    elseif (op_1==-2 && op_2==-2)
         if A.log(inp_1,6)>A.log(inp_2,6)
             A.log(A.log(inp_1,6),4)=-2;
             A.log(A.log(inp_1,6),6)=A.log(inp_2,6);
@@ -402,8 +407,8 @@ for k=1:A.nlog,
                         h1=size(H{a1},2);
                         v2=size(G{a2},1);
                         h2=size(H{a2},2);
-                        if (v1~=v2)|(h1~=h2),
-                            if (v1==1)&(h1==1),
+                        if (v1~=v2)||(h1~=h2),
+                            if (v1==1)&&(h1==1),
                                 G{k}=mhrzct(ones(v2,1)*G{a1},G{a2});
                                 H{k}=mvrtct(H{a1}*ones(1,h2),H{a2});
                                 X{k}=[X{a1} X{a2}];
@@ -413,7 +418,7 @@ for k=1:A.nlog,
                                     msg3=[msg2,'a*ones(size(X))+X ! '];
                                     warning(msg3);
                                 end
-                            elseif (v2==1)&(h2==1),
+                            elseif (v2==1)&&(h2==1),
                                 G{k}=mhrzct(G{a1},ones(v1,1)*G{a2});
                                 H{k}=mvrtct(H{a1},H{a2}*ones(1,h2));
                                 X{k}=[X{a1} X{a2}];
@@ -446,8 +451,8 @@ for k=1:A.nlog,
                         h1=size(H{a1},2);
                         v2=size(G{a2},1);
                         h2=size(H{a2},2);
-                        if (v1~=v2)|(h1~=h2),
-                            if (v1==1)&(h1==1),
+                        if (v1~=v2)||(h1~=h2),
+                            if (v1==1)&&(h1==1),
                                 G{k}=mhrzct(ones(v2,1)*G{a1},-G{a2});
                                 H{k}=mvrtct(H{a1}*ones(1,h2),H{a2});
                                 X{k}=[X{a1} X{a2}];
@@ -457,7 +462,7 @@ for k=1:A.nlog,
                                     msg3=[msg2,'a*ones(size(X))-X ! '];
                                     warning(msg3);
                                 end
-                            elseif (v2==1)&(h2==1),
+                            elseif (v2==1)&&(h2==1),
                                 G{k}=mhrzct(G{a1},-ones(v1,1)*G{a2});
                                 H{k}=mhrzct(H{a1},H{a2}*ones(1,h1));
                                 X{k}=[X{a1} X{a2}];
@@ -495,7 +500,7 @@ for k=1:A.nlog,
                     v2=A.log(a2,2);
                     h2=A.log(a2,3);
                     if A.log(a1,1)==cst,
-                        if (h2==1)&(v2==1)&(h1~=v2),
+                        if (h2==1)&&(v2==1)&&(h1~=v2),
                             if (A.log(a2,1)==var),
                                 X{k}=[X{a2}(2,1);h1;h1];
                                 H{k}=tf(eye(h1));
@@ -509,7 +514,7 @@ for k=1:A.nlog,
                             H{k}=H{a2};
                         end
                     elseif A.log(a2,1)==cst,
-                        if (v2~=h1)&(h1==1)&(v1==1),
+                        if (v2~=h1)&&(h1==1)&&(v1==1),
                             if (A.log(a1,1)==var),
                                 X{k}=[X{a1}(2,1);v2;v2];
                                 G{k}=tf(eye(v2));
@@ -527,7 +532,7 @@ for k=1:A.nlog,
                     end
                 case num_op('vertcat'),
                     if A.log(a1,1)==cst,
-                        [v2,h2]=size(G{a2});
+                        [v2,h2]=size(G{a2}); %#ok<*ASGLU>
                         G{k}=mvrtct(zeros(A.log(a1,2),h2),G{a2});
                         X{k}=X{a2};
                         H{k}=H{a2};
@@ -571,7 +576,7 @@ for k=1:A.nlog,
         case sgn,
             if op==num_op('mtimes'),
                 % disp(['k=' num2str(k) ';    sgn'])
-                if (A.log(a1,2)==1)&(A.log(a1,3)==1),
+                if (A.log(a1,2)==1)&&(A.log(a1,3)==1),
                     %            nstates=nstates+vs*size(ss(B{a1}),3);
                     nstates=nstates+vs*size(ssdata(ss(B{a1})),1);
                 else
@@ -583,7 +588,7 @@ for k=1:A.nlog,
             if op==num_op('mtimes'),
                 % disp(['k=' num2str(k) ';    vsg'])
                 if A.log(a1,1)==cst,
-                    if (A.log(a1,2)==1)&(A.log(a1,3)==1),
+                    if (A.log(a1,2)==1)&&(A.log(a1,3)==1),
                         %               nstates=nstates+vs*size(ss(B{a1}),3);
                         nstates=nstates+vs*size(ssdata(ss(B{a1})),1);
                     else
@@ -591,7 +596,7 @@ for k=1:A.nlog,
                         nstates=nstates+size(ssdata(ss(B{a1})),1);
                     end
                 else
-                    if (A.log(a1,2)==1)&(A.log(a1,3)==1),
+                    if (A.log(a1,2)==1)&&(A.log(a1,3)==1),
                         %               nstates=nstates+vs*(size(ss(G{a1}),3)+size(ss(H{a1}),3));
                         nstates=nstates+vs*(size(ssdata(ss(G{a1})),1)+size(ssdata(ss(H{a1})),1));
                     else
@@ -603,7 +608,7 @@ for k=1:A.nlog,
         case csg,
             if op==num_op('mtimes'),
                 % disp(['k=' num2str(k) ';    csg'])
-                if (A.log(a2,2)==1)&(A.log(a2,3)==1),
+                if (A.log(a2,2)==1)&&(A.log(a2,3)==1),
                     %            nstates=nstates+hs*size(ss(B{a2}),3);
                     nstates=nstates+hs*size(ssdata(ss(B{a2})),1);
                 else
@@ -615,7 +620,7 @@ for k=1:A.nlog,
             if op==num_op('mtimes'),
                 %  disp(['k=' num2str(k) ';    vcs'])
                 if A.log(a2,1)==cst,
-                    if (A.log(a2,2)==1)&(A.log(a2,3)==1),
+                    if (A.log(a2,2)==1)&&(A.log(a2,3)==1),
                         %               nstates=nstates+hs*size(ss(B{a2}),3);
                         nstates=nstates+hs*size(ssdata(ss(B{a2})),1);
                     else
@@ -623,7 +628,7 @@ for k=1:A.nlog,
                         nstates=nstates+size(ssdata(ss(B{a2})),1);
                     end
                 else
-                    if (A.log(a2,2)==1)&(A.log(a2,3)==1),
+                    if (A.log(a2,2)==1)&&(A.log(a2,3)==1),
                         %               nstates=nstates+hs*(size(ss(G{a2}),3)+size(ss(H{a2}),3));
                         nstates=nstates+hs*(size(ssdata(ss(G{a2})),1)+size(ssdata(ss(H{a2})),1));
                     else
@@ -697,7 +702,7 @@ for k=2:A.nlog,
                 v2=size(G{a2},1);
                 h2=size(H{a2},2);
                 if A.log(a1,2)~=A.log(a2,2),
-                    if (v1==1)&(h1==1),
+                    if (v1==1)&&(h1==1),
                         GG=mhrzct(s(1)*ones(v2,1)*G{a1},s(2)*G{a2});  % horizontal concatenation
                         HH=mvrtct(H{a1}*ones(1,h2),H{a2});            % vertical concatenation
                         X{k}=[X{a1}  X{a2}];
@@ -712,7 +717,7 @@ for k=2:A.nlog,
                         msg4=[msg3,num2str(k),' : ',msg1,' here is intepreted as '];
                         msg5=[msg4,msg2,'!'];
                         warning(msg5);
-                    elseif (v2==1)&(h2==1),
+                    elseif (v2==1)&&(h2==1),
                         GG=mhrzct(s(1)*G{a1},s(2)*ones(v1,1)*G{a2});  % horizontal concatenation
                         HH=mvrtct(H{a1},H{a2}*ones(1,h1));            % vertical concatenation
                         X{k}=[X{a1} X{a2}];
@@ -809,7 +814,7 @@ for k=2:A.nlog,
                         C{k}=C{a1}-C{a2};
                     end
                 case num_op('mtimes'),       % times
-                    if (A.log(a1,2)==1)&(A.log(a1,3)==1),
+                    if (A.log(a1,2)==1)&&(A.log(a1,3)==1),
                         ba1=B{a1}*eye(vs);
                     elseif A.log(a2,2)==1,
                         ba1=B{a1}*ones(size(B{a1},2),1);
@@ -947,7 +952,7 @@ for k=2:A.nlog,
                         C{k}=C{a1}-C{a2};
                     end
                 case num_op('mtimes'),       % times
-                    if (A.log(a2,2)==1)&(A.log(a2,3)==1),
+                    if (A.log(a2,2)==1)&&(A.log(a2,3)==1),
                         ba2=B{a2}'*eye(hs);
                     elseif A.log(a1,3)==1,
                         ba2=B{a2}'*ones(size(B{a2},1),1);
@@ -1074,7 +1079,7 @@ for k=2:A.nlog,
                     error(['Invalid vcs log # ' num2str(k)])
             end
         case qfm,
-            if (vs~=1)|(hs~=1),
+            if (vs~=1)||(hs~=1),
                 error(['non-scalar quadratic form log # ' num2str(k)])
             end
             switch op
@@ -1153,7 +1158,6 @@ end
 
 
 % now define the output of iqc_extract
-E.options=A.options;
 E.nlog=nlog;
 E.nlmivar=nlmivar;
 E.nlmi=nlmi;
@@ -1179,7 +1183,7 @@ E.POS=POS';
 E.T=A.log(1:nlog,1);
 
 if vrb,
-    disp('  iqc_extract done OK')
+    disp_str(65,'iqc_extract')
     disp(' ')
 end
 
@@ -1248,7 +1252,7 @@ for forlp_counter=1:length(lnk_index)
     slnk=num2str(lnk_index(forlp_counter));
     err_msg1=['Opps ... Error about ''link'' occured in log #',slnk];
     
-    if A.log(a1,1)==inp & A.log(a2,1)==inp,
+    if A.log(a1,1)==inp && A.log(a2,1)==inp,
         error('Something wrong in the first run: input==input found!')
     elseif A.log(a1,1)==inp,
         lnk_inputs=[lnk_inputs;a1];
@@ -1278,7 +1282,7 @@ c_index_new=[];
 for forlp_counter=1:length(c_index)
     if  c_index(forlp_counter)<=size(C,2)
         if ~isempty(C{c_index(forlp_counter)})
-            c_index(forlp_counter);
+            %             c_index(forlp_counter);
             BigC=[BigC;C{c_index(forlp_counter)}];
             c_index_new=[c_index_new;c_index(forlp_counter)];
         end
@@ -1324,22 +1328,22 @@ for forlp_counter=1:length(lnk_inputs)
     nreplaced=nreplaced+vs;                 % counting how many signals and
     % inputs are to be replaced
     
-    pos1=[POS(inp_replaced):POS(inp_replaced)+vs-1];
-    pos2=[[ns+1:POS(inp_replaced)-1],[POS(inp_replaced)+vs:ns+ni]];
+    pos1=POS(inp_replaced):POS(inp_replaced)+vs-1;
+    pos2=[ns+1:POS(inp_replaced)-1,POS(inp_replaced)+vs:ns+ni];
     elim=[elim,pos1];
     
     % check if this link has been processed before
-    chk1=CD_lnk([cnt+1:cnt+vs],:);
+    chk1=CD_lnk(cnt+1:cnt+vs,:);
     chk2=(chk1==zeros(size(chk1,1),size(chk1,2)));
     if ~all(chk2(:))
-        D_replaced_lnk=CD_lnk([cnt+1:cnt+vs],pos1);
+        D_replaced_lnk=CD_lnk(cnt+1:cnt+vs,pos1);
         r=rank(D_replaced_lnk,1e-6);
         if r~=vs,
             error([err_msg1,' ,non-invertable matrix found!'])
         else
             invD_replaced_lnk=inv(D_replaced_lnk);
-            D_lnk=invD_replaced_lnk*(-1)*CD_lnk([cnt+1:cnt+vs],pos2);
-            C_lnk=invD_replaced_lnk*(-1)*CD_lnk([cnt+1:cnt+vs],[1:ns]);
+            D_lnk=invD_replaced_lnk*(-1)*CD_lnk(cnt+1:cnt+vs,pos2); %#ok<*MINV>
+            C_lnk=invD_replaced_lnk*(-1)*CD_lnk(cnt+1:cnt+vs,1:ns);
         end
         
         % re-compute state space matrix
@@ -1348,7 +1352,7 @@ for forlp_counter=1:length(lnk_inputs)
         B_reduced=a(:,pos2)+B_inp1*D_lnk;
         A_reduced=a(:,1:ns)+B_inp1*C_lnk;
         B_reduced_ext=zeros(ma,na-ns);
-        B_reduced_ext(:,[pos2-ns])=B_reduced;
+        B_reduced_ext(:,pos2-ns)=B_reduced;
         a=[A_reduced,B_reduced_ext];
         
         % re-compute output coefficient matrix
@@ -1357,16 +1361,16 @@ for forlp_counter=1:length(lnk_inputs)
         D_reduced=BigBC(:,pos2)+D_inp1*D_lnk;
         C_reduced=BigBC(:,1:ns)+D_inp1*C_lnk;
         D_reduced_ext=zeros(mBigBC,nBigBC-ns);
-        D_reduced_ext(:,[pos2-ns])=D_reduced;
+        D_reduced_ext(:,pos2-ns)=D_reduced;
         BigBC=[C_reduced,D_reduced_ext];
         
         % re-compute the [C,D] matrix of 'Cx+Dw=0'
         % ----------------------------------------
         D_inp1_CD_lnk=CD_lnk(:,pos1);
         D_reduced_CD_lnk=CD_lnk(:,pos2)+D_inp1_CD_lnk*D_lnk;
-        C_reduced_CD_lnk=CD_lnk(:,[1:ns])+D_inp1_CD_lnk*C_lnk;
+        C_reduced_CD_lnk=CD_lnk(:,1:ns)+D_inp1_CD_lnk*C_lnk;
         D_reduced_ext_CD_lnk=zeros(mCD_lnk,nCD_lnk-ns);
-        D_reduced_ext_CD_lnk(:,[pos2-ns])=D_reduced_CD_lnk;
+        D_reduced_ext_CD_lnk(:,pos2-ns)=D_reduced_CD_lnk;
         CD_lnk=[C_reduced_CD_lnk,D_reduced_ext_CD_lnk];
     end
     
@@ -1399,35 +1403,28 @@ end
 % in C field
 % -------------------------------------------------------------
 % a=a(:,re_construct);
-BigB=BigBC([1:mBigB],:);
-BigC=BigBC([mBigB+1:mBigBC],:);
+BigB=BigBC(1:mBigB,:);
+BigC=BigBC(mBigB+1:mBigBC,:);
 
 cnt=0;
 for forlp_counter=1:length(c_index_new)
     vs=size(C{c_index_new(forlp_counter)},1);
-    C{c_index_new(forlp_counter)}=BigC([cnt+1:cnt+vs],:);
+    C{c_index_new(forlp_counter)}=BigC(cnt+1:cnt+vs,:);
     cnt=cnt+vs;
 end
 
 cnt=0;
 for forlp_counter=1:length(b_index_new)
     vs=size(B{b_index_new(forlp_counter)},1);
-    B{b_index_new(forlp_counter)}=BigB([cnt+1:cnt+vs],:);
+    B{b_index_new(forlp_counter)}=BigB(cnt+1:cnt+vs,:);
     cnt=cnt+vs;
 end
 
 cnt=0;
 for forlp_counter=1:length(lnk_index)
     vs=size(C{lnk_index(forlp_counter)},1);
-    C{lnk_index(forlp_counter)}=CD_lnk([cnt+1:cnt+vs],:);
+    C{lnk_index(forlp_counter)}=CD_lnk(cnt+1:cnt+vs,:);
     cnt=cnt+vs;
 end
 
 % E.ninputs=E.ninputs-nreplaced;
-
-
-
-
-
-
-

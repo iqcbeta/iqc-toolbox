@@ -33,6 +33,11 @@ disp(['*     ||G|| = ' num2str(norm(ss(A,B,C,D),Inf))])
 disp(' ')
 
 abst_init_iqc
+
+% setlmioptions('lmilab')
+% setlmioptions('yalmip','solver','sedumi')
+% setlmioptions('yalmip','solver','sdpt3')
+
 f=signal(m);
 iqc_gain_tbx(f,G*f)
 iqc_bode

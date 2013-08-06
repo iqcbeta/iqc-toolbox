@@ -111,11 +111,11 @@ close all; clear all
 iqc_window_test
 close all; clear all
 
-lmi_feas_tbx_test1
-close all; clear all
-
-lmi_feas_tbx_test2
-close all; clear all
+% lmi_feas_tbx_test1
+% close all; clear all
+% 
+% lmi_feas_tbx_test2
+% close all; clear all
 
 lmi_mincx_tbx_test1
 close all; clear all
