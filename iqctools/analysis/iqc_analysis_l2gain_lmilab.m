@@ -19,7 +19,7 @@ function gain=iqc_analysis_l2gain_lmilab(f,z)
 % Written by ameg@mit.edu, last modified November 10, 1997
 % Modified by cykao@mit.edu on Oct. 25, 1998
 % Last modified by cykao@ee.mu.oz.au on Aug. 14 2004
-% Last modified by cmj on 2013/5/1
+% Last modified by cmj on 2013/5/14
 
 global ABST
 str={};
@@ -60,76 +60,10 @@ str{5}='setlmis([]);';
 eval(str{5});
 
 %% variable definite
-if vrb,
-    disp_str(52)
-end
-str{6}='\n%% Define multiplier variables ...';
-sc=7; % string counter
-
-kvar=find(E.T==var);
-for k=1:length(kvar);
-    ks=num2str(k);
-    eval(['struct' ks '=E.L{' num2str(kvar(k)) '};'])
-    str{sc}=['x' ks '=lmivar(3,struct' ks ');'];
-    eval(str{sc});
-    sc=sc+1;
-end
+defVar;
 
 %% now we define the "non-KYP" lmi
-if vrb,
-    disp_str(53)
-end
-str{sc}='\n%% Define non-KYP lmis ...';
-sc=sc+1;
-kvar=find(E.T==lmi);
-for k=1:length(kvar),
-    ks=num2str(k);
-    kk=kvar(k);
-    [nn,mm]=size(E.AB{kk});    % dimensions
-    nns=num2str(nn);
-    vs=mm-nn;                       % LMI size
-    vss=num2str(vs);
-    if nn>0,
-        eval(['state' ks '=E.AB{kk};']);
-        str{sc}=['p',ks,'=lmivar(1,[',nns,' 1]);']; %#ok<*AGROW>
-        eval(str{sc});
-        sc=sc+1;
-        if strcmp(ABST.systemtype,'continuous'),
-            str{sc}=['lmiterm([',ks,' 1 1 p',ks,...
-                '],[eye(',nns,');zeros(',vss,',',nns,...
-                ')],state',ks,',''s'');'];
-            eval(str{sc});
-            sc=sc+1;
-        elseif strcmp(ABST.systemtype,'discrete'),
-            str{sc}=['lmiterm([',ks,' 1 1 p',ks,...
-                '],state',ks,''',state',ks,');'];
-            eval(str{sc});
-            sc=sc+1;
-            str{sc}=['lmiterm([',ks,' 1 1 p',ks,...
-                '],[-eye(',nns,') zeros(',nns,',',vss,...
-                ')]'',[eye(',nns,') zeros(',nns,',',vss,...
-                ')]);'];
-            eval(str{sc});
-            sc=sc+1;
-        else
-            disp_str(55)
-        end
-    end
-    nh=0;
-    ng=sum(E.X{kk}(3,:));
-    for i=1:size(E.X{kk},2),
-        is=num2str(i);
-        nvs=num2str(E.X{kk}(1,i));   % variable number
-        eval(['l_' ks '_' is '=E.C{kk}(ng+1:ng+E.X{kk}(2,i),:)'';'])
-        eval(['r_' ks '_' is '=E.C{kk}(nh+1:nh+E.X{kk}(3,i),:);'])
-        str{sc}=['lmiterm([',ks,' 1 1 ',nvs,'],l_',ks,'_',is,...
-            ',r_',ks,'_',is,',''s'');']; %#ok<AGROW>
-        eval(str{sc});
-        sc=sc+1;
-        nh=nh+E.X{kk}(3,i);
-        ng=ng+E.X{kk}(2,i);
-    end
-end
+nonKYP;
 
 %% now we define the "main" lmi
 if vrb,
@@ -230,7 +164,7 @@ sc=sc+1;
 str{sc}='c(nc)=1;';
 eval(str{sc});
 sc=sc+1;
-gain = 0;
+gain = inf;
 str{sc}='[gain,xopt]=mincx(lmi,c,lmiparameter);';
 eval(str{sc});
 sc=sc+1;

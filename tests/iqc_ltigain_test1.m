@@ -23,7 +23,7 @@ H=[sh;1];
 
 abst_init_iqc
 
-% setlmioptions('lmilab')
+setlmioptions('lmilab')
 % setlmioptions('yalmip','solver','sdpt3')
 
 w=signal(2);

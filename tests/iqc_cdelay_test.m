@@ -1,5 +1,5 @@
 %
-% Test of iqc_cdelay.m 
+% Test of iqc_cdelay.m
 %
 % clear all
 clc

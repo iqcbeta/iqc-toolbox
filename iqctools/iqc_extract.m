@@ -56,7 +56,9 @@ function E=iqc_extract(f,z)
 % of a variable.
 %
 % Written by cykao@ee.mu.oz.au     Aug. 14 2004
-% Last modified by cmj on 2013/4/24
+% Last modified by cmj on 2013/5/6
+
+% 增加 state_lnk_pos 儲存增加狀態的位置 及 訊號連結對應位置
 
 % safety checks
 global ABST
@@ -93,21 +95,24 @@ qfm=10;
 iqc=11;
 lnk=12;
 
-if vrb,
+if vrb
     disp_str(64,'iqc_extract')
 end
+
+state_lnk_pos={}; % state position
+
 
 %  ---- The following codes were introduced by C. Kao to fix the bug
 %       on linkage. Obviously, the linkage was not processed properly. ----
 %       Oct. 7 1998
-%
-% zero run: process the linkage of input(s) to input(s)
-%           (if linking two inputs ...)
-%           1.) collect the arguments
-%           2.) sorting
-%           3.) mark the younger input and put the reference
 
-% --- 1. collecting ---
+%%
+%% zero run: process the linkage of input(s) to input(s)
+%%           (if linking two inputs ...)
+%%           1.) collect the arguments
+%%           2.) sorting
+%%           3.) mark the younger input and put the reference
+%% --- 1. collecting ---
 lnk_ind=find(A.log(:,1)==lnk);
 inp_inp=[];
 for flcnt=1:length(lnk_ind)
@@ -115,25 +120,27 @@ for flcnt=1:length(lnk_ind)
     hs=A.log(lnk_ind(flcnt),3);
     a1=A.log(lnk_ind(flcnt),6);
     a2=A.log(lnk_ind(flcnt),7);
-    if (A.log(a1,2)~=A.log(a2,2)),
-        error(['link incompatible at log #' num2str(lnk_ind(flcnt))])
+    if (A.log(a1,2)~=A.log(a2,2));
+        error(['link incompatible at log #',num2str(lnk_ind(flcnt))])
     end
     if (A.log(a1,1)==inp && A.log(a2,1)==inp)
         A.log(lnk_ind(flcnt),1)=-1;
-        if a1>a2,
+        state_lnk_pos{a1}=a2;
+        if a1>a2
             inp_inp=[inp_inp;[a2,a1]]; %#ok<*AGROW>
         elseif a1<a2
             inp_inp=[inp_inp;[a1,a2]];
         else
-            error(['link to itself detected at log # ' num2str(lnk_ind(flcnt))]);
+            error(['link to itself detected at log # ',...
+                num2str(lnk_ind(flcnt))]);
         end
     end
 end
 
-% --- 2. sorting ---
+%% --- 2. sorting ---
 inp_inp=sortrows(inp_inp);
 
-% --- 3. mark the younger input and put the reference
+%% --- 3. mark the younger input and put the reference
 for flcnt=1:size(inp_inp,1)
     inp_1=inp_inp(flcnt,1);
     inp_2=inp_inp(flcnt,2);
@@ -141,13 +148,13 @@ for flcnt=1:size(inp_inp,1)
     a1_1=A.log(inp_1,6);
     op_2=A.log(inp_2,4);
     a1_2=A.log(inp_2,6);
-    if (op_1~=-2 && op_2~=-2),
+    if (op_1~=-2 && op_2~=-2)
         A.log(inp_2,4)=-2;
         A.log(inp_2,6)=inp_1;
-    elseif (op_1==-2 && op_2~=-2),
+    elseif (op_1==-2 && op_2~=-2)
         A.log(inp_2,4)=-2;
         A.log(inp_2,6)=A.log(inp_1,6);
-    elseif (op_1~=-2 && op_2==-2),
+    elseif (op_1~=-2 && op_2==-2)
         A.log(inp_1,4)=-2;
         A.log(inp_1,6)=A.log(inp_2,6);
     elseif (op_1==-2 && op_2==-2)
@@ -161,21 +168,22 @@ for flcnt=1:size(inp_inp,1)
     end
 end
 
-% first run: go through to count the number of inputs,
-% states, and simple qfm's,
-% resolve links between inputs
-% process cst,var and lin entries
-% building the extra cell arrays
-%            (k is a log number)
-%     B{k}  is an lti in the ss format (for cst)
-%     L{k} - for variables
-%     G{k} - left lti in ss format
-%                 (nonempty for var,lin,vsg,vcs)
-%     H{k} - right lti (for var,lin,vsg,vcs)
-%     X{k} - list of variables (1st row - variable number from the tbx
-%                               2nd and 3rd - vsize and hsize)
+%%
+%% first run: go through to count the number of inputs,
+%% states, and simple qfm's,
+%% resolve links between inputs
+%% process cst,var and lin entries
+%% building the extra cell arrays
+%%            (k is a log number)
+%%     B{k}  is an lti in the ss format (for cst)
+%%     L{k} - for variables
+%%     G{k} - left lti in ss format
+%%                 (nonempty for var,lin,vsg,vcs)
+%%     H{k} - right lti (for var,lin,vsg,vcs)
+%%     X{k} - list of variables (1st row - variable number from the tbx
+%%                               2nd and 3rd - vsize and hsize)
 
-if vrb,
+if vrb
     disp('  Processing cst, var, and lin, counting ...')
 end
 
@@ -194,14 +202,10 @@ ninputs=0;
 nstates=0;
 nsimple=0;
 B{1}=[];          % k=1 corresponds to the empty abst element
-G{1}=[];
-H{1}=[];
-X{1}=[];
-L{1}=[];
 VT{1}=[];         % VT{k} = [var type; # of row; # of col];
 POS=[];
 
-for k=1:A.nlog,
+for k=1:A.nlog
     tp=A.log(k,1);
     vs=A.log(k,2);
     hs=A.log(k,3);
@@ -211,176 +215,138 @@ for k=1:A.nlog,
     a2=A.log(k,7);
     a3=A.log(k,8);
     nlog=k;
-    if tp==0,
+    if tp==0
         break
     end
     switch tp
-        case inp,
-            if op~=-2,
+        case inp
+            if op~=-2
                 ninputs=ninputs+vs;     % count inputs
             end
-            
-            % following codes were marked by C. Kao on Jun. 15 1998
-            % ---------->
-            %   case lnk,
-            %      ninputs=ninputs-A.log(a1,2);    % reduce the count of inputs
-            %      if (A.log(a1,2)~=A.log(a2,2)),
-            %         error(['link incompatible at log #' num2str(k)])
-            %      end
-            %      if a1<a2,      % change younger log to indicate definition-by-link
-            %         if A.log(a2,1)~=inp,
-            %            error(['Younger in link not input at log #' num2str(k)])
-            %         end
-            %         A.log(a2,4)=-2;
-            %         A.log(a2,6)=a1;
-            %      elseif a1>a2,
-            %         if A.log(a1,1)~=inp,
-            %            error(['Younger in link not input at log #' num2str(k)])
-            %         end
-            %         A.log(a1,4)=-2;
-            %         A.log(a1,6)=a2;
-            %      else
-            %         error(['link to itself detected at log # ' num2str(k)])
-            %      end
-            % ---------->
-            
-            % following codes were first added by C.Kao for 'link' stuff on June. 16 1998
-            % marked again by C. Kao because of not properly written, Oct. 7 1998
-            % ---------->
-        case lnk,
-            if (A.log(a1,2)~=A.log(a2,2)),
+        case lnk
+            if (A.log(a1,2)~=A.log(a2,2))
                 error(['link incompatible at log #' num2str(k)])
             end
-            %      if (A.log(a1,1)==inp & A.log(a2,1)==inp)
-            %         ninputs=ninputs-A.log(a1,2);
-            %         A.log(k,1)=-1;
-            %         if a1<a2,
-            %            A.log(a2,4)=-2;
-            %            A.log(a2,6)=a1;
-            %         elseif a1>a2,
-            %            A.log(a1,4)=-2;
-            %            A.log(a1,6)=a2;
-            %         else
-            %            error(['link to itself detected at log # ' num2str(k)])
-            %         end
-            %      end
-            % ---------->
-            
-        case qfm,
-            if op==num_op('mtimes'),
+        case qfm
+            if op==num_op('mtimes')
                 nsimple=nsimple+1;
             end
-        case cst,                   % constant type
+        case cst                  % constant type
             switch op        % operation ?
-                case -1,                    % conversion
+                case -1                   % conversion
                     B{k}=ss(A.dat{a1});
-                case 0,                     % definition
+                case 0                    % definition
                     switch df        % definition of what ?
-                        case 7,                      % unit matrix
+                        case 7                      % unit matrix
                             B{k}=ss(eye(vs));
-                        case 6,                      % zero matrix
+                        case 6                     % zero matrix
                             B{k}=ss(zeros(vs,hs));
                         otherwise
                             error(['Invalid log entry ' num2str(k)])
                     end
-                case num_op('plus'),         % plus
+                case num_op('plus')        % plus
                     B{k}=B{a1}+B{a2};
-                case num_op('minus'),        % minus
+                case num_op('minus')       % minus
                     B{k}=B{a1}-B{a2};
-                case num_op('mtimes'),       % times
+                case num_op('mtimes')       % times
                     B{k}=B{a1}*B{a2};
-                case num_op('uminus'),       % uminus
+                case num_op('uminus')       % uminus
                     B{k}=-B{a1};
-                case num_op('uplus'),        % uplus
+                case num_op('uplus')       % uplus
                     B{k}=B{a1};
-                case num_op('vertcat'),        % vertcat
+                case num_op('vertcat')       % vertcat
                     B{k}=mvrtct(B{a1},B{a2});
-                case num_op('horzcat'),        % horzcat
+                case num_op('horzcat')        % horzcat
                     B{k}=mhrzct(B{a1},B{a2});
-                case num_op('ctranspose'),        % ctranspose
+                case num_op('ctranspose')       % ctranspose
                     B{k}=B{a1}';
-                case num_op('subsasgn'),
+                case num_op('subsasgn')
                     B{k}=B{a1};
-                    if df~=0,
+                    if df~=0
                         B{k}(a3,df)=B{a2};
                     else
                         ind=A.dat{A.log(a3,6)};
-                        for i=1:size(ind,1),
-                            B{k}(ind(i,1),ind(i,2))=B{a2}(ind(i,3),ind(i,4));
+                        for i=1:size(ind,1)
+                            B{k}(ind(i,1),ind(i,2))=...
+                                B{a2}(ind(i,3),ind(i,4));
                         end
                     end
-                case num_op('subsref'),
+                case num_op('subsref')
                     B{k}=ss(zeros(vs,hs));
-                    if a3~=0,
+                    if a3~=0
                         B{k}=B{a1}(a2,a3);
                     else
                         ind=A.dat{A.log(a2,6)};
-                        for i=1:size(ind,1),
-                            B{k}(ind(i,1),ind(i,2))=B{a1}(ind(i,3),ind(i,4));
+                        for i=1:size(ind,1)
+                            B{k}(ind(i,1),ind(i,2))=...
+                                B{a1}(ind(i,3),ind(i,4));
                         end
                     end
                 otherwise
                     error(['Invalid constant log entry ' num2str(k)])
             end
-        case var,                   % variable type
+        case var % variable type
             switch op
-                case 0,
-                    switch df        % definition of what ?
-                        case 1,                      % full symmetric
-                            svar  = zeros(vs);        % structure matrix
+                case 0
+                    switch df % definition of what ?
+                        case 1 % full symmetric
+                            svar  = zeros(vs); % structure matrix
                             VT{k} = [1; vs; hs];
-                            for i=1:vs,
-                                for j=1:i,
+                            for i=1:vs
+                                for j=1:i
                                     nlmivar=nlmivar+1;
                                     svar(j,i)=nlmivar;
                                     svar(i,j)=nlmivar;
                                 end
                             end
-                        case 2,                      % full rectangular
+                        case 2 % full rectangular
                             nlmivar=nlmivar+vs*hs;
                             svar=reshape((nlmivar-vs*hs+1):nlmivar,hs,vs)';
                             VT{k} = [2; vs; hs];
-                        case 3,                      % diagonal
+                        case 3 % diagonal
                             nlmivar=nlmivar+vs;
                             svar=diag((nlmivar-vs+1):nlmivar);
                             VT{k} = [3; vs; hs];
-                        case 4,                      % skew symmetric
+                        case 4 % skew symmetric
                             svar=zeros(vs);
                             VT{k} = [4; vs; hs];
-                            for i=1:vs,
+                            for i=1:vs
                                 for j=(i+1):vs,
                                     nlmivar=nlmivar+1;
                                     svar(i,j)=nlmivar;
                                     svar(j,i)=-nlmivar;
                                 end
                             end
-                        case 5,                      % structured (defined by "variable")
+                        case 5 % structured (defined by "variable")
                             svar=ABST.dat{A.log(a1,6)};
                             newvar=max(abs(svar));
                             svar=(nlmivar+abs(svar)).*sign(svar);
                             nlmivar=nlmivar+newvar;
                             VT{k} = [5; vs; hs];
                         otherwise
-                            error(['Invalid variable definition log entry ' num2str(k)])
+                            error(['Invalid variable definition log entry ',...
+                                num2str(k)])
                     end
-                case num_op('subsref'),
+                case num_op('subsref')
                     svar=zeros(vs,hs);
-                    if a3~=0,
+                    if a3~=0
                         svar=L{a1}(a2,a3);
                     else
                         ind=A.dat{A.log(a2,6)};
-                        for i=1:size(ind,1),
-                            svar(ind(i,1),ind(i,2))=L{a1}(ind(i,3),ind(i,4));
+                        for i=1:size(ind,1)
+                            svar(ind(i,1),ind(i,2))=...
+                                L{a1}(ind(i,3),ind(i,4));
                         end
                     end
-                case num_op('subsasgn'),
+                case num_op('subsasgn')
                     svar=L{a1};
-                    if df~=0,
+                    if df~=0
                         svar(a3,df)=L{a2};
                     else
                         ind=A.dat{A.log(a3,6)};
-                        for i=1:size(ind,1),
-                            svar(ind(i,1),ind(i,2))=L{a2}(ind(i,3),ind(i,4));
+                        for i=1:size(ind,1)
+                            svar(ind(i,1),ind(i,2))=...
+                                L{a2}(ind(i,3),ind(i,4));
                         end
                     end
                 otherwise
@@ -391,14 +357,14 @@ for k=1:A.nlog,
             G{k}=ss(eye(vs));
             H{k}=ss(eye(hs));
             X{k}=[nvar;vs;hs];
-        case lin,                     % linear type
-            switch op          % produced by which operation ?
-                case num_op('plus'),
-                    if A.log(a1,1)==cst,
+        case lin % linear type
+            switch op % produced by which operation ?
+                case num_op('plus')
+                    if A.log(a1,1)==cst
                         G{k}=G{a2};
                         H{k}=H{a2};
                         X{k}=X{a2};
-                    elseif A.log(a2,1)==cst,
+                    elseif A.log(a2,1)==cst
                         G{k}=G{a1};
                         H{k}=H{a1};
                         X{k}=X{a1};
@@ -407,29 +373,34 @@ for k=1:A.nlog,
                         h1=size(H{a1},2);
                         v2=size(G{a2},1);
                         h2=size(H{a2},2);
-                        if (v1~=v2)||(h1~=h2),
-                            if (v1==1)&&(h1==1),
+                        if (v1~=v2)||(h1~=h2)
+                            if (v1==1)&&(h1==1)
                                 G{k}=mhrzct(ones(v2,1)*G{a1},G{a2});
                                 H{k}=mvrtct(H{a1}*ones(1,h2),H{a2});
                                 X{k}=[X{a1} X{a2}];
-                                if v2==h2,
-                                    msg1='ambiguous scalar in matrix expression found in log # ';
-                                    msg2=[msg1,num2str(k),' : a+X here is intepreted as '];
+                                if v2==h2
+                                    msg1=['ambiguous scalar in matrix ',...
+                                        'expression found in log # '];
+                                    msg2=[msg1,num2str(k),...
+                                        ' : a+X here is intepreted as '];
                                     msg3=[msg2,'a*ones(size(X))+X ! '];
                                     warning(msg3);
                                 end
-                            elseif (v2==1)&&(h2==1),
+                            elseif (v2==1)&&(h2==1)
                                 G{k}=mhrzct(G{a1},ones(v1,1)*G{a2});
                                 H{k}=mvrtct(H{a1},H{a2}*ones(1,h2));
                                 X{k}=[X{a1} X{a2}];
-                                if v1==h1,
-                                    msg1='ambiguous scalar in matrix expression found in log # ';
-                                    msg2=[msg1,num2str(k),' : X+a here is intepreted as '];
+                                if v1==h1
+                                    msg1=['ambiguous scalar in matrix ',...
+                                        'expression found in log # '];
+                                    msg2=[msg1,num2str(k),...
+                                        ' : X+a here is intepreted as '];
                                     msg3=[msg2,'X+a*ones(size(X)) ! '];
                                     warning(msg3);
                                 end
                             else
-                                error(['log # ' num2str(k) ': incompatible size in "plus"'])
+                                error(['log # ',num2str(k),...
+                                    ': incompatible size in "plus"'])
                             end
                         else
                             G{k}=mhrzct(G{a1},G{a2});
@@ -437,12 +408,12 @@ for k=1:A.nlog,
                             X{k}=[X{a1} X{a2}];
                         end
                     end
-                case num_op('minus'),
-                    if A.log(a1,1)==cst,
+                case num_op('minus')
+                    if A.log(a1,1)==cst
                         G{k}=-G{a2};
                         H{k}=H{a2};
                         X{k}=X{a2};
-                    elseif A.log(a2,1)==cst,
+                    elseif A.log(a2,1)==cst
                         G{k}=G{a1};
                         H{k}=H{a1};
                         X{k}=X{a1};
@@ -451,29 +422,34 @@ for k=1:A.nlog,
                         h1=size(H{a1},2);
                         v2=size(G{a2},1);
                         h2=size(H{a2},2);
-                        if (v1~=v2)||(h1~=h2),
-                            if (v1==1)&&(h1==1),
+                        if (v1~=v2)||(h1~=h2)
+                            if (v1==1)&&(h1==1)
                                 G{k}=mhrzct(ones(v2,1)*G{a1},-G{a2});
                                 H{k}=mvrtct(H{a1}*ones(1,h2),H{a2});
                                 X{k}=[X{a1} X{a2}];
-                                if v2==h2,
-                                    msg1='ambiguous scalar in matrix expression found in log # ';
-                                    msg2=[msg1,num2str(k),' : a-X here is intepreted as '];
+                                if v2==h2
+                                    msg1=['ambiguous scalar in matrix',...
+                                        'expression found in log # '];
+                                    msg2=[msg1,num2str(k),...
+                                        ' : a-X here is intepreted as '];
                                     msg3=[msg2,'a*ones(size(X))-X ! '];
                                     warning(msg3);
                                 end
-                            elseif (v2==1)&&(h2==1),
+                            elseif (v2==1)&&(h2==1)
                                 G{k}=mhrzct(G{a1},-ones(v1,1)*G{a2});
                                 H{k}=mhrzct(H{a1},H{a2}*ones(1,h1));
                                 X{k}=[X{a1} X{a2}];
-                                if v1==h1,
-                                    msg1='ambiguous scalar in matrix expression found in log #';
-                                    msg2=[msg1,num2str(k),' : X-a here is intepreted as '];
+                                if v1==h1
+                                    msg1=['ambiguous scalar in matrix',...
+                                        'expression found in log #'];
+                                    msg2=[msg1,num2str(k),...
+                                        ' : X-a here is intepreted as '];
                                     msg3=[msg2,'X-a*ones(size(X)) ! '];
                                     warning(msg3);
                                 end
                             else
-                                error(['log # ' num2str(k) ': incompatible size in "plus"'])
+                                error(['log # ',num2str(k),...
+                                    ': incompatible size in "plus"'])
                             end
                         else
                             G{k}=mhrzct(G{a1},-G{a2});
@@ -481,46 +457,48 @@ for k=1:A.nlog,
                             X{k}=[X{a1} X{a2}];
                         end
                     end
-                case num_op('uplus'),
+                case num_op('uplus')
                     G{k}=G{a1};
                     H{k}=H{a1};
                     X{k}=X{a1};
-                case num_op('uminus'),
+                case num_op('uminus')
                     G{k}=-G{a1};
                     H{k}=H{a1};
                     X{k}=X{a1};
-                case num_op('ctranspose'),
+                case num_op('ctranspose')
                     G{k}=H{a1}';
                     H{k}=G{a1}';
                     X{k}=[-X{a1}(1,:);X{a1}(3,:);X{a1}(2,:)];
-                case num_op('mtimes'),
+                case num_op('mtimes')
                     % special care to multiplication by scalar variables
                     v1=A.log(a1,2);
                     h1=A.log(a1,3);
                     v2=A.log(a2,2);
                     h2=A.log(a2,3);
-                    if A.log(a1,1)==cst,
-                        if (h2==1)&&(v2==1)&&(h1~=v2),
-                            if (A.log(a2,1)==var),
+                    if A.log(a1,1)==cst
+                        if (h2==1)&&(v2==1)&&(h1~=v2)
+                            if (A.log(a2,1)==var)
                                 X{k}=[X{a2}(2,1);h1;h1];
                                 H{k}=tf(eye(h1));
                                 G{k}=B{a1};
                             else
-                                error(['Invalid sizes in mtimes lin log # ' num2str(k)])
+                                error(['Invalid sizes in mtimes lin log # ',...
+                                    num2str(k)])
                             end
                         else
                             X{k}=X{a2};
                             G{k}=B{a1}*G{a2};
                             H{k}=H{a2};
                         end
-                    elseif A.log(a2,1)==cst,
-                        if (v2~=h1)&&(h1==1)&&(v1==1),
-                            if (A.log(a1,1)==var),
+                    elseif A.log(a2,1)==cst
+                        if (v2~=h1)&&(h1==1)&&(v1==1)
+                            if (A.log(a1,1)==var)
                                 X{k}=[X{a1}(2,1);v2;v2];
                                 G{k}=tf(eye(v2));
                                 H{k}=B{a2};
                             else
-                                error(['Invalid sizes in mtimes lin log # ' num2str(k)])
+                                error(['Invalid sizes in mtimes lin log # ',...
+                                    num2str(k)])
                             end
                         else
                             X{k}=X{a1};
@@ -530,13 +508,13 @@ for k=1:A.nlog,
                     else
                         error(['Invalid lin mtimes log entry ' num2str(k)])
                     end
-                case num_op('vertcat'),
-                    if A.log(a1,1)==cst,
+                case num_op('vertcat')
+                    if A.log(a1,1)==cst
                         [v2,h2]=size(G{a2}); %#ok<*ASGLU>
                         G{k}=mvrtct(zeros(A.log(a1,2),h2),G{a2});
                         X{k}=X{a2};
                         H{k}=H{a2};
-                    elseif A.log(a2,1)==cst,
+                    elseif A.log(a2,1)==cst
                         [v1,h1]=size(G{a1});
                         G{k}=mvrtct(G{a1},zeros(A.log(a2,2),h1));
                         X{k}=X{a1};
@@ -550,13 +528,13 @@ for k=1:A.nlog,
                         X{k}=[X{a1} X{a2}];
                         H{k}=mvrtct(H{a1},H{a2});
                     end
-                case num_op('horzcat'),
-                    if A.log(a1,1)==cst,
+                case num_op('horzcat')
+                    if A.log(a1,1)==cst
                         [v2,h2]=size(H{a2});
                         H{k}=mhrzct(zeros(v2,A.log(a1,3)),H{a2});
                         X{k}=X{a2};
                         G{k}=G{a2};
-                    elseif A.log(a2,1)==cst,
+                    elseif A.log(a2,1)==cst
                         [v1,h1]=size(H{a1});
                         H{k}=mhrzct(H{a1},zeros(v1,A.log(a2,3)));
                         X{k}=X{a1};
@@ -573,85 +551,73 @@ for k=1:A.nlog,
                 otherwise
                     error(['Invalid lin log # ' num2str(k)])
             end
-        case sgn,
-            if op==num_op('mtimes'),
-                % disp(['k=' num2str(k) ';    sgn'])
-                if (A.log(a1,2)==1)&&(A.log(a1,3)==1),
-                    %            nstates=nstates+vs*size(ss(B{a1}),3);
+        case sgn
+            if op==num_op('mtimes')
+                if (A.log(a1,2)==1)&&(A.log(a1,3)==1)
                     nstates=nstates+vs*size(ssdata(ss(B{a1})),1);
                 else
-                    %            nstates=nstates+size(ss(B{a1}),3);
                     nstates=nstates+size(ssdata(ss(B{a1})),1);
                 end
             end
-        case vsg,
-            if op==num_op('mtimes'),
-                % disp(['k=' num2str(k) ';    vsg'])
-                if A.log(a1,1)==cst,
+        case vsg
+            if op==num_op('mtimes')
+                if A.log(a1,1)==cst
                     if (A.log(a1,2)==1)&&(A.log(a1,3)==1),
-                        %               nstates=nstates+vs*size(ss(B{a1}),3);
                         nstates=nstates+vs*size(ssdata(ss(B{a1})),1);
                     else
-                        %               nstates=nstates+size(ss(B{a1}),3);
                         nstates=nstates+size(ssdata(ss(B{a1})),1);
                     end
                 else
-                    if (A.log(a1,2)==1)&&(A.log(a1,3)==1),
-                        %               nstates=nstates+vs*(size(ss(G{a1}),3)+size(ss(H{a1}),3));
-                        nstates=nstates+vs*(size(ssdata(ss(G{a1})),1)+size(ssdata(ss(H{a1})),1));
+                    if (A.log(a1,2)==1)&&(A.log(a1,3)==1)
+                        nstates=nstates+vs*(size(ssdata(ss(G{a1})),1)+...
+                            size(ssdata(ss(H{a1})),1));
                     else
-                        %               nstates=nstates+size(ss(G{a1}),3)+size(ss(H{a1}),3);
-                        nstates=nstates+size(ssdata(ss(G{a1})),1)+size(ssdata(ss(H{a1})),1);
+                        nstates=nstates+size(ssdata(ss(G{a1})),1)+...
+                            size(ssdata(ss(H{a1})),1);
                     end
                 end
             end
-        case csg,
-            if op==num_op('mtimes'),
-                % disp(['k=' num2str(k) ';    csg'])
-                if (A.log(a2,2)==1)&&(A.log(a2,3)==1),
-                    %            nstates=nstates+hs*size(ss(B{a2}),3);
+        case csg
+            if op==num_op('mtimes')
+                if (A.log(a2,2)==1)&&(A.log(a2,3)==1)
                     nstates=nstates+hs*size(ssdata(ss(B{a2})),1);
                 else
-                    %            nstates=nstates+size(ss(B{a2}),3);
                     nstates=nstates+size(ssdata(ss(B{a2})),1);
                 end
             end
-        case vcs,
-            if op==num_op('mtimes'),
-                %  disp(['k=' num2str(k) ';    vcs'])
-                if A.log(a2,1)==cst,
-                    if (A.log(a2,2)==1)&&(A.log(a2,3)==1),
-                        %               nstates=nstates+hs*size(ss(B{a2}),3);
+        case vcs
+            if op==num_op('mtimes')
+                if A.log(a2,1)==cst
+                    if (A.log(a2,2)==1)&&(A.log(a2,3)==1)
                         nstates=nstates+hs*size(ssdata(ss(B{a2})),1);
                     else
-                        %               nstates=nstates+size(ss(B{a2}),3);
                         nstates=nstates+size(ssdata(ss(B{a2})),1);
                     end
                 else
-                    if (A.log(a2,2)==1)&&(A.log(a2,3)==1),
-                        %               nstates=nstates+hs*(size(ss(G{a2}),3)+size(ss(H{a2}),3));
-                        nstates=nstates+hs*(size(ssdata(ss(G{a2})),1)+size(ssdata(ss(H{a2})),1));
+                    if (A.log(a2,2)==1)&&(A.log(a2,3)==1)
+                        nstates=nstates+hs*(size(ssdata(ss(G{a2})),1)+...
+                            size(ssdata(ss(H{a2})),1));
                     else
-                        %               nstates=nstates+size(ss(G{a2}),3)+size(ss(H{a2}),3);
-                        nstates=nstates+size(ssdata(ss(G{a2})),1)+size(ssdata(ss(H{a2})),1);
+                        nstates=nstates+size(ssdata(ss(G{a2})),1)+...
+                            size(ssdata(ss(H{a2})),1);
                     end
                 end
             end
     end
-end      % finish first run loop
+end % finish first run loop
 
-
-if vrb,
+if vrb
     disp(['    scalar inputs:  ',num2str(ninputs)])
     disp(['    states:         ',num2str(nstates)])
     disp(['    simple q-forms: ',num2str(nsimple)])
     disp('  Processing signals and quadratic forms ...')
 end
-% second run: building the main state-space model
-% storing state equations in a and output matrices in C{k}
-% defining the lmi's lmis
-% Q{k} - row vector of size nsimple - indicates signs of simple
-%        q-forms in q-forms and iqc's
+
+%% second run: building the main state-space model
+%% storing state equations in a and output matrices in C{k}
+%% defining the lmi's lmis
+%% Q{k} - row vector of size nsimple - indicates signs of simple
+%%        q-forms in q-forms and iqc's
 
 nlmi=0;     % lmi counter
 incnt=0;    % number of scalar inputs counted so far
@@ -661,7 +627,7 @@ a=zeros(nstates,nstates+ninputs);
 simples=zeros(1,nsimple);  % to keep addresses of simple qforms
 gqfm=zeros(1,nsimple);     % coefficients of simple qfm in the qlobal iqc
 
-for k=2:A.nlog,
+for k=2:A.nlog
     tp=A.log(k,1);
     vs=A.log(k,2);
     hs=A.log(k,3);
@@ -670,29 +636,23 @@ for k=2:A.nlog,
     a1=A.log(k,6);
     a2=A.log(k,7);
     a3=A.log(k,8);
-    switch tp        % type ?
-        
-        % following codes (between two arrows) was added by C.Kao for handling
-        % 'link'
-        % ------->
-        case lnk,
+    switch tp % type ?
+        case lnk
             C{k}=C{a1}-C{a2};
-            % ------->
-            
-        case lmi,
-            if vs~=hs,
+        case lmi
+            if vs~=hs
                 error(['non-square lmi log #' num2str(k)])
             end
             s=[1 -1];
-            if op==num_op('gt'),
+            if op==num_op('gt')
                 s=[-1 1];
             end
             % now building one big lmi GG*XX*HH<0
-            if A.log(a1,1)==cst,
+            if A.log(a1,1)==cst
                 GG=s(2)*G{a2};
                 HH=H{a2};
                 X{k}=X{a2};
-            elseif A.log(a2,1)==cst,
+            elseif A.log(a2,1)==cst
                 GG=s(1)*G{a1};
                 HH=H{a1};
                 X{k}=X{a1};
@@ -701,35 +661,43 @@ for k=2:A.nlog,
                 h1=size(H{a1},2);
                 v2=size(G{a2},1);
                 h2=size(H{a2},2);
-                if A.log(a1,2)~=A.log(a2,2),
-                    if (v1==1)&&(h1==1),
-                        GG=mhrzct(s(1)*ones(v2,1)*G{a1},s(2)*G{a2});  % horizontal concatenation
-                        HH=mvrtct(H{a1}*ones(1,h2),H{a2});            % vertical concatenation
-                        X{k}=[X{a1}  X{a2}];
-                        if op==num_op('gt'),
+                if A.log(a1,2)~=A.log(a2,2)
+                    if (v1==1)&&(h1==1)
+                        % horizontal concatenation
+                        GG=mhrzct(s(1)*ones(v2,1)*G{a1},s(2)*G{a2});
+                        % vertical concatenation
+                        HH=mvrtct(H{a1}*ones(1,h2),H{a2});
+                        X{k}=[X{a1} X{a2}];
+                        if op==num_op('gt')
                             msg1='a > X';
                             msg2='a*ones(size(X) > X';
                         else
                             msg1='a < X';
                             msg2='a*ones(size(X) < X';
                         end
-                        msg3='ambiguous scalar in matrix expression found in log # ';
-                        msg4=[msg3,num2str(k),' : ',msg1,' here is intepreted as '];
+                        msg3=['ambiguous scalar in matrix expression',...
+                            'found in log # '];
+                        msg4=[msg3,num2str(k),' : ',msg1,...
+                            ' here is intepreted as '];
                         msg5=[msg4,msg2,'!'];
                         warning(msg5);
-                    elseif (v2==1)&&(h2==1),
-                        GG=mhrzct(s(1)*G{a1},s(2)*ones(v1,1)*G{a2});  % horizontal concatenation
-                        HH=mvrtct(H{a1},H{a2}*ones(1,h1));            % vertical concatenation
+                    elseif (v2==1)&&(h2==1)
+                        % horizontal concatenation
+                        GG=mhrzct(s(1)*G{a1},s(2)*ones(v1,1)*G{a2});
+                        % vertical concatenation
+                        HH=mvrtct(H{a1},H{a2}*ones(1,h1));
                         X{k}=[X{a1} X{a2}];
-                        if op==num_op('gt'),
+                        if op==num_op('gt')
                             msg1='X > a';
                             msg2='X > a*ones(size(X)';
                         else
                             msg1='X < a';
                             msg2='X < a*ones(size(X)';
                         end
-                        msg3='ambiguous scalar in matrix expression found in log # ';
-                        msg4=[msg3,num2str(k),' : ',msg1,' here is intepreted as '];
+                        msg3=['ambiguous scalar in matrix expression',...
+                            'found in log # '];
+                        msg4=[msg3,num2str(k),' : ',msg1,...
+                            ' here is intepreted as '];
                         msg5=[msg4,msg2,'!'];
                         warning(msg5);
                     else
@@ -741,7 +709,7 @@ for k=2:A.nlog,
                     X{k}=[X{a1} X{a2}];
                 end
             end
-            nh=size(HH,1); % # of outputs of HH
+            %             nh=size(HH,1); % # of outputs of HH
             [AH,BH,CH,DH]=ssdata(HH);
             [AG,BG,CG,DG]=ssdata(GG);
             nG=size(AG,1);
@@ -751,72 +719,58 @@ for k=2:A.nlog,
             BB=[BH;CG'];
             CC=[CH zeros(size(CH,1),nG);zeros(size(BG,2),nH) -BG'];
             DD=[DH;DG'];
+            
             nlmis=nlmis+1;
             C{k}=[CC DD];
             AB{k}=[AA BB];
             nlmi=nlmi+1;
-            if vrb,
-                disp(['    LMI #' sft(nlmi,5) 'size = ' sft(vs,5) 'states: ' ...
-                    sft(size(CC,2),5) ])
+            if vrb
+                disp(['    LMI #',sft(nlmi,5),'size = ' sft(vs,5),...
+                    'states: ',sft(size(CC,2),5) ])
             end
-        case inp,
+        case inp
             switch op
-                case 0,       % an original input
-                    
-                    % the following codes were added by C. Kao on Jun. 15 1998
-                    % ---------->
+                case 0 % an original input
                     POS(k)=nstates+incnt+1;
-                    % ---------->
-                    
                     C{k}=[zeros(vs,nstates+incnt) eye(vs) ...
                         zeros(vs,ninputs-incnt-vs)];
                     incnt=incnt+vs;
-                    
-                    % marked by C.Kao on Jun. 15 1998
-                    % re-activate by C.Kao on Jun. 16 1998
-                    
-                case -2,      % a linked input
+                case -2 % a linked input
                     C{k}=C{a1};
-                    
                 otherwise
                     error(['Invalid input log # ' num2str(k)])
             end
-            
-        case sgn,
+        case sgn
             switch op
-                case -3,                    % differentiation
-                    
-                    % the following codes were added by C. Kao on June 21 1998
-                    % ------------->
-                    [a,B,C]=iqc_reduce(a,B,C,A.log(1:k,1),ninputs,nstates,POS');
-                    % ------------->
-                    
+                case -3 % differentiation
+                    [a,B,C]=iqc_reduce(a,B,C,A.log(1:k,1),...
+                        ninputs,nstates,POS');
                     ddd=C{a1}(:,nstates+1:nstates+ninputs);
                     ddd=ddd(:);
-                    if any(ddd~=0),
+                    if any(ddd~=0)
                         error(['illegal differentiation log #' num2str(k)])
                     end
                     C{k}=C{a1}(:,1:nstates)*a;
-                case num_op('plus'),        % plus
-                    if A.log(a1,2)==1,
+                case num_op('plus') % plus
+                    if A.log(a1,2)==1
                         C{k}=ones(vs,1)*C{a1}+C{a2};
-                    elseif A.log(a2,2)==1,
+                    elseif A.log(a2,2)==1
                         C{k}=C{a1}+ones(vs,1)*C{a2};
                     else
                         C{k}=C{a1}+C{a2};
                     end
-                case num_op('minus'),       % minus
-                    if A.log(a1,2)==1,
+                case num_op('minus') % minus
+                    if A.log(a1,2)==1
                         C{k}=ones(vs,1)*C{a1}-C{a2};
-                    elseif A.log(a2,2)==1,
+                    elseif A.log(a2,2)==1
                         C{k}=C{a1}-ones(vs,1)*C{a2};
                     else
                         C{k}=C{a1}-C{a2};
                     end
-                case num_op('mtimes'),       % times
-                    if (A.log(a1,2)==1)&&(A.log(a1,3)==1),
+                case num_op('mtimes') % times
+                    if (A.log(a1,2)==1)&&(A.log(a1,3)==1)
                         ba1=B{a1}*eye(vs);
-                    elseif A.log(a2,2)==1,
+                    elseif A.log(a2,2)==1
                         ba1=B{a1}*ones(size(B{a1},2),1);
                     else
                         ba1=B{a1};
@@ -824,102 +778,112 @@ for k=2:A.nlog,
                     [AA,BB,CC,DD]=ssdata(ba1);
                     nn=size(AA,1);
                     a(stcnt+1:stcnt+nn,stcnt+1:stcnt+nn)=AA;
+                    state_lnk_pos{k}=stcnt+1:stcnt+nn;
                     a(stcnt+1:stcnt+nn,:)=a(stcnt+1:stcnt+nn,:)+BB*C{a2};
                     C{k}=DD*C{a2};
                     C{k}(:,stcnt+1:stcnt+nn)=C{k}(:,stcnt+1:stcnt+nn)+CC;
                     stcnt=stcnt+nn;
-                case num_op('uminus'),      % uminus
+                case num_op('uminus') % uminus
                     C{k}=-C{a1};
-                case num_op('uplus'),        % uplus
+                case num_op('uplus') % uplus
                     C{k}=C{a1};
-                case num_op('vertcat'),        % vertcat
-                    if A.log(a1,1)==cst,
+                case num_op('vertcat') % vertcat
+                    if A.log(a1,1)==cst
                         C{k}=[zeros(A.log(a1,2),nstates+ninputs);C{a2}];
-                    elseif A.log(a2,1)==cst,
+                    elseif A.log(a2,1)==cst
                         C{k}=[C{a1};zeros(A.log(a2,2),nstates+ninputs)];
                     else
                         C{k}=[C{a1};C{a2}];
                     end
-                case num_op('ctranspose'),        % ctranspose
-                    C{k}=C{a1};        % no conjugation !!!
-                case num_op('subsasgn'),
+                case num_op('ctranspose') % ctranspose
+                    C{k}=C{a1}; % no conjugation !!!
+                case num_op('subsasgn')
                     C{k}=C{a1};
-                    if df~=0,               % single entry assignment
+                    if df~=0 % single entry assignment
                         C{k}(a3,:)=C{a2};
                     else
-                        ind=A.dat{A.log(a3,6)};       % multiple entries assignment
-                        for i=1:size(ind,1),
+                        % multiple entries assignment
+                        ind=A.dat{A.log(a3,6)};
+                        for i=1:size(ind,1)
                             C{k}(ind(i,1),:)=C{a2}(ind(i,3),:);
                         end
                     end
-                case num_op('subsref'),
+                case num_op('subsref')
                     C{k}=zeros(vs,ninputs+nstates);
-                    if a3~=0,
+                    if a3~=0
                         C{k}=C{a1}(a2,:);
                     else
                         ind=A.dat{A.log(a2,6)};
-                        for i=1:size(ind,1),
+                        for i=1:size(ind,1)
                             C{k}(ind(i,1),:)=C{a1}(ind(i,3),:);
                         end
                     end
                 otherwise
                     error(['Invalid signal log entry ' num2str(k)])
             end
-        case vsg,
-            switch op          % produced by which operation ?
-                case num_op('plus'),
-                    if A.log(a1,2)==1,
+        case vsg
+            switch op % produced by which operation ?
+                case num_op('plus')
+                    if A.log(a1,2)==1
                         G{k}=mhrzct(ones(vs,1)*G{a1},G{a2});
-                    elseif A.log(a2,2)==1,
+                    elseif A.log(a2,2)==1
                         G{k}=mhrzct(G{a1},ones(vs,1)*G{a2});
                     else
                         G{k}=mhrzct(G{a1},G{a2});
                     end
                     C{k}=[C{a1};C{a2}];
                     X{k}=[X{a1} X{a2}];
-                case num_op('minus'),
-                    if A.log(a1,2)==1,
+                case num_op('minus')
+                    if A.log(a1,2)==1
                         G{k}=mhrzct(ones(vs,1)*G{a1},-G{a2});
-                    elseif A.log(a2,2)==1,
+                    elseif A.log(a2,2)==1
                         G{k}=mhrzct(G{a1},-ones(vs,1)*G{a2});
                     else
                         G{k}=mhrzct(G{a1},-G{a2});
                     end
                     C{k}=[C{a1};C{a2}];
                     X{k}=[X{a1} X{a2}];
-                case num_op('uplus'),
+                case num_op('uplus')
                     C{k}=C{a1};
                     G{k}=G{a1};
                     X{k}=X{a1};
-                case num_op('uminus'),
+                case num_op('uminus')
                     C{k}=C{a1};
                     G{k}=-G{a1};
                     X{k}=X{a1};
-                case num_op('mtimes'),
-                    if A.log(a1,1)==cst,
+                case num_op('mtimes')
+                    if A.log(a1,1)==cst
                         C{k}=C{a2};
                         G{k}=B{a1}*G{a2};
                         X{k}=X{a2};
                     else
-                        sw=1; % switch to handle scalar variable exception (sw==0)
-                        if A.log(a2,2)==1,   % if the signal is scalar
+                        % switch to handle scalar variable exception(sw==0)
+                        sw=1;
+                        if A.log(a2,2)==1
+                            % if the signal is scalar
                             ca2=ones(A.log(a1,3),1)*C{a2};
-                        elseif A.log(a1,3)==A.log(a2,2), % if sizes are compatible
+                        elseif A.log(a1,3)==A.log(a2,2)
+                            % if sizes are compatible
                             ca2=C{a2};
                         else
-                            if A.log(a1,1)==var, % scalar variable exception case
+                            if A.log(a1,1)==var
+                                % scalar variable exception case
                                 sw=0;
                             else
-                                error(['Incompatible size in vsg mtimes log # ' num2str(k)])
+                                error(['Incompatible size in',...
+                                    ' vsg mtimes log # ' num2str(k)])
                             end
                         end
-                        if sw,
+                        if sw
                             [AA,BB,CC,DD]=ssdata(H{a1});
                             nn=size(AA,1);
                             a(stcnt+1:stcnt+nn,stcnt+1:stcnt+nn)=AA;
-                            a(stcnt+1:stcnt+nn,:)=a(stcnt+1:stcnt+nn,:)+BB*ca2;
+                            state_lnk_pos{k}=stcnt+1:stcnt+nn;
+                            a(stcnt+1:stcnt+nn,:)=...
+                                a(stcnt+1:stcnt+nn,:)+BB*ca2;
                             C{k}=DD*ca2;
-                            C{k}(:,stcnt+1:stcnt+nn)=C{k}(:,stcnt+1:stcnt+nn)+CC;
+                            C{k}(:,stcnt+1:stcnt+nn)=...
+                                C{k}(:,stcnt+1:stcnt+nn)+CC;
                             stcnt=stcnt+nn;
                             X{k}=X{a1};
                             G{k}=G{a1};
@@ -933,28 +897,28 @@ for k=2:A.nlog,
                 otherwise
                     error(['Invalid vsg log # ' num2str(k)])
             end
-        case csg,
+        case csg
             switch op
-                case num_op('plus'),        % plus
+                case num_op('plus') % plus
                     if A.log(a1,3)==1,
                         C{k}=ones(hs,1)*C{a1}+C{a2};
-                    elseif A.log(a2,3)==1,
+                    elseif A.log(a2,3)==1
                         C{k}=C{a1}+ones(hs,1)*C{a2};
                     else
                         C{k}=C{a1}+C{a2};
                     end
-                case num_op('minus'),       % minus
-                    if A.log(a1,3)==1,
+                case num_op('minus') % minus
+                    if A.log(a1,3)==1
                         C{k}=ones(hs,1)*C{a1}-C{a2};
-                    elseif A.log(a2,3)==1,
+                    elseif A.log(a2,3)==1
                         C{k}=C{a1}-ones(hs,1)*C{a2};
                     else
                         C{k}=C{a1}-C{a2};
                     end
-                case num_op('mtimes'),       % times
-                    if (A.log(a2,2)==1)&&(A.log(a2,3)==1),
+                case num_op('mtimes') % times
+                    if (A.log(a2,2)==1)&&(A.log(a2,3)==1)
                         ba2=B{a2}'*eye(hs);
-                    elseif A.log(a1,3)==1,
+                    elseif A.log(a1,3)==1
                         ba2=B{a2}'*ones(size(B{a2},1),1);
                     else
                         ba2=B{a2}';
@@ -962,51 +926,54 @@ for k=2:A.nlog,
                     [AA,BB,CC,DD]=ssdata(ba2);
                     nn=size(AA,1);
                     a(stcnt+1:stcnt+nn,stcnt+1:stcnt+nn)=AA;
+                    state_lnk_pos{k}=stcnt+1:stcnt+nn;
                     a(stcnt+1:stcnt+nn,:)=a(stcnt+1:stcnt+nn,:)+BB*C{a1};
                     C{k}=DD*C{a1};
                     C{k}(:,stcnt+1:stcnt+nn)=C{k}(:,stcnt+1:stcnt+nn)+CC;
                     stcnt=stcnt+nn;
-                case num_op('uminus'),      % uminus
+                case num_op('uminus') % uminus
                     C{k}=-C{a1};
-                case num_op('uplus'),        % uplus
+                case num_op('uplus') % uplus
                     C{k}=C{a1};
-                case num_op('horzcat'),        % still vertcat for C!!!
-                    if A.log(a1,1)==cst,
+                case num_op('horzcat') % still vertcat for C!!!
+                    if A.log(a1,1)==cst
                         C{k}=[zeros(A.log(a1,3),nstates+ninputs);C{a2}];
-                    elseif A.log(a2,1)==cst,
+                    elseif A.log(a2,1)==cst
                         C{k}=[C{a1};zeros(A.log(a2,3),nstates+ninputs)];
                     else
                         C{k}=[C{a1};C{a2}];
                     end
-                case num_op('ctranspose'),        % ctranspose
-                    C{k}=C{a1};        % no conjugation !!!
-                case num_op('subsasgn'),
+                case num_op('ctranspose') % ctranspose
+                    C{k}=C{a1}; % no conjugation !!!
+                case num_op('subsasgn')
                     C{k}=C{a1};
-                    if df~=0,               % single entry assignment
+                    if df~=0
+                        % single entry assignment
                         C{k}(a3,:)=C{a2};
                     else
-                        ind=A.dat{A.log(a3,6)};       % multiple entries assignment
-                        for i=1:size(ind,1),
+                        % multiple entries assignment
+                        ind=A.dat{A.log(a3,6)};
+                        for i=1:size(ind,1)
                             C{k}(ind(i,1),:)=C{a2}(ind(i,3),:);
                         end
                     end
-                case num_op('subsref'),
+                case num_op('subsref')
                     C{k}=tf(zeros(vs,ninputs+nstates));
-                    if a3~=0,
+                    if a3~=0
                         C{k}=C{a1}(a2,:);
                     else
                         ind=A.dat{A.log(a2,6)};
-                        for i=1:size(ind,1),
+                        for i=1:size(ind,1)
                             C{k}(ind(i,1),:)=C{a1}(ind(i,3),:);
                         end
                     end
                 otherwise
                     error(['Invalid co-signal log entry ' num2str(k)])
             end
-        case vcs,
-            switch op          % produced by which operation ?
-                case num_op('plus'),
-                    if A.log(a1,3)==1,
+        case vcs
+            switch op % produced by which operation ?
+                case num_op('plus')
+                    if A.log(a1,3)==1
                         G{k}=mhrzct(ones(hs,1)*G{a1},G{a2});
                     elseif A.log(a2,3)==1,
                         G{k}=mhrzct(G{a1},ones(hs,1)*G{a2});
@@ -1015,53 +982,57 @@ for k=2:A.nlog,
                     end
                     C{k}=[C{a1};C{a2}];
                     X{k}=[X{a1} X{a2}];
-                case num_op('minus'),
-                    if A.log(a1,3)==1,
+                case num_op('minus')
+                    if A.log(a1,3)==1
                         G{k}=mhrzct(ones(hs,1)*G{a1},-G{a2});
-                    elseif A.log(a2,3)==1,
+                    elseif A.log(a2,3)==1
                         G{k}=mhrzct(G{a1},-ones(hs,1)*G{a2});
                     else
                         G{k}=mhrzct(G{a1},-G{a2});
                     end
                     C{k}=[C{a1};C{a2}];
                     X{k}=[X{a1} X{a2}];
-                case num_op('uplus'),
+                case num_op('uplus')
                     C{k}=C{a1};
                     G{k}=G{a1};
                     X{k}=X{a1};
-                case num_op('uminus'),
+                case num_op('uminus')
                     C{k}=C{a1};
                     G{k}=-G{a1};
                     X{k}=X{a1};
-                case num_op('ctranspose'),
+                case num_op('ctranspose')
                     C{k}=C{a1};
                     G{k}=G{a1};
                     X{k}=X{a1};
-                case num_op('mtimes'),
-                    if A.log(a2,1)==cst,
+                case num_op('mtimes')
+                    if A.log(a2,1)==cst
                         C{k}=C{a1};
                         G{k}=B{a2}'*G{a1};
                         X{k}=X{a1};
                     else
                         sw=1; % switch to handle scalar variable exception
-                        if A.log(a1,3)==1,
+                        if A.log(a1,3)==1
                             ca1=ones(A.log(a2,2),1)*C{a1};
-                        elseif A.log(a2,2)==A.log(a1,3),
+                        elseif A.log(a2,2)==A.log(a1,3)
                             ca1=C{a1};
                         else
-                            if A.log(a2,1)==var,
+                            if A.log(a2,1)==var
                                 sw=0;
                             else
-                                error(['Incompatible size in vcs mtimes log # ' num2str(k)])
+                                error(['Incompatible size in vcs mtimes',...
+                                    ' log # ' num2str(k)])
                             end
                         end
-                        if sw,
+                        if sw
                             [AA,BB,CC,DD]=ssdata(G{a2}');
                             nn=size(AA,1);
+                            state_lnk_pos{k}=stcnt+1:stcnt+nn;
                             a(stcnt+1:stcnt+nn,stcnt+1:stcnt+nn)=AA;
-                            a(stcnt+1:stcnt+nn,:)=a(stcnt+1:stcnt+nn,:)+BB*ca1;
+                            a(stcnt+1:stcnt+nn,:)=...
+                                a(stcnt+1:stcnt+nn,:)+BB*ca1;
                             C{k}=DD*ca1;
-                            C{k}(:,stcnt+1:stcnt+nn)=C{k}(:,stcnt+1:stcnt+nn)+CC;
+                            C{k}(:,stcnt+1:stcnt+nn)=...
+                                C{k}(:,stcnt+1:stcnt+nn)+CC;
                             stcnt=stcnt+nn;
                             X{k}=[-X{a2}(1,:);X{a2}(3,:);X{a2}(2,:)];
                             G{k}=H{a2}';
@@ -1078,29 +1049,35 @@ for k=2:A.nlog,
                     abst(k,0)
                     error(['Invalid vcs log # ' num2str(k)])
             end
-        case qfm,
-            if (vs~=1)||(hs~=1),
+        case qfm
+            if (vs~=1)||(hs~=1)
                 error(['non-scalar quadratic form log # ' num2str(k)])
             end
             switch op
-                case num_op('mtimes'),
-                    if A.log(a1,1)==vcs,
+                case num_op('mtimes')
+                    if A.log(a1,1)==vcs
                         [AA,BB,CC,DD]=ssdata(G{a1}');
                         nn=size(AA,1);
+                        state_lnk_pos{k}=stcnt+1:stcnt+nn;
                         a(stcnt+1:stcnt+nn,stcnt+1:stcnt+nn)=AA;
-                        a(stcnt+1:stcnt+nn,:)=a(stcnt+1:stcnt+nn,:)+BB*C{a2};
+                        a(stcnt+1:stcnt+nn,:)=...
+                            a(stcnt+1:stcnt+nn,:)+BB*C{a2};
                         B{k}=DD*C{a2};
-                        B{k}(:,stcnt+1:stcnt+nn)=B{k}(:,stcnt+1:stcnt+nn)+CC;
+                        B{k}(:,stcnt+1:stcnt+nn)=...
+                            B{k}(:,stcnt+1:stcnt+nn)+CC;
                         stcnt=stcnt+nn;
                         X{k}=X{a1};
                         C{k}=C{a1};
-                    elseif A.log(a2,1)==vsg,
+                    elseif A.log(a2,1)==vsg
                         [AA,BB,CC,DD]=ssdata(G{a2}');
                         nn=size(AA,1);
+                        state_lnk_pos{k}=stcnt+1:stcnt+nn;
                         a(stcnt+1:stcnt+nn,stcnt+1:stcnt+nn)=AA;
-                        a(stcnt+1:stcnt+nn,:)=a(stcnt+1:stcnt+nn,:)+BB*C{a1};
+                        a(stcnt+1:stcnt+nn,:)=...
+                            a(stcnt+1:stcnt+nn,:)+BB*C{a1};
                         B{k}=DD*C{a1};
-                        B{k}(:,stcnt+1:stcnt+nn)=B{k}(:,stcnt+1:stcnt+nn)+CC;
+                        B{k}(:,stcnt+1:stcnt+nn)=...
+                            B{k}(:,stcnt+1:stcnt+nn)+CC;
                         stcnt=stcnt+nn;
                         X{k}=X{a2};
                         C{k}=C{a2};
@@ -1134,7 +1111,7 @@ for k=2:A.nlog,
                 otherwise
                     error(['Invalid q-form log # ' num2str(k)])
             end
-        case iqc,
+        case iqc
             if A.log(a1,1)==cst,
                 Q{k}=-Q{a2};
             elseif A.log(a2,1)==cst,
@@ -1148,16 +1125,15 @@ for k=2:A.nlog,
             end
             gqfm=gqfm+Q{k};
     end
-end          % end of second run
+end % end of second run
 
-
-% check if the states count was correct
-if stcnt~=nstates,
+%% check if the states count was correct
+if stcnt~=nstates
     error('the pre-calculated number of states is incorrect')
 end
 
 
-% now define the output of iqc_extract
+%% now define the output of iqc_extract
 E.nlog=nlog;
 E.nlmivar=nlmivar;
 E.nlmi=nlmi;
@@ -1180,6 +1156,7 @@ E.H=H;
 E.X=X;
 E.Q=Q;
 E.POS=POS';
+E.state_lnk_pos=state_lnk_pos;
 E.T=A.log(1:nlog,1);
 
 if vrb,
@@ -1198,7 +1175,6 @@ function [a,B,C]=iqc_reduce(a,B,C,T,ni,ns,POS)
 % internal function:
 % the purpose of this internal function is dealing with
 % the 'link' stuff and reducing the system
-
 
 global ABST
 A=ABST;

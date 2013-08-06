@@ -18,12 +18,12 @@ function gain=iqc_analysis_l2gain_yalmip(f,z)
 % exported in the format of two files: *_exe.m and *_exe.mat
 % (containing the script and the datafile respectively)
 %
-% Written by cmj on 2013/5/1
+% Written by cmj on 2013/5/14
 
 global ABST
 str={};
 
-sft_v='1e-9';
+sft_v='(1e-9)';
 % sft_v='0';
 % sft_v='eps';
 
@@ -54,7 +54,7 @@ E=iqc_reduce(E);
 var=2;
 lmi=4;
 
-if ~vrb,
+if ~vrb
     disp_str(50,'iqc_analysis_l2gain_yalmip')
 else
     disp_str(51,'iqc_analysis_l2gain_yalmip')
@@ -72,169 +72,16 @@ str{5}='ALL_LMI = [];';
 eval(str{5});
 
 %% variable definite
-if vrb,
-    disp_str(52)
-end
-str{6}='\n%% Define multiplier variables ...';
-sc=7; % string counter
-
-vc=0;
-kvar=find(E.T==var);
-for k=1:length(kvar),
-    ks   = num2str(k);
-    varn = num2str(E.X{kvar(k)}(2,:));
-    varm = num2str(E.X{kvar(k)}(3,:));
-    switch ABST.log(kvar(k),5)
-        case 1  % symmetric
-            str{sc}=['X' ks '=sdpvar(' varn ',' varm ...
-                ',''symmetric'');']; %#ok<*AGROW>
-            eval(str{sc});
-            sc=sc+1;
-            num_var_pos=[num_var_pos;{['X',ks],'1',[]}];
-        case 2  % rectangular
-            str{sc}=['X' ks '=sdpvar(' varn ',' varm ',''full'');'];
-            eval(str{sc});
-            sc=sc+1;
-            num_var_pos=[num_var_pos;{['X',ks],'2',[]}];
-        case 3  % diagonal
-            str{sc} = ['X' ks '=diag(sdpvar(' varn ',1));'];
-            eval(str{sc});
-            sc=sc+1;
-            num_var_pos=[num_var_pos;{['X',ks],'3',[]}];
-        case 4  % skew symmetric
-            str{sc}=['X' ks '=sdpvar(' varn ',' varm ',''skew'');'];
-            eval(str{sc});
-            sc=sc+1;
-            num_var_pos=[num_var_pos;{['X',ks],'4',[]}];
-        case 5  % variable
-            str{sc} = ['X' ks '=zeros(' varn ',' varm ');'];
-            eval(str{sc});
-            sc=sc+1;
-            eval(['struct' ks '= E.L{' num2str(kvar(k)) '};']);
-            M   = E.L{kvar(k)};
-            Ma  = sort(M(:));
-            Ms  = Ma(Ma>0);
-            Msc = Ms(1);
-            cnt = 1;
-            for flcnt = 2: length(Ms)
-                if Ms(flcnt) > Msc(cnt);
-                    Msc(cnt+1) = Ms(flcnt);
-                    cnt = cnt + 1;
-                end
-            end
-            allvc=[];
-            for flcnt = 1: length(Msc)
-                Mscvar = num2str(Msc(flcnt));
-                vc=vc+1;
-                vcs = num2str(vc);
-                str{sc}  = ['y' vcs '= sdpvar;'];
-                eval(str{sc});
-                sc=sc+1;
-                str{sc} = ['X' ks '= X' ks '+((abs(struct' ks...
-                    ')==' Mscvar ').*sign(struct' ks '))*y' vcs...
-                    ';'];
-                eval(str{sc});
-                sc=sc+1;
-                allvc=[allvc;['y',vcs]];
-            end
-            num_var_pos=[num_var_pos;{['X',ks],'5',...
-                num2str(allvc)}];
-        otherwise
-            switch ABST.log(kvar(k),4),
-                case 28, % subsref
-                    rc=find(kvar==ABST.log(kvar(k),6));
-                    p_rc=find(E.L{kvar(rc)}==E.L{kvar(k)});
-                    str{sc} = ['X' ks '= X' num2str(rc)...
-                        '(' num2str(p_rc(1)) ');' ];
-                    eval(str{sc});
-                    sc=sc+1;
-                case 29, % subsasgn
-                    rc=find(kvar==ABST.log(kvar(k),7));
-                    p_rc=find(E.L{kvar(rc)}==E.L{kvar(k)});
-                    str{sc} = ['X' ks '= X' num2str(rc)...
-                        '(' num2str(p_rc(1)) ');' ];
-                    eval(str{sc});
-                    sc=sc+1;
-                otherwise
-                    disp_str(55)
-            end
-    end
-end
+defVar;
 
 %% now we define the "non-KYP" lmi
-if vrb,
-    disp_str(53)
-end
-str{sc}='\n%% Define non-KYP lmis ...';
-sc=sc+1;
-kvar=find(E.T==lmi);
-for k=1:length(kvar);
-    ks=num2str(k);
-    kk=kvar(k);
-    [nn,mm]=size(E.AB{kk});    % dimensions
-    nns=num2str(nn);
-    mms=num2str(mm);
-    vs=mm-nn;
-    vss=num2str(vs);
-    str{sc}=['LMI',ks,'=zeros(',mms,');'];
-    eval(str{sc});
-    sc=sc+1;
-    if nn>0;
-        eval(['state' ks '=E.AB{kk};']);
-        str{sc}=['p',ks,'=sdpvar(',nns,',',nns,',''symmetric'');'];
-        eval(str{sc});
-        sc=sc+1;
-        num_var_pos=[num_var_pos;{['p',ks],'1',[]}];
-        str{sc}=['ouf',ks,'=[state',ks,...
-            ';eye(',nns,') zeros(',nns,',',vss,')];'];
-        eval(str{sc});
-        sc=sc+1;
-        str{sc}=['LMI',ks,'=LMI',ks,...
-            '+ouf',ks,'''*kron(',psi,',p',ks,')*ouf',ks,';'];
-        eval(str{sc});
-        sc=sc+1;
-    end
-    nh=0;
-    ng=sum(E.X{kk}(3,:));
-    for i=1:size(E.X{kk},2),
-        is=num2str(i);
-        vr=E.X{kk}(1,i);
-        eval(['l_' ks '_' is '=E.C{kk}(ng+1:ng+E.X{kk}(2,i),:)'';'])
-        eval(['r_' ks '_' is '=E.C{kk}(nh+1:nh+E.X{kk}(3,i),:);'])
-        if vr < 0,
-            vrs=num2str(-vr);
-            str{sc}=['LMI',ks,'=LMI',ks,'+l_',ks,'_',is,'*X',vrs,...
-                '''*r_',ks,'_',is,'+(l_',ks,'_',is,'*X',vrs,...
-                '''*r_',ks,'_',is,')'';'];
-            eval(str{sc});
-            sc=sc+1;
-        else
-            vrs=num2str(vr);
-            str{sc}=['LMI',ks,'=LMI',ks,'+l_',ks,'_',is,'*X',vrs,...
-                '*r_',ks,'_',is,'+(l_',ks,'_',is,'*X',vrs,...
-                '*r_',ks,'_',is,')'';'];
-            eval(str{sc});
-            sc=sc+1;
-        end
-        nh=nh+E.X{kk}(3,i);
-        ng=ng+E.X{kk}(2,i);
-    end
-    
-    %     str{sc}=['LMI',ks,'=clean(LMI',ks,',0.1*',sft_v,');'];
-    %     eval(str{sc})
-    %     sc=sc+1;
-    
-    str{sc}=['ALL_LMI = ALL_LMI + [LMI',ks,'<= -',sft_v,'*eye(',...
-        mms,')];'];
-    eval(str{sc});
-    sc=sc+1;
-end
+nonKYP;
 
 %% now we define the "main" lmi
-if ~vrb,
+if vrb
     disp_str(54)
 end
-str{sc}='\n%% KYP LMI terms...';
+str{sc}='\n%% KYP LMI terms...'; %#ok<*NODEF>
 sc=sc+1;
 
 nn=E.nstates;
@@ -278,7 +125,7 @@ for j=1:E.nsimple,
             vrs=num2str(-vr);
             str{sc}=['Main_LMI=Main_LMI+L_',js,'_',is,'*X',vrs,...
                 '''*R_',js,'_',is,'+(L_',js,'_',is,'*X',vrs,...
-                '''*R_',js,'_',is,')'';'];
+                '''*R_',js,'_',is,')'';']; %#ok<*AGROW>
             eval(str{sc});
             sc=sc+1;
         else

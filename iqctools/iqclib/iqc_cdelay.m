@@ -20,7 +20,7 @@ function [w,X,x]=iqc_cdelay(v,T0,a)
 %
 %
 % Work by UlfJ Oct 21, 1997
-% Last modified by cmj on 2013/5/1
+% Last modified by cmj on 2013/5/9
 
 if nargin<1
     disp_str(1)
@@ -52,7 +52,8 @@ switch ABST.systemtype
         b=sqrt(50);
         a=sqrt(2*b+6.5);
         H=2*T0*s*(T0*s+sqrt(12.5))/(T0^2*s*s+a*T0*s+b);
-        (H*v)'*X*(H*v)>w'*X*w;
+        Hv=H*v;
+        (Hv)'*X*(Hv)>w'*X*w;
     case 'discrete'
         disp_str(70,'iqc_cdelay','discrete')
 end

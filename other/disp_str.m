@@ -180,6 +180,9 @@ switch idx
     case 71
         error(['the "',parameter{1},'" is not available for the user'])
         % parameter{1} = signal processing toolbox
+    case 72
+        error(['Numerical problems, the "Decomposition process"',...
+            ' is invalid'])
 end
 
 warning('off','all')

@@ -92,7 +92,7 @@ switch ABST.systemtype
             % p(s) terms
             cc=rectangular(m);
             p=p+cc*Ga;
-            c{k+1}=cc;
+            c{k+1}=cc; %#ok<*AGROW>
             % one IQC expressed using three inequalities
             ya1p'*cc*y1p>0;
             ya2md=derivative(ya2m);

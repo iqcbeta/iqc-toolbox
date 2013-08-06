@@ -46,6 +46,7 @@ location={[Inf .3] [ Inf .3];[Inf .3] [Inf .3]};    %      3.2327
 [waux,xa,xb,xc,xd,dd]=iqc_d_slope_odd(v,location,0,1);
 
 w==waux;
+
 g=iqc_gain_tbx(f,w);
 
 

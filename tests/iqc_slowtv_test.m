@@ -45,6 +45,7 @@ w=signal;
 f=signal;
 v=G*(f+w);
 w==iqc_slowtv(v,k1,[1,3,5],k2);
+
 gain=iqc_gain_tbx(f,w);
 
 if ~isempty(gain)

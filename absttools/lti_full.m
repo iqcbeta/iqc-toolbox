@@ -18,5 +18,5 @@ y=num(n+1)*v;
 for k=1:n,
     v=derivative(v);
     y=y+num(n+1-k)*v;
-    x{k+1}=v;
+    x{k+1}=v; %#ok<*AGROW>
 end
